@@ -1,0 +1,37 @@
+CustomerStatus
+ status_id, status_message
+
+RentalStatus
+ rental_status_id, status_message
+
+CategoryMaster
+ category_id, name
+
+FormatMaster
+ format_id, name
+
+Movie_Format
+ movie_format_id, movie_id, format_id, price_per_month
+
+MemberTypeMaster
+ type_id, type_name, rental_limit
+
+Member
+ member_id, name, phone, type_id, fav_category_id
+
+Movie
+ movie_id, title, description, category_id
+
+Dependent
+ dependent_id, name, member_id
+
+Rental 
+ rental_id, rental_date, total_amount, rental_status_id, member_id, dependent_id (either member_id or dependent_id can be null)
+
+Rental_Details
+ rental_details_id, movie_format_id, rental_id, rental_date, rental_months, price 
+
+
+
+ 
+

@@ -1,0 +1,247 @@
+1. https://www.hackerrank.com/challenges/plus-minus/problem?isFullScreen=true
+
+public static void plusMinus(List<int> arr)
+    {
+        int len = arr.Count;
+        int positive = 0, negative = 0, zero = 0;
+
+        foreach(int num in arr){
+            if(num > 0){
+                positive++;
+            }
+            else if(num < 0){
+                negative++;
+            }
+            else{
+                zero++;
+            }
+        }
+
+        Console.WriteLine((double)positive/len);
+        Console.WriteLine((double)negative/len);
+        Console.WriteLine((double)zero/len);
+    }
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+2. https://www.hackerrank.com/challenges/staircase/problem?isFullScreen=true
+
+public static void staircase(int n)
+    {
+        for(int i=0; i<n; i++){
+            for(int s=0; s<n-1-i; s++){
+                Console.Write(" ");
+            }
+            for(int j=0; j<=i; j++){
+                Console.Write("#");
+            }
+            Console.WriteLine();
+        }
+
+    }
+ 
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+3. https://www.hackerrank.com/challenges/mini-max-sum/problem?isFullScreen=true
+
+public static void miniMaxSum(List<int> arr)
+    {
+        int min = int.MaxValue;
+        int max = int.MinValue;
+        long total = 0;
+
+        foreach(int num in arr){
+            if(num < min)
+                min = num;
+            if(num > max)
+                max = num;
+            total += num;                
+        }
+
+        Console.Write(total - max + " ");
+        Console.Write(total - min);
+
+    }
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ 
+4. https://www.hackerrank.com/challenges/birthday-cake-candles/problem?isFullScreen=true
+
+public static int birthdayCakeCandles(List<int> candles)
+    {
+        int max = Int32.MinValue;
+        int count = 0;
+
+        foreach(int candle in candles){
+            if(candle > max)
+                max = candle;
+        }
+
+        foreach(int candle in candles){
+            if(candle == max)
+                count++;
+        }
+
+        return count;
+    }
+ 
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+5. https://www.hackerrank.com/challenges/time-conversion/problem?isFullScreen=true
+
+public static string timeConversion(string s)
+    {
+        int len = s.Length;
+        string notation = s.Substring(len - 2);
+        string time = s.Substring(0, len-2);
+        
+        string[] parts = time.Split(':');
+        int hour = Int32.Parse(parts[0]);
+        int minute = Int32.Parse(parts[1]);
+        int second = Int32.Parse(parts[2]);
+        
+        if(notation == "AM" && hour == 12){
+            hour = 0;            
+        }
+        else if(notation == "PM" && hour != 12){
+            hour += 12;
+        }
+        
+        return $"{hour:D2}:{minute:D2}:{second:D2}";
+            
+    }
+
+}
+ 
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+
+6. https://www.hackerrank.com/challenges/grading/problem?isFullScreen=true
+
+public static List<int> gradingStudents(List<int> grades)
+    {
+        List<int> roundedGrades = new();
+
+        foreach(int grade in grades){
+            if(grade < 38 || 5 - grade % 5 > 2){
+                roundedGrades.Add(grade);
+            }
+            else{
+                roundedGrades.Add(grade + 5 - grade % 5);
+            }
+        }
+
+        return roundedGrades;
+
+    }
+ 
+------------------------------------------------------------------------------
+ 
+7. https://www.hackerrank.com/challenges/apple-and-orange/problem?isFullScreen=true
+
+public static void countApplesAndOranges(int s, int t, int a, int b, List<int> apples, List<int> oranges)
+{
+    int appleCount = 0;
+    int orangeCount = 0;
+    
+    foreach(int apple in apples) {
+        int landingPosition = a + apple;
+        if(landingPosition >= s && landingPosition <= t) {
+            appleCount++;
+        }
+    }
+    
+    foreach(int orange in oranges) {
+        int landingPosition = b + orange;
+        if(landingPosition >= s && landingPosition <= t) {
+            orangeCount++;
+        }
+    }
+    
+    Console.WriteLine(appleCount);
+    Console.WriteLine(orangeCount);
+}
+ 
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+8. https://www.hackerrank.com/challenges/kangaroo/problem?isFullScreen=true
+
+public static string kangaroo(int x1, int v1, int x2, int v2)
+{
+    if (v1 == v2){
+        return x1 == x2 ? "YES" : "NO"; 
+    }
+ 
+    if ((x1 - x2) % (v2 - v1) == 0 && (x1 - x2) / (v2 - v1) > 0){
+        return "YES";
+    }
+ 
+    return "NO";
+}
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+9. https://www.hackerrank.com/challenges/between-two-sets/problem
+
+public static int getTotalX(List<int> a, List<int> b)
+    {
+        int lcm = a[0];
+        for(int i = 1; i < a.Count; i++){
+            lcm = LCM(lcm,a[i]);
+        }
+        int gcd = b[0];
+        for(int i = 1; i < b.Count; i++){
+            gcd = GCD(gcd,b[i]);
+        }
+        int count = 0;
+        for(int i = lcm ; i <= gcd; i+= lcm){
+            if(gcd % i == 0){
+                count++;
+            }
+        }
+        return count;
+    }
+
+public static int LCM(int x,int y)
+    {
+	return (x * y) / GCD(x , y);
+    }
+
+public static int GCD(int x,int y)
+    {
+	while( y != 0 ){
+	int temp = y;
+            y = x % y;
+            x = temp;
+        }
+        return x;
+    }
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+10. https://www.hackerrank.com/challenges/breaking-best-and-worst-records/problem?isFullScreen=true
+
+public static List<int> breakingRecords(List<int> scores)
+{
+    int min = scores[0], max = scores[0];
+    int minBreaks = 0, maxBreaks = 0;
+ 
+    for (int i = 1; i < scores.Count; i++)
+    {
+        if (scores[i] > max)
+        {
+            max = scores[i];
+            maxBreaks++;
+        }
+        else if (scores[i] < min)
+        {
+            min = scores[i];
+            minBreaks++;
+        }
+    }
+ 
+    return new List<int> { maxBreaks, minBreaks };
+} 
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
