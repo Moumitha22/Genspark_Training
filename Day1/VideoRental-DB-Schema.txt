@@ -1,5 +1,5 @@
-CustomerStatus
- status_id, status_message
+MemberStatus
+ member_status_id, status_message
 
 RentalStatus
  rental_status_id, status_message
@@ -17,7 +17,7 @@ MemberTypeMaster
  type_id, type_name, rental_limit
 
 Member
- member_id, name, phone, type_id, fav_category_id
+ member_id, name, phone, type_id, fav_category_id, member_status_id
 
 Movie
  movie_id, title, description, category_id
