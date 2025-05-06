@@ -1,0 +1,53 @@
+Design the database for a shop which sells products
+Points for consideration
+  1) One product can be supplied by many suppliers
+  2) One supplier can supply many products
+  3) All customers details have to present
+  4) A customer can buy more than one product in every purchase
+  5) Bill for every purchase has to be stored
+  6) These are just details of one shop
+
+ 
+
+CustomerStatus
+ customer_status_id, status_message
+
+SupplierSttaus
+ suuplier_status_id, status_message
+
+OrderStatus
+ order_status_id, status_message
+ 
+Country
+ country_id, country_name
+ 
+State
+ state_id, state_name, country_id
+ 
+City
+ city_id, city_name, state_id
+ 
+Area
+ zipcode, area_name, city_id
+ 
+Address
+ address_id, door_number, addressline1, zipcode
+ 
+Supplier
+ supplier_id, supplier_name, contact_person, phone, email, address_id, supplier_status_id
+ 
+Product
+ product_id, product_name, unit_price, quantity, description, image
+ 
+Product_supplier
+ transaction_id, product_id, supplier_id, date_of_supply, quantity
+ 
+Customer
+ customer_id, customer_name, phone, age, address_id, customer_status_id
+ 
+Order
+  order_number, customer_id, order_date, amount, order_status_id
+ 
+Order_details
+  order_details_id, order_number, product_id, quantity, unit_price
+
