@@ -7,13 +7,11 @@ Points for consideration
   5) Bill for every purchase has to be stored
   6) These are just details of one shop
 
- 
-
 CustomerStatus
  customer_status_id, status_message
 
-SupplierSttaus
- suuplier_status_id, status_message
+SupplierStatus
+ supplier_status_id, status_message
 
 OrderStatus
  order_status_id, status_message
@@ -50,4 +48,3 @@ Order
  
 Order_details
   order_details_id, order_number, product_id, quantity, unit_price
-
