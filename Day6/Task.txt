@@ -1,0 +1,55 @@
+1️⃣ Question:
+In a transaction, if I perform multiple updates and an error happens in the third statement, but I have not used SAVEPOINT, what will happen if I issue a ROLLBACK?
+Will my first two updates persist?
+
+=> No, the first two updates wont persist. If multiple updates are performed in a transaction and there's no SAVEPOINT used
+and an error happens in the third statement, then the entire transaction fails. If ROLLBACK is issued, all changes made in the transaction (including 
+the two updates) are undone.
+
+2️⃣ Question:
+Suppose Transaction A updates Alice’s balance but does not commit. Can Transaction B read the new balance if the isolation level is set to READ COMMITTED?
+
+=> No, Transaction B cannot read the new balance if the isolation level is set to READ COMMITTED.
+Transaction B will see the original balance, not the uncommitted change.
+
+3️⃣ Question:
+What will happen if two concurrent transactions both execute:
+UPDATE tbl_bank_accounts SET balance = balance - 100 WHERE account_name = 'Alice';
+at the same time? Will one overwrite the other?
+
+=> If two transactions try to update the same row at the same time, one will wait until the other finishes. This prevents them from changing the row at the same time and avoid overwriting each other's changes.
+
+4️⃣ Question:
+If I issue ROLLBACK TO SAVEPOINT after_alice;, will it only undo changes made after the savepoint or everything?
+
+=> It will undo only the changes made after the SAVEPOINT.
+
+5️⃣ Question:
+Which isolation level in PostgreSQL prevents phantom reads?
+
+=> Serializable
+
+6️⃣ Question:
+Can Postgres perform a dirty read (reading uncommitted data from another transaction)?
+
+=> No, Dirty Reads are not supported in Postgres.
+
+7️⃣ Question:
+If autocommit is ON (default in Postgres), and I execute an UPDATE, is it safe to assume the change is immediately committed?
+
+=> Yes, the change is immediately committed if it is executed outside a BEGIN or START Transaction block.
+However, if the UPDATE is done inside a BEGIN or START Transaction block, a COMMIT should be given explicitly to persist the change.
+
+8️⃣ Question:
+If I do this:
+
+BEGIN;
+UPDATE accounts SET balance = balance - 500 WHERE id = 1;
+-- (No COMMIT yet)
+And from another session, I run:
+
+SELECT balance FROM accounts WHERE id = 1;
+Will the second session see the deducted balance?
+
+=> No, the second session cannot see the deducted balance.
+Since the first session has not issued a COMMIT yet, the update is uncommitted and invisible to other sessions.
