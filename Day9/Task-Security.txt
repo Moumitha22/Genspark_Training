@@ -1,0 +1,210 @@
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+-- 1. Create a stored procedure to encrypt a given text
+-- Task: Write a stored procedure sp_encrypt_text that takes a plain text input (e.g., email or mobile number) and returns an encrypted version using PostgreSQL's pgcrypto extension.
+CREATE OR REPLACE PROCEDURE sp_encrypt_text(
+    plain_text TEXT, 
+    secret_key TEXT, 
+    OUT encrypted_text BYTEA)  
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    BEGIN
+        encrypted_text := pgp_sym_encrypt(plain_text, secret_key);
+    EXCEPTION
+        WHEN OTHERS THEN
+            RAISE EXCEPTION 'Error encrypting text: %', SQLERRM;
+    END;
+END;
+$$;
+
+DO
+$$
+DECLARE 
+	encrypted_text BYTEA;
+BEGIN
+	CALL sp_encrypt_text('Moumi', 'mysecretkey', encrypted_text);
+	RAISE NOTICE '%',encrypted_text;
+	RAISE NOTICE '%',encode(encrypted_text,'base64');
+END;
+$$
+
+-- 2. Create a stored procedure to compare two encrypted texts
+-- Task: Write a procedure sp_compare_encrypted that takes two encrypted values and checks if they decrypt to the same plain text.
+CREATE OR REPLACE PROCEDURE sp_compare_encrypted(
+    encrypted_text1 BYTEA, 
+    encrypted_text2 BYTEA, 
+    secret_key TEXT,
+    OUT is_equal BOOLEAN) 
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    decrypted_text1 TEXT;
+    decrypted_text2 TEXT;
+BEGIN
+    BEGIN
+		-- Decrypt first encrypted text
+        decrypted_text1 := pgp_sym_decrypt(encrypted_text1, secret_key);
+        
+		-- Decrypt second encrypted text
+		decrypted_text2 := pgp_sym_decrypt(encrypted_text2, secret_key);
+
+		-- Check if both the decrypted texts are equal or not
+        is_equal := (decrypted_text1 = decrypted_text2);
+    EXCEPTION
+        WHEN OTHERS THEN
+            RAISE EXCEPTION 'Error comparing encrypted texts: %', SQLERRM;
+    END;
+END;
+$$;
+
+DO $$
+DECLARE
+    encrypted1 BYTEA;
+    encrypted2 BYTEA;
+    are_equal BOOLEAN;
+BEGIN
+    -- Encrypt first text
+    CALL sp_encrypt_text('moumitha@gmail.com', 'secret_key', encrypted1);
+    
+    -- Encrypt second text
+    CALL sp_encrypt_text('moumitha@gmail.com', 'secret_key', encrypted2);
+    
+    -- To Compare the two encrypted values
+    CALL sp_compare_encrypted(encrypted1, encrypted2, 'secret_key', are_equal);
+    
+    IF are_equal THEN
+        RAISE NOTICE 'Texts are EQUAL after decryption.';
+    ELSE
+        RAISE NOTICE 'Texts are NOT equal after decryption.';
+    END IF;
+END;
+$$;
+
+-- 3. Create a stored procedure to partially mask a given text
+-- Task: Write a procedure sp_mask_text that:
+-- Shows only the first 2 and last 2 characters of the input string
+-- Masks the rest with *
+-- E.g., input: 'john.doe@example.com' → output: 'jo***************om'
+CREATE OR REPLACE PROCEDURE sp_mask_text(
+	plain_text TEXT, 
+	OUT masked_text TEXT) 
+LANGUAGE plpgsql
+AS $$
+DECLARE
+	len INT;
+BEGIN
+	len := LENGTH(plain_text);
+	IF len <= 4 THEN -- If length of text is less than or equal to 4, return original text
+		masked_text := REPEAT('*', len);
+	ELSE
+		masked_text := SUBSTRING(plain_text FROM 1 FOR 2) || REPEAT('*', len-4) ||  SUBSTRING(plain_text FROM len-1 FOR 2) ;
+	END IF;
+END;
+$$;
+
+DO
+$$
+DECLARE 
+	masked_text TEXT;
+BEGIN
+	CALL sp_mask_text('Moumitha', masked_text);
+	RAISE NOTICE '%',masked_text;
+	CALL sp_mask_text('Moumi', masked_text);
+	RAISE NOTICE '%',masked_text;
+	CALL sp_mask_text('Momo', masked_text);
+	RAISE NOTICE '%',masked_text;
+END;
+$$
+
+-- 4. Create a procedure to insert into customer with encrypted email and masked name
+-- Task:
+-- Call sp_encrypt_text for email
+-- Call sp_mask_text for first_name
+-- Insert masked and encrypted values into the customer table
+
+CREATE TABLE customer(
+	customer_id SERIAL PRIMARY KEY,
+	first_name TEXT NOT NULL,
+	last_name TEXT NOT NULL,
+	email TEXT NOT NULL
+);
+
+CREATE OR REPLACE PROCEDURE sp_insert_customer(
+	IN p_first_name TEXT,
+	IN p_last_name TEXT,
+	IN p_email TEXT,
+	IN p_secret_key TEXT) 
+LANGUAGE plpgsql
+AS $$
+DECLARE
+	masked_first_name TEXT;
+	encrypted_email BYTEA;
+BEGIN
+	BEGIN
+		-- Mask first_name
+		CALL sp_mask_text(p_first_name, masked_first_name);
+
+		-- Encrypt email
+		CALL sp_encrypt_text(p_email, p_secret_key, encrypted_email);
+
+		-- Insert into customer table
+		INSERT INTO customer(first_name, last_name, email)
+		VALUES(masked_first_name, p_last_name, encode(encrypted_email, 'base64'));
+
+	EXCEPTION
+        WHEN OTHERS THEN
+            RAISE EXCEPTION 'Error inserting customer: %', SQLERRM;
+    END;
+END;
+$$;
+
+CALL sp_insert_customer('Moumitha','Raghu','moumi@gmail.com', 'mysecretkey');
+CALL sp_insert_customer('Thara','Krish','thara@gmail.com', 'secretkey');
+
+-- 5. Create a procedure to fetch and display masked first_name and decrypted email for all customers
+-- Task:
+-- Write sp_read_customer_masked() that:
+-- Loops through all rows
+-- Decrypts email
+-- Displays customer_id, masked first name, and decrypted emails
+
+
+CREATE OR REPLACE PROCEDURE sp_read_customer(IN p_secret_key TEXT) 
+LANGUAGE plpgsql
+AS $$
+DECLARE
+	record RECORD;
+	decrypted_email TEXT;
+    email_decrypt_cur CURSOR FOR
+        SELECT customer_id, first_name, email FROM customer;
+BEGIN
+    OPEN email_decrypt_cur;
+ 
+    LOOP
+        FETCH email_decrypt_cur INTO record;
+		
+        EXIT WHEN NOT FOUND;
+ 
+        BEGIN
+			-- Decrypt email into text
+			decrypted_email := pgp_sym_decrypt(decode(record.email, 'base64'), p_secret_key);
+        EXCEPTION
+            WHEN OTHERS THEN
+            	decrypted_email := '[decryption failed]';
+        END;
+ 
+        RAISE NOTICE 'ID: %, Name: %, Email: %', record.customer_id, record.first_name, decrypted_email;
+    END LOOP;
+ 
+    CLOSE email_decrypt_cur;
+END;
+$$;
+ 
+
+SELECT * FROM customer;
+
+CALL sp_read_customer('mysecretkey');
+CALL sp_read_customer('secretkey');
+
+
