@@ -9,9 +9,9 @@ namespace OrderProcessingApplication.Services
     {
         private readonly IRepository<int, Order> _orderRepository;
         private readonly IPaymentProcessor _paymentProcessor;
-        private readonly INotifier _notifier;
+        private readonly IEmailNotifier _notifier;
 
-        public OrderService(IRepository<int, Order> orderRepository, IPaymentProcessor paymentProcessor, INotifier notifier)
+        public OrderService(IRepository<int, Order> orderRepository, IPaymentProcessor paymentProcessor, IEmailNotifier notifier)
         {
             _orderRepository = orderRepository;
             _paymentProcessor = paymentProcessor;
@@ -32,7 +32,7 @@ namespace OrderProcessingApplication.Services
                 throw new PaymentFailedException("Payment failed for the order.");
             }
 
-            _notifier.SendNotification($"Order with ID {order.Id} has been placed successfully.");
+            _notifier.SendEmail($"Order with ID {order.Id} has been placed successfully.");
 
             return order;
         }

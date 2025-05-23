@@ -12,7 +12,7 @@ namespace OrderProcessingApplication
         {
             IRepository<int, Order> orderRepository = new OrderRepository();
             IPaymentProcessor paymentProcessor = new PaymentProcessor();
-            INotifier notifier = new EmailNotifier();
+            IEmailNotifier notifier = new EmailNotifier();
 
             IOrderService orderService = new OrderService(orderRepository, paymentProcessor, notifier);
 

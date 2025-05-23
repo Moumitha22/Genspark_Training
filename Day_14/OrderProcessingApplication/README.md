@@ -23,7 +23,7 @@
 
   * `OrderService` handles order-related operations like placing an order, retrieving orders, etc.
   * `PaymentProcessor` and its subclasses(`CreditCardPaymentProcessor`, `GooglePayPaymentProcessor`) handle different payment processing methods.
-  * `EmailNotifier` is responsible for sending notifications.
+  * `EmailNotifier` and `SmsNotifier` are responsible for sending notifications.
   * `ManageOrders` manages the user interface for interacting with the system.
 
 **O - Open/Closed Principle (OCP)**
@@ -39,16 +39,20 @@
 
   * Both subclasses override the `ProcessPayment` method, and they can be used wherever the `PaymentProcessor` is expected, ensuring the system’s correctness.
 
+
 **I - Interface Segregation Principle (ISP)**
 
 * Interfaces are designed to be client-specific:
 
-  * `IOrderService`, `IPaymentProcessor`, and `INotifier` define small, focused contracts that only expose the necessary methods for their specific responsibilities.
-  * `IOrderService` does not include payment processing, `IPaymentProcessor` does not include order management, and `INotifier` does not deal with payments.
+  * `IEmailNotifier` and `ISmsNotifier` define small, focused interfaces tailored to different types of notifications.
+    * `IEmailNotifier` includes methods specifically for sending email notifications, while  `ISmsNotifier` is responsible only for SMS-based notifications.
+
+  * Similarly, `IOrderService` and `IPaymentProcessor` are focused on distinct responsibilities:
+    * `IOrderService` handles order-related operations, while `IPaymentProcessor` is concerned solely with processing payments.
 
 **D - Dependency Inversion Principle (DIP)**
 
 * High-level modules depend on abstractions, not on low-level modules:
 
-  * `OrderService` depends on `IRepository<int, Order>`, `IPaymentProcessor`, and `INotifier`, not on concrete implementations like `OrderRepository`, `PaymentProcessor`, or `EmailNotifier`.
+  * `OrderService` depends on `IRepository<int, Order>`, `IPaymentProcessor`, and `IEmailNotifier`, not on concrete implementations like `OrderRepository`, `PaymentProcessor`, or `EmailNotifier`.
   * This allows for flexibility in substituting different repository, payment, or notification implementations.

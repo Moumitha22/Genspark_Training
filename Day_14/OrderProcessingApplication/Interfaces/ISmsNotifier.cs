@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace OrderProcessingApplication.Interfaces
 {
-    public interface INotifier
+    internal interface ISmsNotifier
     {
-        void SendNotification(string message);
+        void SendSMS(string message);
     }
 }

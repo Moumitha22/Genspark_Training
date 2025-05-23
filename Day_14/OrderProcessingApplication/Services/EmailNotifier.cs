@@ -2,11 +2,11 @@
 
 namespace OrderProcessingApplication.Services
 {
-    public class EmailNotifier : INotifier
+    public class EmailNotifier : IEmailNotifier
     {
-        public void SendNotification(string message)
+        public void SendEmail(string message)
         {
-            Console.WriteLine($"\nNotification Sent: {message}");
+            Console.WriteLine($"\nNotification Sent via Email: {message}");
         }
     }
 }
