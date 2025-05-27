@@ -4,3 +4,6 @@ obj/
 
 # Ignore Visual Studio user-specific files and folders
 .vs/
+
+# macOS system files|
+.DS_Store
