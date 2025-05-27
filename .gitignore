@@ -7,3 +7,13 @@ obj/
 
 # macOS system files|
 .DS_Store
+
+# Ignore all launch profiles
+**/Properties/launchSettings.json
+
+# Ignore development config files
+**/appsettings.Development.json
+**/appsettings.Local.json
+
+# Ignore .http request files used in VS REST Client
+**/*.http
