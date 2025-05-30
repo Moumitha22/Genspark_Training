@@ -1,8 +1,4 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using BankManagementSystem.Models;
-using BankManagementSystem.Contexts;
-using Microsoft.EntityFrameworkCore;
 using BankManagementSystem.Interfaces;
 using BankManagementSystem.Misc;
 using BankManagementSystem.Models.DTOs;
@@ -20,6 +16,25 @@ namespace BankManagementSystem.Services
             _userRepository = userRepository;
         }
 
+        public async Task<User> AddUser(UserAddRequestDto userAddRequestDto)
+        {
+            var allUsers = await _userRepository.GetAll();
+
+            var existingUser = allUsers.FirstOrDefault(u => u.Email.Equals(userAddRequestDto.Email, StringComparison.OrdinalIgnoreCase));
+
+            if (existingUser != null)
+                throw new Exception($"A user with email {userAddRequestDto.Email} already exists.");
+
+            var user = userMapper.MapUserAddRequestDtoToUser(userAddRequestDto);
+            user = await _userRepository.Add(user);
+            return user;
+        }
+
+        public async Task<ICollection<User>> GetAllUsers()
+        {
+            var users = await _userRepository.GetAll();
+            return users.ToList();
+        }
         public async Task<User> GetUserById(int userId)
         {
             try
@@ -33,17 +48,5 @@ namespace BankManagementSystem.Services
             }
         }
 
-        public async Task<ICollection<User>> GetAllUsers()
-        {
-            var users = await _userRepository.GetAll();
-            return users.ToList();
-        }
-
-        public async Task<User> AddUser(UserAddRequestDto userAddRequestDto)
-        {
-            var user = userMapper.MapUserAddRequestDtoToUser(userAddRequestDto);
-            user = await _userRepository.Add(user);
-            return user;
-        }
     }
 }

@@ -12,7 +12,7 @@ namespace BankManagementSystem.Misc
                 UserId = dto.UserId,
                 AccountType = dto.AccountType,
                 Status = "Open",
-                Balance = 0, 
+                Balance = dto.InitialDeposit ?? 0, 
                 OpenedAt = DateTime.UtcNow
             };
         }

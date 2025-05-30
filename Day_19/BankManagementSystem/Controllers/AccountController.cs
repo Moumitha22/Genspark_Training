@@ -16,6 +16,19 @@ namespace BankManagementSystem.Controllers
             _accountService = accountService;
         }
 
+        [HttpPost]
+        public async Task<ActionResult<Account>> CreateAccount([FromBody] AccountAddRequestDto accountDto)
+        {
+            try
+            {
+                var createdAccount = await _accountService.CreateAccount(accountDto);
+                return Ok(createdAccount);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpGet]
         public async Task<ActionResult<ICollection<Account>>> GetAllAccounts()
         {
@@ -44,18 +57,48 @@ namespace BankManagementSystem.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Account>> CreateAccount([FromBody] AccountAddRequestDto accountDto)
+        [HttpGet("accountNumber/{accountNumber}")]
+        public async Task<ActionResult<Account>> GetAccountByAccountNumber(string accountNumber)
         {
             try
             {
-                var createdAccount = await _accountService.CreateAccount(accountDto);
-                return Ok(createdAccount);
+                var account = await _accountService.GetAccountByAccountNumber(accountNumber);
+                return Ok(account);
             }
             catch (System.Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpGet("check-balance/{accountNumber}")]
+        public async Task<ActionResult<decimal>> CheckBalance(string accountNumber)
+        {
+            try
+            {
+                var balance = await _accountService.CheckBalance(accountNumber);
+                return Ok(balance);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpPatch("close/{accountNumber}")]
+        public async Task<IActionResult> CloseAccount(string accountNumber)
+        {
+            try
+            {
+                var result = await _accountService.CloseAccount(accountNumber);
+                return Ok(new { Message = "Account deactivated successfully." });
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+
+
     }
 }

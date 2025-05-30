@@ -44,17 +44,31 @@ namespace BankManagementSystem.Controllers
             }
         }
 
-        [HttpGet("check-balance/{accountId}")]
-        public async Task<ActionResult<decimal>> CheckBalance(int accountId)
+        [HttpPost("transfer")]
+        public async Task<ActionResult<Transaction>> Transfer([FromBody] TransactionTransferRequestDto dto)
         {
             try
             {
-                var balance = await _transactionService.CheckBalance(accountId);
-                return Ok(balance);
+                var result = await _transactionService.Transfer(dto);
+                return Ok(result);
             }
             catch (Exception ex)
             {
-                return NotFound(ex.Message);
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("by-account/{accountNumber}")]
+        public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactionsByAccountNumber(string accountNumber)
+        {
+            try
+            {
+                var transactions = await _transactionService.GetTransactionsByAccountNumber(accountNumber);
+                return Ok(transactions);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }

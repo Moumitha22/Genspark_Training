@@ -7,5 +7,6 @@ namespace BankManagementSystem.Models.DTOs
     {
         public int UserId { get; set; }
         public string AccountType { get; set; } = string.Empty;
+        public decimal? InitialDeposit { get; set; }
     }
 }
