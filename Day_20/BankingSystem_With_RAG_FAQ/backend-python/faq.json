@@ -1,0 +1,70 @@
+[
+  {
+    "question": "What is net banking?",
+    "answer": "Net banking allows you to access and manage your bank account online, including checking balances, transferring funds, and paying bills."
+  },
+  {
+    "question": "How do I reset my net banking password?",
+    "answer": "You can reset your password using the \"Forgot Password\" option on the login page and completing the verification process."
+  },
+  {
+    "question": "Is online banking secure?",
+    "answer": "Yes, online banking uses encryption and two-factor authentication (2FA) to ensure security. Never share your OTP or password with anyone."
+  },
+  {
+    "question": "What types of accounts do you offer?",
+    "answer": "We offer savings accounts, current accounts, fixed deposits, and recurring deposit accounts."
+  },
+  {
+    "question": "What is the minimum balance required in a savings account?",
+    "answer": "The minimum balance requirement depends on the type of account. For a regular savings account, it is typically ₹5,000."
+  },
+  {
+    "question": "How do I block my lost or stolen debit card?",
+    "answer": "You can block your card immediately via mobile banking, net banking, or by calling our 24/7 helpline."
+  },
+  {
+    "question": "How can I apply for a credit card?",
+    "answer": "You can apply online through our website or visit your nearest branch with valid identity and income proof."
+  },
+  {
+    "question": "What is the difference between NEFT, RTGS, and IMPS?",
+    "answer": "NEFT and RTGS are scheduled bank transfers during working hours. IMPS is an instant 24x7 transfer system for smaller amounts."
+  },
+  {
+    "question": "Are there charges for transferring money via UPI?",
+    "answer": "Most UPI transfers are free for personal use. However, charges may apply for business or high-volume usage."
+  },
+  {
+    "question": "What types of loans are available?",
+    "answer": "We offer personal, home, car, education, and business loans with flexible repayment options."
+  },
+  {
+    "question": "How do I apply for a loan?",
+    "answer": "You can apply through our website or visit a branch. You'll need identity, income, and address proof along with your application."
+  },
+  {
+    "question": "Can I prepay my loan?",
+    "answer": "Yes, prepayment is allowed. Some loans may carry a small prepayment charge. Check your loan agreement for details."
+  },
+  {
+    "question": "How do I download my account statement?",
+    "answer": "You can download it from net banking or the mobile app under the \"Statements\" section."
+  },
+  {
+    "question": "How do I update my address or contact details?",
+    "answer": "Log in to net banking or visit a branch with valid address proof to update your information."
+  },
+  {
+    "question": "Can I request a checkbook online?",
+    "answer": "Yes, you can request a new checkbook via net banking or the mobile app."
+  },
+  {
+    "question": "How can I contact customer support?",
+    "answer": "You can reach us via phone, email, live chat, or by visiting your nearest branch."
+  },
+  {
+    "question": "What should I do if I notice unauthorized transactions?",
+    "answer": "Immediately report them via our helpline or block your card using net/mobile banking."
+  }
+]
