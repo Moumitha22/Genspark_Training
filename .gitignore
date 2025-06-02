@@ -14,6 +14,20 @@ obj/
 # Ignore development config files
 **/appsettings.Development.json
 **/appsettings.Local.json
+**/appsettings.json
 
 # Ignore .http request files used in VS REST Client
 **/*.http
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+env/
+venv/
+.env
+
+# FastAPI / Uvicorn
+*.log
