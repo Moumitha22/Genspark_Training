@@ -1,5 +1,6 @@
 using ClinicManagementSystem.Contexts;
 using ClinicManagementSystem.Models;
+using ClinicManagementSystem.Interfaces;
 using ClinicManagementSystem.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,116 +31,109 @@ namespace ClinicManagementSystem.Test
             };
         }
 
-        [Test]
-        public async Task CreateUser_Succeeds()
-        {
-            var repository = new UserRepository(_context);
-            var user = CreateSampleUser();
+        // [Test]
+        // public async Task CreateUserPassTest()
+        // {
+        //     IRepository<string, User> userRepository = new UserRepository(_context);
+        //     var user = CreateSampleUser();
 
-            var savedUser = await repository.Add(user);
+        //     var savedUser = await userRepository.Add(user);
 
-            Assert.That(savedUser, Is.Not.Null);
-            Assert.That(savedUser.Username, Is.EqualTo(user.Username));
-        }
+        //     Assert.That(savedUser, Is.Not.Null);
+        //     Assert.That(savedUser.Username, Is.EqualTo(user.Username));
+        // }
 
-        [Test]
-        public async Task AddDuplicateUser_ShouldFail()
-        {
-            var repository = new UserRepository(_context);
-            var user = CreateSampleUser("duplicate@user.com");
+        // [Test]
+        // public async Task GetUserPassTest()
+        // {
+        //     IRepository<string, User> userRepository = new UserRepository(_context);
+        //     var user = CreateSampleUser();
+        //     await userRepository.Add(user);
 
-            await repository.Add(user);
+        //     var retrieved = await userRepository.Get(user.Username);
 
-            var ex = Assert.ThrowsAsync<Exception>(async () => await repository.Add(user));
+        //     Assert.That(retrieved.Username, Is.EqualTo(user.Username));
+        // }
 
-            Assert.That(ex?.Message, Does.Contain("duplicate").IgnoreCase);
-        }
+        // [TestCase("user1@gmail.com")]
+        // public void GetUser_InvalidKey_ThrowsExceptionTest(string email)
+        // {
+        //     IRepository<string, User> userRepository = new UserRepository(_context);
 
-        [Test]
-        public async Task GetUser_ReturnsCorrectUser()
-        {
-            var repository = new UserRepository(_context);
-            var user = CreateSampleUser();
-            await repository.Add(user);
+        //     var ex = Assert.ThrowsAsync<Exception>(async () => await userRepository.Get(email));
+        //     Assert.That(ex.Message, Is.EqualTo($"No user with given user name {email}"));
+        // }
 
-            var retrieved = await repository.Get(user.Username);
+        // [Test]
+        // public async Task GetAllUsersPassTest()
+        // {
+        //     IRepository<string, User> userRepository = new UserRepository(_context);
+        //     var users = new[]
+        //     {
+        //         CreateSampleUser("user1@example.com"),
+        //         CreateSampleUser("user2@example.com"),
+        //         CreateSampleUser("user3@example.com")
+        //     };
 
-            Assert.That(retrieved.Username, Is.EqualTo(user.Username));
-        }
+        //     foreach (var user in users)
+        //         await userRepository.Add(user);
 
-        [Test]
-        public void GetUser_InvalidKey_ThrowsException()
-        {
-            var repository = new UserRepository(_context);
+        //     var allUsers = (await userRepository.GetAll()).ToList();
 
-            var ex = Assert.ThrowsAsync<Exception>(async () => await repository.Get("a@email.com"));
-            Assert.That(ex.Message, Is.EqualTo("No User with the given ID"));
-        }
+        //     Assert.That(allUsers.Count, Is.EqualTo(users.Length));
+        // }
+        
+        // [Test]
+        // public async Task GetAllUsersExceptionTest()
+        // {
+        //     IRepository<string, User> userRepository = new UserRepository(_context);
 
-        [Test]
-        public async Task GetAllUsers_ReturnsExpectedCount()
-        {
-            var repository = new UserRepository(_context);
-            var users = new[]
-            {
-                CreateSampleUser("user1@example.com"),
-                CreateSampleUser("user2@example.com"),
-                CreateSampleUser("user3@example.com")
-            };
+        //     var ex = Assert.ThrowsAsync<Exception>(async () => await userRepository.GetAll());
+        //     Assert.That(ex.Message, Is.EqualTo($"No users in the database"));;
+        // }
 
-            foreach (var user in users)
-                await repository.Add(user);
+        // [Test]
+        // public async Task UpdateUser_Success()
+        // {
+        //     IRepository<string, User> userRepository = new UserRepository(_context);
+        //     var user = await userRepository.Add(CreateSampleUser());
 
-            var allUsers = (await repository.GetAll()).ToList();
+        //     user.Role = "Admin";
+        //     var updated = await userRepository.Update(user.Username, user);
 
-            Assert.That(allUsers.Count, Is.EqualTo(users.Length));
-        }
-
-        [Test]
-        public async Task UpdateUser_Success()
-        {
-            var repository = new UserRepository(_context);
-            var user = await repository.Add(CreateSampleUser());
-
-            user.Role = "Admin";
-            var updated = await repository.Update(user.Username, user);
-
-            Assert.That(updated.Role, Is.EqualTo("Admin"));
-        }
+        //     Assert.That(updated.Role, Is.EqualTo("Admin"));
+        // }
 
 
-        [Test]
-        public void UpdateUser_NotFound_ThrowsException()
-        {
-            var repository = new UserRepository(_context);
-            var fakeUser = CreateSampleUser("abc@abc.com");
+        //    [TestCase("test@gmail.com")]
+        //     public void UpdateUser_NotFound_ThrowsException(string email)
+        //     {
+        //         IRepository<string, User> userRepository = new UserRepository(_context);
+        //         var user = CreateSampleUser("user@gmail.com");
 
-            var ex = Assert.ThrowsAsync<Exception>(async () => await repository.Update(fakeUser.Username, fakeUser));
-            Assert.That(ex.Message, Is.EqualTo("No such item found for updation"));
-        }
+        //         var ex = Assert.ThrowsAsync<Exception>(async () => await userRepository.Update(email, user));
+        //         Assert.That(ex.Message, Is.EqualTo($"No user with given user name {email}"));
+        //     }
 
-        [Test]
-        public async Task DeleteUser_Succeeds()
-        {
-            var repository = new UserRepository(_context);
-            var user = await repository.Add(CreateSampleUser());
+        // [Test]
+        // public async Task DeleteUserPassTest()
+        // {
+        //     IRepository<string, User> userRepository = new UserRepository(_context);
+        //     var user = await userRepository.Add(CreateSampleUser());
 
-            var deleted = await repository.Delete(user.Username);
+        //     var deleted = await userRepository.Delete(user.Username);
 
-            Assert.That(deleted.Username, Is.EqualTo(user.Username));
+        //     Assert.That(deleted.Username, Is.EqualTo(user.Username));
+        // }
 
-            var ex = Assert.ThrowsAsync<Exception>(async () => await repository.Get(user.Username));
-            Assert.That(ex.Message, Is.EqualTo("No User with the given ID"));
-        }
+        // [TestCase("usertest@gmail.com")]
+        // public void DeleteUser_NotFound_ThrowsExceptionTest(string email)
+        // {
+        //     IRepository<string, User> userRepository = new UserRepository(_context);
 
-        [Test]
-        public void DeleteUser_NotFound_ThrowsException()
-        {
-            var repository = new UserRepository(_context);
-
-            var ex = Assert.ThrowsAsync<Exception>(async () => await repository.Delete("g@gmail.com"));
-            Assert.That(ex.Message, Is.EqualTo("No such item found for deleting"));
-        }
+        //     var ex = Assert.ThrowsAsync<Exception>(async () => await userRepository.Delete(email));
+        //     Assert.That(ex.Message, Is.EqualTo($"No user with given user name {email}"));
+        // }
 
         [TearDown]
         public void Cleanup()

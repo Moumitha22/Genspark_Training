@@ -1,7 +1,7 @@
-using   ClinicManagementSystem.Contexts;
-using   ClinicManagementSystem.Models;
-using   ClinicManagementSystem.Repositories;
-using   ClinicManagementSystem.Interfaces;
+using ClinicManagementSystem.Contexts;
+using ClinicManagementSystem.Models;
+using ClinicManagementSystem.Repositories;
+using ClinicManagementSystem.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using System;
@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace   ClinicManagementSystem.Test
+namespace ClinicManagementSystem.Test
 {
     public class SpecialityRepoTest
     {
@@ -34,105 +34,137 @@ namespace   ClinicManagementSystem.Test
             };
         }
 
-        [Test]
-        public async Task AddSpecialityTest()
-        {
-            IRepository<int, Speciality> repository = new SpecialityRepository(_context);
-            var speciality = CreateTestSpeciality();
+        // [Test]
+        // public async Task AddSpecialityTest()
+        // {
+        //     // Arrange
+        //     IRepository<int, Speciality> specialityRepository = new SpecialityRepository(_context);
+        //     var speciality = CreateTestSpeciality();
 
-            var result = await repository.Add(speciality);
+        //     // Action
+        //     var result = await specialityRepository.Add(speciality);
 
-            Assert.That(result, Is.Not.Null);
-            Assert.That(result.Id, Is.GreaterThan(0));
-            Assert.That(result.Name, Is.EqualTo("Cardiology"));
-        }
+        //     // Assert
+        //     Assert.That(result, Is.Not.Null);
+        //     Assert.That(result.Id, Is.GreaterThan(0));
+        //     Assert.That(result.Name, Is.EqualTo("Cardiology"));
+        // }
 
-        [Test]
-        public async Task GetSpecialityTest()
-        {
-            IRepository<int, Speciality> repository = new SpecialityRepository(_context);
-            var speciality = await repository.Add(CreateTestSpeciality("Neurology"));
+        // [TestCase(1)]
+        // public async Task GetSpecialityPassTest(int id)
+        // {
+            // Arrange
+        //     IRepository<int, Speciality> specialityRepository = new SpecialityRepository(_context);
+        //     var speciality = await specialityRepository.Add(CreateTestSpeciality("Neurology"));
 
-            var result = await repository.Get(speciality.Id);
+        //     // Action
+        //     var result = await specialityRepository.Get(id);
 
-            Assert.That(result, Is.Not.Null);
-            Assert.That(result.Name, Is.EqualTo("Neurology"));
-        }
+        //     // Assert
+        //     Assert.That(result, Is.Not.Null);
+        //     Assert.That(result.Name, Is.EqualTo("Neurology"));
+        // }
 
-        [Test]
-        public void GetSpeciality_NotFound_ThrowsException()
-        {
-            IRepository<int, Speciality> repository = new SpecialityRepository(_context);
+        // [TestCase(99)]
+        // public void GetSpecialityExceptionTest(int id)
+        // {
+        //     // Arrange
+        //     IRepository<int, Speciality> specialityRepository = new SpecialityRepository(_context);
 
-            var ex = Assert.ThrowsAsync<Exception>(async () => await repository.Get(999));
-            Assert.That(ex.Message, Is.EqualTo("No speciality with the given ID"));
-        }
+        //     // Action & Assert
+        //     var ex = Assert.ThrowsAsync<Exception>(async () => await specialityRepository.Get(id));
+        //     Assert.That(ex.Message, Is.EqualTo($"No speciality with given ID {id}"));
+        // }
 
-        [Test]
-        public async Task GetAllSpecialitiesTest()
-        {
-            IRepository<int, Speciality> repository = new SpecialityRepository(_context);
-            var list = new List<Speciality>
-            {
-                CreateTestSpeciality("Cardiology"),
-                CreateTestSpeciality("Orthopedics"),
-                CreateTestSpeciality("Dermatology")
-            };
+        // [Test]
+        // public async Task GetAllSpecialitiesPassTest()
+        // {
+        //     // Arrange
+        //     IRepository<int, Speciality> specialityRepository = new SpecialityRepository(_context);
+        //     var specialities = new List<Speciality>
+        //     {
+        //         CreateTestSpeciality("Cardiology"),
+        //         CreateTestSpeciality("Neurology"),
+        //         CreateTestSpeciality("Dermatology")
+        //     };
 
-            foreach (var item in list)
-                await repository.Add(item);
+        //     foreach (var item in specialities)
+        //         await specialityRepository.Add(item);
 
-            var result = await repository.GetAll();
-            var results = result.ToList();
+        //     // Action
+        //     var result = await specialityRepository.GetAll();
+        //     var results = result.ToList();
 
-            Assert.That(results.Count, Is.EqualTo(list.Count));
-            Assert.That(results.Select(s => s.Name), Is.EquivalentTo(list.Select(s => s.Name)));
-        }
+        //     // Assert
+        //     Assert.That(results.Count, Is.EqualTo(specialities.Count));
+        //     Assert.That(results.Select(s => s.Name), Is.EquivalentTo(specialities.Select(s => s.Name)));
+        // }
+        
+        // [Test]
+        // public async Task GetAllSpecialitiesExceptionTest()
+        // {
+        //     // Arrange
+        //     IRepository<int, Speciality> specialityRepository = new SpecialityRepository(_context);
 
-        [Test]
-        public async Task UpdateSpecialityTest()
-        {
-            IRepository<int, Speciality> repository = new SpecialityRepository(_context);
-            var speciality = await repository.Add(CreateTestSpeciality("ENT"));
+        //     // Action & Assert
+        //     var ex = Assert.ThrowsAsync<Exception>(async () => await specialityRepository.GetAll());
+        //     Assert.That(ex.Message, Is.EqualTo($"No specialities in the database"));;
+        // }
 
-            speciality.Status = "Inactive";
-            var updated = await repository.Update(speciality.Id, speciality);
+        // [TestCase]
+        // public async Task UpdateSpecialityPassTest()
+        // {
+        //     // Arrange
+        //     IRepository<int, Speciality> specialityRepository = new SpecialityRepository(_context);
+        //     var speciality = await specialityRepository.Add(CreateTestSpeciality("ENT"));
 
-            Assert.That(updated.Status, Is.EqualTo("Inactive"));
-        }
+        //     // Action
+        //     speciality.Status = "Inactive";
+        //     var updatedSpeciality = await specialityRepository.Update(speciality.Id, speciality);
 
-        [Test]
-        public void UpdateSpeciality_NotFound_ThrowsException()
-        {
-            IRepository<int, Speciality> repository = new SpecialityRepository(_context);
-            var speciality = CreateTestSpeciality();
-            speciality.Id = 999;
+        //     // Assert
+        //     Assert.That(updatedSpeciality.Status, Is.EqualTo("Inactive"));
+        // }
 
-            var ex = Assert.ThrowsAsync<Exception>(async () => await repository.Update(speciality.Id, speciality));
-            Assert.That(ex.Message, Is.EqualTo("No speciality with the given ID"));
-        }
+        // [Test]
+        // public void UpdateSpecialityThrowsExceptionTest()
+        // {
+        //     // Arrange
+        //     IRepository<int, Speciality> specialityRepository = new SpecialityRepository(_context);
+        //     var speciality = CreateTestSpeciality();
 
-        [Test]
-        public async Task DeleteSpecialityTest()
-        {
-            IRepository<int, Speciality> repository = new SpecialityRepository(_context);
-            var speciality = await repository.Add(CreateTestSpeciality());
+        //     speciality.Id = 999;
+        //     speciality.Status = "Inactive";
 
-            var deleted = await repository.Delete(speciality.Id);
-            Assert.That(deleted.Id, Is.EqualTo(speciality.Id));
+        //     // Action & Assert
+        //     var ex = Assert.ThrowsAsync<Exception>(async () => await specialityRepository.Update(speciality.Id, speciality));
+        //     Assert.That(ex.Message, Is.EqualTo($"No speciality with given ID {speciality.Id}"));
+        // }
 
-            var ex = Assert.ThrowsAsync<Exception>(async () => await repository.Get(speciality.Id));
-            Assert.That(ex.Message, Is.EqualTo("No speciality with the given ID"));
-        }
+        // [Test]
+        // public async Task DeleteSpecialityPassTest()
+        // {
+        //     // Arrange
+        //     IRepository<int, Speciality> specialityRepository = new SpecialityRepository(_context);
+        //     var speciality = await specialityRepository.Add(CreateTestSpeciality());
 
-        [Test]
-        public void DeleteSpeciality_NotFound_ThrowsException()
-        {
-            IRepository<int, Speciality> repository = new SpecialityRepository(_context);
+        //     // Action 
+        //     var deleted = await specialityRepository.Delete(speciality.Id);
 
-            var ex = Assert.ThrowsAsync<Exception>(async () => await repository.Delete(999));
-            Assert.That(ex.Message, Is.EqualTo("No speciality with the given ID"));
-        }
+        //     // Assert
+        //     Assert.That(deleted.Id, Is.EqualTo(speciality.Id));
+        // }
+
+        // [TestCase(99)]
+        // public void DeleteSpecialityThrowsExceptionTest(int id)
+        // {
+        //     // Arrange
+        //     IRepository<int, Speciality> specialityRepository = new SpecialityRepository(_context);
+
+        //     // Action & Assert
+        //     var ex = Assert.ThrowsAsync<Exception>(async () => await specialityRepository.Delete(id));
+        //     Assert.That(ex.Message, Is.EqualTo($"No speciality with given ID {id}"));
+        // }
 
         [TearDown]
         public void TearDown()

@@ -12,12 +12,18 @@ namespace ClinicManagementSystem.Repositories
         }
         public override async Task<User> Get(string key)
         {
-            return await _clinicContext.Users.SingleOrDefaultAsync(u => u.Username == key);
+            var user = await _clinicContext.Users.SingleOrDefaultAsync(u => u.Username == key);
+            return user ?? throw new Exception($"No user with given user name {key}");
         }
 
         public override async Task<IEnumerable<User>> GetAll()
         {
-            return await _clinicContext.Users.ToListAsync();
+            var users = _clinicContext.Users;
+            if (users.Count() == 0)
+            {
+                throw new Exception("No users in the database");
+            }
+            return await users.ToListAsync();
         }
             
     }

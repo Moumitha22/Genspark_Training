@@ -8,7 +8,7 @@ using ClinicManagementSystem.Interfaces;
 namespace ClinicManagementSystem.Test;
 public class PatientRepoTest
 {
-    ClinicContext _context;
+    private ClinicContext _context;
     [SetUp]
     public void Setup()
     {
@@ -20,6 +20,18 @@ public class PatientRepoTest
         
     }
 
+    private User CreateTestUser(string email = "test@gmail.com", string role = "Patient")
+    {
+        return new User
+        {
+            Username = email,
+            Password = System.Text.Encoding.UTF8.GetBytes("test123"),
+            HashKey = Guid.NewGuid().ToByteArray(),
+            Role = role
+        };
+    }
+
+
     private Patient CreateTestPatient(string email = "test@gmail.com")
     {
         return new Patient
@@ -30,170 +42,166 @@ public class PatientRepoTest
     }
 
     // [Test]
-    // public async Task AddPatientTest()
+    // public async Task AddPatientPassTest()
     // {
-    //     //arrange
-    //     var email = "test@gmail.com";
-    //     var password = System.Text.Encoding.UTF8.GetBytes("test123");
-    //     var key = Guid.NewGuid().ToByteArray();
-    //     var user = new User
-    //     {
-    //         Username = email,
-    //         Password = password,
-    //         HashKey = key,
-    //         Role = "Patient"
-    //     };
-    //     _context.Add(user);
+    //     // Arrange
+    //      var email = "test@gmail.com";
+    //     _context.Users.Add(CreateTestUser(email));
     //     await _context.SaveChangesAsync();
+
     //     var patient = CreateTestPatient(email);
-    //     IRepository<int, Patient> _doctorRepository = new PatientRepository(_context);
-    //     //action
-    //     var result = await _doctorRepository.Add(patient);
-    //     //assert
-    //     Assert.That(result, Is.Not.Null, "Patient IS not addeed");
+
+    //     IRepository<int, Patient> _patientRepository = new PatientRepository(_context);
+
+    //     // Action
+    //     var result = await _patientRepository.Add(patient);
+
+    //     // Assert
+    //     Assert.That(result, Is.Not.Null, "Patient IS not added");
     //     Assert.That(result.Id, Is.EqualTo(1));
-    //     Assert.That(result.Email, Is.EqualTo("test@gmail.com"));
+    //     Assert.That(result.Email, Is.EqualTo(email));
     // }
 
     // [TestCase(1)]
-    // [TestCase(2)]
     // public async Task GetPatientPassTest(int id)
     // {
     //     //arrange
-    //     var email = " test@gmail.com";
-    //     var password = System.Text.Encoding.UTF8.GetBytes("test123");
-    //     var key = Guid.NewGuid().ToByteArray();
-    //     var user = new User
-    //     {
-    //         Username = email,
-    //         Password = password,
-    //         HashKey = key,
-    //         Role = "Patient"
-    //     };
-    //     _context.Add(user);
+    //     var email = "test@gmail.com";
+    //     _context.Users.Add(CreateTestUser(email));
     //     await _context.SaveChangesAsync();
+
     //     var patient = CreateTestPatient(email);
-    //     IRepository<int, Patient> _doctorRepository = new PatientRepository(_context);
-    //     //action
-    //     await _doctorRepository.Add(patient);
+    //     IRepository<int, Patient> _patientRepository = new PatientRepository(_context);
+    //     await _patientRepository.Add(patient);
 
     //     //action
-    //     var result = _doctorRepository.Get(id);
+    //     var result = _patientRepository.Get(id);
+
     //     //assert
     //     Assert.That(result.Id, Is.EqualTo(id));
-
     // }
 
     // [TestCase(3)]
     // public async Task GetPatientExceptionTest(int id)
     // {
-    //     // Arrange
+    //     //arrange
     //     var email = "test@gmail.com";
-    //     var password = System.Text.Encoding.UTF8.GetBytes("test123");
-    //     var key = Guid.NewGuid().ToByteArray();
-
-    //     var user = new User
-    //     {
-    //         Username = email,
-    //         Password = password,
-    //         HashKey = key,
-    //         Role = "Patient"
-    //     };
-    //     _context.Users.Add(user);
+    //     _context.Users.Add(CreateTestUser(email));
     //     await _context.SaveChangesAsync();
 
-    //     var patient = new Patient
-    //     {
-    //         Name = "test",
-    //         Email = email
-    //     };
-    //     IRepository<int, Patient> doctorRepository = new PatientRepository(_context);
-    //     await doctorRepository.Add(patient); 
+    //     var patient = CreateTestPatient(email);
+    //     IRepository<int, Patient> _patientRepository = new PatientRepository(_context);
+    //     await _patientRepository.Add(patient);
 
-    //     // Act & Assert
-    //     var ex = await Assert.ThrowsAsync<Exception>(async () => await doctorRepository.Get(id));
-    //     Assert.That(ex.Message, Is.EqualTo("No Patient with the given ID"));
+    //     //action
+    //     var result = _patientRepository.Get(id);
+
+    //     var ex = Assert.ThrowsAsync<Exception>(async () => await _patientRepository.Get(id));
+    //     Assert.That(ex.Message, Is.EqualTo($"No patient with the given ID {id}"));
     // }
 
     // [Test]
-    // public async Task GetAllPatientsTest()
+    // public async Task GetAllPatientsPassTest()
     // {
-    //     IRepository<int, Patient> _doctorRepository = new PatientRepository(_context);
-
-    //     var doctors = new List<Patient>
+    //     // Arrange
+    //     var patients = new List<Patient>
     //     {
-    //         CreateTestPatient("doc1@gmail.com"),
-    //         CreateTestPatient("doc2@gmail.com"),
-    //         CreateTestPatient("doc3@gmail.com"),
+    //         CreateTestPatient("patient1@gmail.com"),
+    //         CreateTestPatient("patient2@gmail.com"),
+    //         CreateTestPatient("patient3@gmail.com"),
     //     };
 
-    //     foreach (var doc in doctors)
+    //     IRepository<int, Patient> _patientRepository = new PatientRepository(_context);
+    //     foreach (var patient in patients)
     //     {
-    //         await _doctorRepository.Add(doc);
+    //         await _patientRepository.Add(patient);
     //     }
-
-    //     var result = await _doctorRepository.GetAll();
+    //     // Action
+    //     var result = await _patientRepository.GetAll();
+    //     // Assert
     //     var results = result.ToList();
-    //     Assert.That(results.Count, Is.EqualTo(doctors.Count));
+    //     Assert.That(results.Count, Is.EqualTo(patients.Count));
     //     CollectionAssert.AreEquivalent(
-    //         doctors.ConvertAll(d => d.Email),
+    //         patients.ConvertAll(d => d.Email),
     //         results.ConvertAll(d => d.Email));
     // }
 
     // [Test]
-    // public async Task UpdatePatientTest()
+    // public async Task GetAllPatientsExceptionTest()
     // {
-    //     IRepository<int, Patient> _doctorRepository = new PatientRepository(_context);
-    //     var patient = await _doctorRepository.Add(CreateTestPatient());
+    //     // Arrange
+
+    //     IRepository<int, Patient> _patientRepository = new PatientRepository(_context);
+
+    //     // Action & Assert
+    //     var ex = Assert.ThrowsAsync<Exception>(async () => await _patientRepository.GetAll());
+    //     Assert.That(ex.Message, Is.EqualTo($"No Patients in the database"));;
+    // }
+
+    // [TestCase(1)]
+    // public async Task UpdatePatientTest(int id)
+    // {
+    //     // Arrange
+    //     var patient = CreateTestPatient();
+    //     IRepository<int, Patient> _patientRepository = new PatientRepository(_context);
+    //     patient = await _patientRepository.Add(patient);
 
     //     patient.Name = "Updated Name";
+    //     patient.Age = 30;
 
-    //     var updatedPatient = await _doctorRepository.Update(patient.Id, patient);
+    //     // Action
+    //     var updatedPatient = await _patientRepository.Update(id, patient);
 
+    //     //Assert
     //     Assert.That(updatedPatient, Is.Not.Null);
-    //     Assert.That(updatedPatient.Id, Is.EqualTo(patient.Id));
+    //     Assert.That(updatedPatient.Id, Is.EqualTo(id));
     //     Assert.That(updatedPatient.Name, Is.EqualTo("Updated Name"));
+    //     Assert.That(updatedPatient.Age, Is.EqualTo(30));
     // }
 
-    // [Test]
-    // public void UpdatePatient_NotFound_ThrowsException()
+    // [TestCase(999)]
+    // public async Task UpdatePatientExceptionTest(int id)
     // {
-    //     IRepository<int, Patient> _doctorRepository = new PatientRepository(_context);
-
+    //     // Arrange
     //     var patient = CreateTestPatient();
-    //     patient.Id = 999; 
+    //     IRepository<int, Patient> _patientRepository = new PatientRepository(_context);
+    //     patient = await _patientRepository.Add(patient);
 
+    //     patient.Id = id;
+    //     patient.Name = "Updated Name";
+
+    //     // Action & Assert
     //     var ex = Assert.ThrowsAsync<System.Exception>(async () =>
-    //         await _doctorRepository.Update(patient.Id, patient));
+    //         await _patientRepository.Update(id, patient));
 
-    //     Assert.That(ex.Message, Is.EqualTo("No patient with the given ID"));
+    //     Assert.That(ex.Message, Is.EqualTo($"No patient with the given ID {id}"));
     // }
 
 
-    // [Test]
-    // public async Task DeletePatientTest()
+    // [TestCase(1)]
+    // public async Task DeletePatientPassTest(int id)
     // {
-    //     IRepository<int, Patient> _doctorRepository = new PatientRepository(_context);
-    //     var patient = await _doctorRepository.Add(CreateTestPatient());
+    //      // Arrange
+    //     IRepository<int, Patient> _patientRepository = new PatientRepository(_context);
+    //     var patient = await _patientRepository.Add(CreateTestPatient());
 
-    //     var deleteResult = await _doctorRepository.Delete(patient.Id);
+    //     // Action 
+    //     var deleteResult = await _patientRepository.Delete(id);
 
-    //     Assert.That(deleteResult.Id, Is.EqualTo(patient.Id));
-
-    //     var ex = Assert.ThrowsAsync<System.Exception>(async () => await _doctorRepository.Get(patient.Id));
-    //     Assert.That(ex.Message, Is.EqualTo("No patient with the given ID"));
+    //     // Assert
+    //     Assert.That(deleteResult.Id, Is.EqualTo(id));
     // }
 
-
-    // [Test]
-    // public void DeletePatient_NotFound_ThrowsException()
+    // [TestCase(99)]
+    // public void DeletePatientExceptionTest(int id)
     // {
-    //     IRepository<int, Patient> _doctorRepository = new PatientRepository(_context);
+    //     IRepository<int, Patient> _patientRepository = new PatientRepository(_context);
 
+    //     // Action & Assert
     //     var ex = Assert.ThrowsAsync<System.Exception>(async () =>
-    //         await _doctorRepository.Delete(999)); 
+    //         await _patientRepository.Delete(id)); 
 
-    //     Assert.That(ex.Message, Is.EqualTo("No patient with the given ID"));
+    //     Assert.That(ex.Message, Is.EqualTo($"No patient with the given ID {id}"));
     // }
 
 
