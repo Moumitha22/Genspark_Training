@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Notify - File Upload Alerts</title>
+</head>
+<body>
+    <h2>File Upload Notifications</h2>
+    <div id="notifications"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@microsoft/signalr@8.0.7/dist/browser/signalr.min.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("http://localhost:5143/notificationHub",{
+                                    withCredentials:true
+                                })
+            .withAutomaticReconnect()
+            .build();
+
+        connection.on("NewFileUploaded", (fileName, uploadedBy) => {
+            console.log("✅ SignalR Event Received:", fileName, uploadedBy);  // Add this line
+    
+            const notificationsDiv = document.getElementById("notifications");
+            const message = document.createElement("p");
+            const now = new Date().toLocaleTimeString();
+            message.textContent = `[${now}] New file uploaded: "${fileName}" by ${uploadedBy}`;
+            notificationsDiv.appendChild(message);
+        });
+
+
+        connection.start()
+            .then(() => console.log("Connected to NotifyHub"))
+            .catch(err => console.error("SignalR connection error:", err));
+    </script>
+</body>
+</html>
+
