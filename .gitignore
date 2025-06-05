@@ -31,3 +31,6 @@ venv/
 
 # FastAPI / Uvicorn
 *.log
+
+UploadedDocs/
+faq_index/

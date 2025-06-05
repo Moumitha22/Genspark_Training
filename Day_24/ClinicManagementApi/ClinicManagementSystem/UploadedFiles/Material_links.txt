@@ -1,0 +1,23 @@
+LINQ
+
+https://github.com/tigerbluejay/FullLINQ101Implementations/tree/main/FullLINQ101ImplementationsSolutions
+
+SOLID PRINCIPLES
+
+https://learn.microsoft.com/en-us/archive/msdn-magazine/2014/may/csharp-best-practices-dangers-of-violating-solid-principles-in-csharp
+
+Design Patterns
+
+https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/common-design-patterns
+
+HTTP METHODS
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods
+
+HTTP STATUS CODES
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status
+
+Swagger
+https://swagger.io/specification/
+
+Dummyjson
+https://dummyjson.com/docs
