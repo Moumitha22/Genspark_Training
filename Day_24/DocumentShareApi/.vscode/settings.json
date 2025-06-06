@@ -1,0 +1,16 @@
+// {
+//   "liveServer.settings.wait": 1000000,
+//   "liveServer.settings.fullReload": false,
+//   "liveServer.settings.ignoreFiles": [
+//     "**/*.html",
+//     "**/*.css",
+//     "**/*.js"
+//   ]
+// }
+
+
+{
+  "liveServer.settings.fullReload": false,
+  "liveServer.settings.ignoreFiles": ["**/*"]
+}
+
