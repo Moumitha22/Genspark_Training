@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Doctor’s Clinic</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <header class="header">
+    <div class="logo">
+      <i class="logo-icon" data-lucide="stethoscope"></i>
+      <span>Doctor’s Clinic</span>
+    </div>
+
+    <a href="#nav-menu" class="menu-toggle" aria-label="Open Menu">
+      <i data-lucide="menu"></i>
+    </a>
+
+    <nav class="nav" id="nav-menu">
+      <a href="#" class="close-btn" >
+        <i data-lucide="x"></i>
+      </a>
+
+      <a href="#">Home</a>
+      <a href="#">Services</a>
+      <button class="btn primary-btn">Log In</button>
+      <button class="btn outline-btn">Register</button>
+    </nav>
+  </header>
+
+
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Quality Care for Your Health</h1>
+      <p>Our clinic provides the best medical services for you and your family.</p>
+      <button class="btn primary-btn">Book Appointment</button>
+    </div>
+    <div class="hero-image">
+        <img src="./images/doctor.png">
+    </div>
+  </section>
+
+  <section class="services">
+    <h2>Our Services</h2>
+    <div class="card-container">
+      <div class="card">
+        <i class="icon" data-lucide="clipboard-list"></i>
+        <h3>Primary Care</h3>
+        <p>Provide doctor early care or cutlanes.</p>
+      </div>
+      <div class="card">
+        <i class="icon" data-lucide="stethoscope"></i>
+        <h3>Pediatrics</h3>
+        <p>Provide careare with kids in-names.</p>
+      </div>
+      <div class="card">
+        <i class="icon" data-lucide="cross"></i>
+        <h3>Specialty Care</h3>
+        <p>Provide accarearie and curisel-car.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonials">
+    <h2>What Our Patients Are Saying</h2>
+    <div class="testimonial-box">
+        <i class="quote-icon" data-lucide="quote"></i>
+        <p>Excellent service and wonderful staff.<br>I always feel well taken care of.</p>
+        <span class="author">- John D.</span>
+    </div>
+  </section>
+
+  <section class="hours">
+    <h2>Clinic Hours</h2>
+    <div class="hours-container">
+      <div class="hours-box">
+        <i class="icon" data-lucide="clock"></i>
+        <h3>Weekday Hours</h3>
+        <p>Monday – Friday: 8:00 AM – 6:00 PM</p>
+        <p>Saturday: 9:00 AM – 1:00 PM</p>
+      </div>
+      <div class="hours-box">
+        <i class="icon" data-lucide="calendar"></i>
+        <h3>Appointment Hours</h3>
+        <p>Monday – Friday: 8:00 AM – 5:00 PM</p>
+        <p>Saturday: 9:00 AM – 1:00 PM</p>
+      </div>
+    </div>
+  </section>
+
+
+
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>
