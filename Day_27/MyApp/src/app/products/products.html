@@ -1,0 +1,17 @@
+<div class="products">
+  <h1>Products</h1>
+
+  <div class="cart">
+    <i class="bi bi-cart3 icon"></i>
+    <span>{{cartCount}}</span>
+  </div>
+
+
+  <div class="product-list">
+    <app-product-item
+      *ngFor="let product of products"
+      [product]="product"
+      (addToCart)="handleAddToCart()">
+    </app-product-item>
+  </div>
+</div>
