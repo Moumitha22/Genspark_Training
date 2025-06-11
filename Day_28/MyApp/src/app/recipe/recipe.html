@@ -1,0 +1,13 @@
+<div class="recipe-card">
+  <img [src]="recipe?.image" alt="{{ recipe?.name }}" />
+  <h3>{{ recipe?.name }}</h3>
+  <p><strong>Cuisine:</strong> {{ recipe?.cuisine }}</p>
+  <p><strong>Difficulty:</strong> {{ recipe?.difficulty }}</p>
+  <p><strong>Ingredients:</strong> {{ recipe?.ingredients?.join(', ') }}</p>
+
+  <!-- Prep/Cook Time Row -->
+  <div class="time-box">
+    <span>Prep: {{ recipe?.prepTimeMinutes }} min</span>
+    <span>Cook: {{ recipe?.cookTimeMinutes }} min</span>
+  </div>
+</div>

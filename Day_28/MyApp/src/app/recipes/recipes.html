@@ -1,0 +1,12 @@
+<h2>Recipe Gallery</h2>
+
+@if (recipes().length > 0) {
+  <div class="recipes-grid">
+    @for (recipe of recipes(); track recipe.id) {
+      <app-recipe [recipe]="recipe" />
+    }
+  </div>
+} @else {
+  <div class="empty">No recipes available</div>
+}
+
