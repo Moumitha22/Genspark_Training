@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Details Example</title>
+</head>
+<body>
+
+  <h3>User Details</h3>
+  <button id="callbackBtn">Get Users (Callback)</button>
+  <button id="promiseBtn">Get Users (Promise)</button>
+  <button id="asyncAwaitBtn">Get Users (Async/Await)</button>
+
+  <div id="loading"></div>
+  <div id="userContainer"></div>
+
+  <script>
+    const users = [
+      { id: 1, name: "John Doe", age: 28 },
+      { id: 2, name: "Jane Smith", age: 32 },
+      { id: 3, name: "Mike Johnson", age: 40 }
+    ];
+
+    function clearDisplay() {
+      document.getElementById('userContainer').innerHTML = '';
+      document.getElementById('loading').innerText = 'Loading...';
+    }
+
+    function displayUsers(data) {
+      const container = document.getElementById('userContainer');
+      document.getElementById('loading').innerText = ''; // remove loading
+      data.forEach(user => {
+        const userDiv = document.createElement('div');
+        userDiv.innerText = `ID: ${user.id}, Name: ${user.name}, Age: ${user.age}`;
+        container.appendChild(userDiv);
+      });
+    }
+
+    // Callback Example
+    function getUsersCallback(callback) {
+      setTimeout(() => {
+        callback(users);
+      }, 1000);
+    }
+
+    document.getElementById('callbackBtn').addEventListener('click', () => {
+      clearDisplay();
+      getUsersCallback((data) => {
+        displayUsers(data);
+      });
+    });
+
+    // Promise Example
+    function getUsersPromise() {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(users);
+        }, 1000);
+      });
+    }
+
+    document.getElementById('promiseBtn').addEventListener('click', () => {
+      clearDisplay();
+      getUsersPromise().then(data => displayUsers(data));
+    });
+
+    // Async/Await Example
+    async function getUsersAsync() {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(users);
+        }, 1000);
+      });
+    }
+
+    document.getElementById('asyncAwaitBtn').addEventListener('click', async () => {
+      clearDisplay();
+      const data = await getUsersAsync();
+      displayUsers(data);
+    });
+  </script>
+
+</body>
+</html>
