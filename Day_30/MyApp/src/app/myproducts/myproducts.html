@@ -1,0 +1,26 @@
+<button type="button" class="btn btn-primary">
+  Notifications <span class="badge badge-light">{{cartCount}}</span>
+</button>
+<div>
+    @if (cartCount>0) {
+        @for (item of cartItems; track item.id) {
+            <li>{{item.id}} -- {{item.count}}</li>
+        }
+    }
+</div>
+  
+@if (products) {
+    <div>
+        @for (item of products; track item.id) {
+            <app-product [product]="item" (addToCart)="handleAddToCart($event)"></app-product>
+        }
+    </div>
+}
+@else {
+    <!-- <div>
+        No products available
+    </div> -->
+     <div class="spinner-border text-success" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+}

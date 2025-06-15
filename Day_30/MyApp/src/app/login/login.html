@@ -1,0 +1,12 @@
+<!-- <h3>Login Form</h3>
+<input type="text" placeholder="Username" [(ngModel)]="user.username">
+<input type="password" placeholder="Password" [(ngModel)]="user.password">
+<button (click)="handleLogin()">Login & Store</button> -->
+
+<div class="loginDiv">
+    <label class="form-control">Username</label>
+    <input class="form-control" type="text" [(ngModel)]="user.username"/>
+     <label class="form-control">Password</label>
+    <input class="form-control" type="text" [(ngModel)]="user.password"/>
+    <button class="btn btn-success" (click)="handleLogin()">Login</button>
+</div>

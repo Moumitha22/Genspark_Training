@@ -1,0 +1,27 @@
+<div class="card h-100 w-100 recipe-card">
+  <img [src]="recipe?.image" class="card-img-top recipe-image" [alt]="recipe?.name" />
+
+  <div class="card-body">
+    <h5 class="card-title">{{ recipe?.name }}</h5>
+
+    <!-- Rating -->
+    <div class="rating mb-2">
+      <ng-container *ngFor="let star of [1,2,3,4,5]">
+      <i class="bi"
+        [ngClass]="(recipe?.rating ?? 0) >= star ? 'bi-star-fill text-warning' 
+                  : (recipe?.rating ?? 0) >= star - 0.5 ? 'bi-star-half text-warning'
+                  : 'bi-star text-muted'"></i>
+    </ng-container>
+    ( {{ recipe?.rating }})
+    </div>
+    <p class="card-text"><strong>Cuisine:</strong> {{ recipe?.cuisine }}</p>
+    <p class="card-text"><strong>Difficulty:</strong> {{ recipe?.difficulty }}</p>
+    <p class="card-text"><strong>Ingredients:</strong> {{ recipe?.ingredients?.join(', ') }}</p>
+  </div>
+
+  <!-- Time Footer -->
+  <div class="card-footer prep-cook-footer d-flex justify-content-between small text-white">
+    <span>Prep: {{ recipe?.prepTimeMinutes }} min</span>
+    <span>Cook: {{ recipe?.cookTimeMinutes }} min</span>
+  </div>
+</div>

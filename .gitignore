@@ -1,19 +1,24 @@
-# Ignore build output
+# ========== Build Output ==========
 bin/
 obj/
+/dist
+/tmp
+/out-tsc
+/bazel-out
 
-# Ignore all launch profiles
+# ========== Configuration Files ==========
 **/Properties/launchSettings.json
-
-# Ignore development config files
 **/appsettings.Development.json
 **/appsettings.Local.json
 **/appsettings.json
 
-# Ignore .http request files used in VS REST Client
-**/*.http
+# ========== Environment & Logs ==========
+.env
+*.log
+npm-debug.log
+yarn-error.log
 
-# Python
+# ========== Python ==========
 __pycache__/
 *.pyc
 *.pyo
@@ -21,26 +26,25 @@ __pycache__/
 .venv/
 env/
 venv/
-.env
 
-# FastAPI / Uvicorn
-*.log
+# ========== FastAPI / HTTP Clients ==========
+*.http
 
+# ========== Uploaded or Generated ==========
 UploadedDocs/
 faq_index/
+/.angular/cache
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
 
-# Compiled output
-/dist
-/tmp
-/out-tsc
-/bazel-out
-
-# Node
+# ========== Node.js ==========
 /node_modules
-npm-debug.log
-yarn-error.log
 
-# IDEs and editors
+# ========== IDEs ==========
 .idea/
 .project
 .classpath
@@ -49,68 +53,15 @@ yarn-error.log
 .settings/
 *.sublime-workspace
 
-# Visual Studio Code
-# Ignore Visual Studio user-specific files and folders
+# ========== Visual Studio Code ==========
 .vs/
-.vscode/*
+/.vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
 .history/*
 
-# Miscellaneous
-/.angular/cache
-.sass-cache/
-/connect.lock
-/coverage
-/libpeerconnection.log
-testem.log
-/typings
-
-# System files
-.DS_Store
-Thumbs.db
-
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
-
-# Compiled output
-/dist
-/tmp
-/out-tsc
-/bazel-out
-
-# Node
-/node_modules
-npm-debug.log
-yarn-error.log
-
-# IDEs and editors
-.idea/
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
-
-# Visual Studio Code
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-.history/*
-
-# Miscellaneous
-/.angular/cache
-.sass-cache/
-/connect.lock
-/coverage
-/libpeerconnection.log
-testem.log
-/typings
-
-# System files
+# ========== System Files ==========
 .DS_Store
 Thumbs.db

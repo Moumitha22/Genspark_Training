@@ -1,0 +1,70 @@
+<p>first works!</p>
+<h2>
+    <!-- interpolation -->
+    Hello {{name}}
+</h2>
+
+<!-- Property Binding -->
+<input type="text" #uname [value]="name"/>
+
+<!-- Two-way Binding -->
+<input type="text" #uname [(ngModel)]="name"/>
+
+<i [class]="className" (click)="toggleLike()"></i>
+
+<!-- Event Binding -->
+<button (click)="onButtonClick(uname.value)">Click Me</button>
+
+<hr/>
+<!-- Inter component Communication (Parent child) -->
+<!-- message -> @Input in child-->
+<!-- notify, like -> @Output in child-->
+<app-second [message]="name" (notify)="onNotify($event)" (like)="handleLikeClick()"></app-second>
+<hr/>
+
+<p>Message from child: {{childMsg}}</p>
+<p>Like Count: {{count}}</p>
+
+<!-- Module values -->
+<div style="border: 2px solid black; padding: 20px; width:200px; ">
+    <p style="text-align: center;">Custom Details</p>
+    <p>Id: {{customer.id}}</p>
+    <p>Name: {{customer.name}}</p>
+    <p>Age: {{customer.age}}</p>
+    <div style="display: flex; justify-content: center;">
+    <i class="bi bi-hand-thumbs-up like" (click)=handleCustomerLike()></i>
+    <p>{{customer.like}}</p>
+    <i class="bi bi-hand-thumbs-down disike" (click)=handleCustomerDislike()></i>
+    <p>{{customer.dislike}}</p>
+    </div>
+</div>
+
+<!-- *ngFor directive to loop to list of Module objects -->
+<div style="display: flex; gap: 30px;">
+  <div *ngFor="let custom of customers" 
+       style="border: 2px solid black; padding: 20px; width: 200px;">
+    <p style="text-align: center;">Customer Details</p>
+    <p>Id: {{ custom.id }}</p>
+    <p>Name: {{ custom.name }}</p>
+    <p>Age: {{ custom.age }}</p>
+    <div style="display: flex; justify-content: center; gap: 10px;">
+      <i class="bi bi-hand-thumbs-up like" (click)="handleCustomerLikes(custom)"></i>
+      <p>{{ custom.like }}</p>
+      <i class="bi bi-hand-thumbs-down dislike" (click)="handleCustomerDislikes(custom)"></i>
+      <p>{{ custom.dislike }}</p>
+    </div>
+  </div>
+</div>
+
+<!-- *ngIf -->
+ <button (click)="show = !show">Show about</button>
+ <p *ngIf="show">This is the about.</p>
+
+ <!-- *ngSwitch -->
+ <div [ngSwitch]="color">
+  <p *ngSwitchCase="'red'">Red selected</p>
+  <p *ngSwitchCase="'green'">Green selected</p>
+  <p *ngSwitchDefault>Unknown color</p>
+</div>
+
+
