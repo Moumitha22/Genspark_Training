@@ -1,0 +1,19 @@
+<div *ngIf="weather" class="weather-card">
+  <div *ngIf="weather.error; else weatherData" class="error">{{ weather.error }}</div>
+
+  <ng-template #weatherData>
+    <h2 class="city-name">{{ weather.name }}</h2>
+
+    <div class="temp-display">{{ weather.main.temp }}°C</div>
+
+    <img class="weather-icon"
+         [src]="'http://openweathermap.org/img/wn/' + weather.weather[0].icon + '@2x.png'"
+         alt="Weather Icon">
+
+    <div class="weather-details">
+      <p><i class="bi bi-cloud-sun"></i> Condition: <strong>{{ weather.weather[0].description }}</strong></p>
+      <p><i class="bi bi-droplet-half"></i> Humidity: <strong>{{ weather.main.humidity }}%</strong></p>
+      <p><i class="bi bi-wind"></i> Wind Speed: <strong>{{ weather.wind.speed }} m/s</strong></p>
+    </div>
+  </ng-template>
+</div>
