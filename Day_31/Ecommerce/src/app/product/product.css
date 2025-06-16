@@ -1,0 +1,8 @@
+.card {
+  width: 220px;
+}
+
+.highlight {
+  background-color: yellow;
+  font-weight: bold;
+}
