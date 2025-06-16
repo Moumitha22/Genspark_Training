@@ -1,0 +1,38 @@
+.products{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 50px;
+}
+
+.products h1{
+  color : rgb(112, 30, 190);
+}
+
+.cart {
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.cart .icon{
+  font-size: 30px;
+}
+
+.cart span {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%);
+  background-color: red;
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 50%;
+}
+
+
+.product-list {
+  display: flex;
+  gap: 80px;
+  flex-wrap: wrap;
+}
