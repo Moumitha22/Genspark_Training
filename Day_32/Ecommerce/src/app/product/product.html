@@ -1,0 +1,15 @@
+<div class="card h-100 shadow-sm" (click)="handleView(product?.id!)">
+  <img [src]="product?.thumbnail" class="card-img-top" alt="{{ product?.title }}" />
+
+  <div class="card-body text-center">
+    <h5 class="card-title">
+      <ng-container *ngIf="highlightParts(product?.title)">
+        <ng-container *ngFor="let part of highlightParts(product?.title)">
+          <span [ngClass]="{ 'highlight': part.isMatch }">{{ part.text }}</span>
+        </ng-container>
+      </ng-container>
+    </h5>
+
+    <p class="card-text fw-bold text-success">$ {{ product?.price }}</p>
+  </div>
+</div>

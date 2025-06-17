@@ -1,0 +1,48 @@
+<div class="container py-4 px-3">
+  <h2 class="text-center mb-4">Product Listing</h2>
+
+  <div class="row justify-content-center mb-4">
+    <div class="col-md-6 col-lg-4">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search products..."
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchChange()"
+      />
+    </div>
+  </div>
+
+  @if (products.length > 0) {
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-4">
+      @for (p of products; track p) {
+        <div class="col">
+          <app-product [product]="p" [searchTerm]="searchTerm" />
+        </div>
+      }
+    </div>
+  }
+
+
+  @if (loading) {
+    <div class="text-center my-3">
+      <div class="spinner-border text-primary" role="status"></div>
+    </div>
+  } 
+
+  @if(!loading && products.length === 0) {
+    <div class="text-center text-muted my-4">
+      No results found.
+    </div>
+  }
+
+  @if (showBackToTop) {
+  <button
+    class="btn btn-primary back-to-top"
+    (click)="scrollToTop()"
+    aria-label="Back to Top"
+  >
+    ↑ Top
+  </button>
+  }
+</div>

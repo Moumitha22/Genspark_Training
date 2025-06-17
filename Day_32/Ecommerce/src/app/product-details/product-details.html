@@ -1,0 +1,20 @@
+<div class="container py-4 text-center">
+  <h2 class="mb-4">Product Details</h2>
+
+  <div *ngIf="loading" class="text-center my-3">
+    <div class="spinner-border text-primary" role="status"></div>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <div *ngIf="!loading && !error" class="card shadow p-3 mx-auto" style="max-width: 500px;">
+    <img [src]="product.thumbnail" class="card-img-top mb-3" [alt]="product.title" />
+    <div class="card-body">
+      <h5 class="card-title">{{ product.title }}</h5>
+      <p class="card-text">{{ product.description }}</p>
+      <p class="card-text fw-bold text-success">$ {{ product.price }}</p>
+    </div>
+  </div>
+</div>
