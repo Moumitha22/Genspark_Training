@@ -1,0 +1,16 @@
+<div class="customer-details">
+  <h1>Customer Details</h1>
+
+  <div class="customer-card">
+    <h2>{{customer.firstName}} {{customer.lastName}}</h2>
+    <p>Age: {{customer.age}}</p>
+    <p>Location: {{customer.location}}</p>
+
+    <div class="feedback">
+      <i (click)="like()" class="bi bi-hand-thumbs-up like"></i>
+      <span>{{likes}}</span>
+      <i (click)="dislike()" class="bi bi-hand-thumbs-down dislike"></i>
+      <span>{{dislikes}}</span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+<h2 class="mb-4 text-center">Recipe Gallery</h2>
+
+<div class="container">
+  @if (recipes().length > 0) {
+    <div class="row justify-content-center g-4">
+      @for (recipe of recipes(); track recipe.id) {
+        <div class="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 d-flex justify-content-center">
+          <app-recipe [recipe]="recipe" />
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="alert alert-warning text-center">No recipes available</div>
+  }
+</div>

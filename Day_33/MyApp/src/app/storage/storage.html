@@ -1,0 +1,11 @@
+<h3>Retrieve Data on Button Click</h3>
+
+<button (click)="retrieveFromLocal()">Get from Local Storage</button>
+@if (localUser) {
+  <p>LocalStorage: Username: {{localUser.username}}, Password: {{localUser.password}}</p>
+}
+
+<button (click)="retrieveFromSession()">Get from Session Storage</button>
+@if (sessionUser) {
+  <p>SessionStorage: Username: {{sessionUser.username}}, Password: {{sessionUser.password}}</p>
+}
