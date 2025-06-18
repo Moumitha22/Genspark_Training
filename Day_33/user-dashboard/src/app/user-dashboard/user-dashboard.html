@@ -1,0 +1,180 @@
+<div class="container py-4">
+  <h3 class="mb-4 text-center">User Dashboard</h3>
+<div class="row mb-4 text-center">
+  <div class="col-md-3 mb-3">
+    <div class="card shadow-sm p-3 h-100 d-flex flex-column justify-content-center align-items-center" style="min-height: 180px;">
+      <h5>Total Users</h5>
+      <i class="bi bi-people text-primary display-3 mb-2"></i>
+      <p class="fw-bold fs-4 text-primary">{{ totalUsers }}</p>
+    </div>
+  </div>
+  <div class="col-md-3 mb-3">
+    <div class="card shadow-sm p-3 h-100 d-flex flex-column justify-content-center align-items-center" style="min-height: 180px;">
+      <h5>Male Users</h5>
+      <i class="bi bi-gender-male text-success display-3 mb-2"></i>
+      <p class="fw-bold fs-4 text-success">{{ maleUsers }}</p>
+    </div>
+  </div>
+  <div class="col-md-3 mb-3">
+    <div class="card shadow-sm p-3 h-100 d-flex flex-column justify-content-center align-items-center" style="min-height: 180px;">
+      <h5>Female Users</h5>
+      <i class="bi bi-gender-female text-danger display-3 mb-2"></i>
+      <p class="fw-bold fs-4 text-danger">{{ femaleUsers }}</p>
+    </div>
+  </div>
+  <div class="col-md-3 mb-3">
+    <div class="card shadow-sm p-3 h-100 d-flex flex-column justify-content-center align-items-center" style="min-height: 180px;">
+
+      <h5>Gender Ratio</h5>
+      <div style="margin-top: 5px; height: 150px;">
+        <canvas baseChart
+          [data]="genderChartData"
+          [labels]="genderChartLabels"
+          [type]="genderChartType"
+          [options]="chartOptions">
+        </canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+  <div class="card p-3 mb-5 shadow-sm" style="height: 250px;">
+    <h5 class="text-info">State Distribution</h5>
+    <canvas baseChart
+    [data]="stateChartData"
+    [type]="stateChartType"
+    [options]="stateChartOptions"
+    ></canvas>
+  </div>
+
+
+  <div class="card p-3 mb-5 shadow-sm" style="height: 250px;">
+    <h5 class="text-success">Role Distribution</h5>
+    <canvas baseChart
+      [type]="roleChartType"
+      [data]="roleChartData"
+      [options]="roleChartOptions"
+    ></canvas>
+  </div>
+
+
+  <!-- Filter Controls -->
+   <div class="card mb-4 p-3 shadow-sm">
+    <div class="row g-3 align-items-center">
+      <div class="col-md-3">
+        <input type="text" class="form-control" placeholder="Search by name..." [(ngModel)]="searchText"  (ngModelChange)="updateChartData()" />
+      </div>
+      <div class="col-md-3">
+        <select class="form-select" [(ngModel)]="selectedGender"(ngModelChange)="updateChartData()"  >
+          <option value="">All Genders</option>
+          <option>male</option>
+          <option>female</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <select class="form-select" [(ngModel)]="selectedRole" (ngModelChange)="updateChartData()" >
+          <option value="">All Roles</option>
+          <option>Accountant</option>
+          <option>Business Analyst</option>
+          <option>Business Development Manager</option>
+          <option>Chief Executive Officer</option>
+          <option>Chief Financial Officer</option>
+          <option>Chief Technology Officer</option>
+          <option>Database Administrator</option>
+          <option>Human Resources Manager</option>
+          <option>Internal Auditor</option>
+          <option>Legal Counsel</option>
+          <option>Quality Assurance Engineer</option>
+          <option>Research Analyst</option>
+          <option>Sales Manager</option>
+          <option>Support Specialist</option>
+          <option>Web Developer</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+      <select class="form-select" [(ngModel)]="selectedState" (ngModelChange)="updateChartData()">
+        <option value="">All States</option>
+        <option>Alabama</option>
+        <option>Arkansas</option>
+        <option>Colorado</option>
+        <option>Delaware</option>
+        <option>Illinois</option>
+        <option>Iowa</option>
+        <option>Louisiana</option>
+        <option>Maine</option>
+        <option>Massachusetts</option>
+        <option>Mississippi</option>
+        <option>Missouri</option>
+        <option>Montana</option>
+        <option>Nevada</option>
+        <option>New Jersey</option>
+        <option>New Mexico</option>
+        <option>New York</option>
+        <option>North Dakota</option>
+        <option>Ohio</option>
+        <option>Pennsylvania</option>
+        <option>Rhode Island</option>
+        <option>South Dakota</option>
+        <option>Tennessee</option>
+        <option>Utah</option>
+        <option>West Virginia</option>
+        <option>Wyoming</option>
+      </select>
+    </div>
+
+
+    </div>
+  </div>
+
+  @if (filteredUsers.length > 0) {
+    <div class="table-responsive">
+    <table class="table table-bordered table-hover align-middle">
+      <thead class="bg-light">
+        <tr class="border-0">
+          <th class="border-0">Profile</th>
+          <th class="border-0">Name</th>
+          <th class="border-0">Email</th>
+          <th class="border-0">Role</th>
+          <th class="border-0">State</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (user of filteredUsers; track user.id) {
+          <tr
+            class="bg-white shadow-sm border-0 mb-2 rounded-2 d-table-row align-middle
+                  transition hover-scale"
+            style="--bs-table-bg: transparent;"
+          >
+            <td class="border-0">
+              <img
+                [src]="user.image"
+                alt="Profile"
+                class="rounded-circle border border-2"
+                width="50"
+                height="50"
+                style="object-fit: cover;"
+              />
+            </td>
+            <td class="border-0">{{ user.firstName }} {{ user.lastName }}</td>
+            <td class="border-0">{{ user.email }}</td>
+            <td class="border-0">{{ user.role }}</td>
+            <td class="border-0">{{ user.state }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  } @else {
+    <div class="text-center text-muted mt-4">No users found.</div>
+  }
+
+  
+  <!-- Add User Button -->
+  <div class="text-center mt-4">
+    <button class="btn btn-primary" (click)="handleAddUser()">Add User +</button>
+  </div>
+
+</div>

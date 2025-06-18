@@ -1,0 +1,163 @@
+<div class="d-flex justify-content-center">
+
+  <form [formGroup]="addUserForm" (ngSubmit)="handleAddUser()" class="card p-4 shadow-sm" style="width: 500px;">
+    <h5 class="mb-3 text-primary text-center">Add New User</h5>
+
+    <div class="mb-2">
+      <label>Username</label>
+      <input type="text" class="form-control" formControlName="username" />
+      @if (username?.touched && username?.errors) {
+        <span class="alert alert-danger">Username is required</span>
+      }
+    </div>
+
+    <div class="mb-2">
+      <label>Email</label>
+      <input type="email" class="form-control" formControlName="email" />
+      @if (email?.touched && email?.errors) {
+        @if (email?.errors?.['required']) {
+          <span class="alert alert-danger">Email is required</span>
+        }
+        @if (email?.errors?.['email']) {
+          <span class="alert alert-danger">Invalid email format</span>
+        }
+      }
+    </div>
+
+    <div class="mb-2">
+      <label>First Name</label>
+      <input type="text" class="form-control" formControlName="firstName" />
+    </div>
+
+    <div class="mb-2">
+      <label>Last Name</label>
+      <input type="text" class="form-control" formControlName="lastName" />
+    </div>
+
+    <div class="mb-2">
+      <label>Gender</label>
+      <select class="form-select" formControlName="gender">
+        <option value="">Select Gender</option>
+        <option>male</option>
+        <option>female</option>
+      </select>
+      @if (gender?.touched && gender?.invalid) {
+        <span class="alert alert-danger">Gender is required</span>
+      }
+    </div>
+
+    <div class="mb-2">
+      <label>Password</label>
+      <input type="password" class="form-control" formControlName="password" />
+      
+      @if (password?.touched && password?.errors) {
+        @if (password?.errors?.['required']) {
+          <span class="alert alert-danger">Password is required</span>
+        }
+        @if (password?.errors?.['minlength']) {
+          <span class="alert alert-danger">Password must be at least 5 characters</span>
+        }
+      }
+    </div>
+
+
+    <div class="mb-2" [formGroup]="companyGroup">
+
+      <label>Role</label>
+      <select class="form-select" formControlName="title">
+        <option value="">Select Role</option>
+        <option>Accountant</option>
+        <option>Business Analyst</option>
+        <option>Business Development Manager</option>
+        <option>Chief Executive Officer</option>
+        <option>Chief Financial Officer</option>
+        <option>Chief Technology Officer</option>
+        <option>Database Administrator</option>
+        <option>Human Resources Manager</option>
+        <option>Internal Auditor</option>
+        <option>Legal Counsel</option>
+        <option>Quality Assurance Engineer</option>
+        <option>Research Analyst</option>
+        <option>Sales Manager</option>
+        <option>Support Specialist</option>
+        <option>Web Developer</option>
+      </select>
+      @if (role?.touched && role?.invalid) {
+        <span class="alert alert-danger">Role is required</span>
+      }
+    </div>
+    
+    <div class="mb-2" [formGroup]="addressGroup">
+      <label>State</label>
+      <select class="form-select" formControlName="state">
+        <option value="">Select State</option>
+        <option>Alabama</option>
+        <option>Alaska</option>
+        <option>Arizona</option>
+        <option>Arkansas</option>
+        <option>California</option>
+        <option>Colorado</option>
+        <option>Connecticut</option>
+        <option>Delaware</option>
+        <option>Florida</option>
+        <option>Georgia</option>
+        <option>Hawaii</option>
+        <option>Idaho</option>
+        <option>Illinois</option>
+        <option>Indiana</option>
+        <option>Iowa</option>
+        <option>Kansas</option>
+        <option>Kentucky</option>
+        <option>Louisiana</option>
+        <option>Maine</option>
+        <option>Maryland</option>
+        <option>Massachusetts</option>
+        <option>Michigan</option>
+        <option>Minnesota</option>
+        <option>Mississippi</option>
+        <option>Missouri</option>
+        <option>Montana</option>
+        <option>Nebraska</option>
+        <option>Nevada</option>
+        <option>New Hampshire</option>
+        <option>New Jersey</option>
+        <option>New Mexico</option>
+        <option>New York</option>
+        <option>North Carolina</option>
+        <option>North Dakota</option>
+        <option>Ohio</option>
+        <option>Oklahoma</option>
+        <option>Oregon</option>
+        <option>Pennsylvania</option>
+        <option>Rhode Island</option>
+        <option>South Carolina</option>
+        <option>South Dakota</option>
+        <option>Tennessee</option>
+        <option>Texas</option>
+        <option>Utah</option>
+        <option>Vermont</option>
+        <option>Virginia</option>
+        <option>Washington</option>
+        <option>West Virginia</option>
+        <option>Wisconsin</option>
+        <option>Wyoming</option>
+      </select>
+
+      @if (state?.touched && state?.invalid) {
+        <span class="alert alert-danger">State is required</span>
+      }
+    </div>
+
+
+    <div class="mb-2">
+      <label>Image URL (optional)</label>
+      <input type="text" class="form-control" formControlName="image" />
+    </div>
+
+    <div class="text-center">
+      <button type="submit" class="btn btn-success" [disabled]="addUserForm.invalid">Add User</button>
+    </div>
+  </form>
+</div>
+
+
