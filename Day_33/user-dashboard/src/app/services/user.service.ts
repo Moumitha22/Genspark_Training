@@ -11,8 +11,17 @@ export class UserService {
   private usersSubject = new BehaviorSubject<UserModel[]>([]);
   users$: Observable<UserModel[]> = this.usersSubject.asObservable();
 
+  private hasFetched = false;
+  
+  constructor() {
+    this.fetchUsers();
+  }
+
   // Fetch all users from API
   fetchUsers(): void {
+     if (this.hasFetched) return;
+      this.hasFetched = true;
+
     this.http.get<any>('https://dummyjson.com/users').subscribe({
       next: (res) => {
         const usersData = res.users.map((user: any) => ({

@@ -58,13 +58,10 @@ export class AddUser {
     this.newUser = this.addUserForm.value;
 
     this.userService.addUser(this.newUser);
+    alert('User added successfully')
     
     this.newUser = new UserAddModel(); 
     this.addUserForm.reset();
-  }
-
-  handleNavigate(){
-    this.router.navigateByUrl('/dashboard');
   }
 
 }

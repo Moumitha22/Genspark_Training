@@ -44,7 +44,6 @@ export class UserDashboard implements OnInit {
     plugins: {
       legend: {
         position: 'bottom',
-        // position: 'right',
         labels: {
           font: {
             size: 12
@@ -137,53 +136,48 @@ export class UserDashboard implements OnInit {
   };
 
   stateChartOptions: ChartOptions<'bar'> = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      display: false
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            const label = context.dataset.label || '';
+            return `${label}: ${context.raw}`;
+          }
+        }
+      }
     },
-    tooltip: {
-      callbacks: {
-        label: function (context) {
-          const label = context.dataset.label || '';
-          return `${label}: ${context.raw}`;
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: 'State'
+        }
+      },
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'User Count'
         }
       }
     }
-  },
-  scales: {
-    x: {
-      title: {
-        display: true,
-        text: 'State'
-      }
-    },
-    y: {
-      beginAtZero: true,
-      title: {
-        display: true,
-        text: 'User Count'
-      }
-    }
+  };
+
+  ngOnInit(): void {
+    this.userService.users$.subscribe({
+      next: (data) => {
+        this.users = data;
+        this.updateChartData();
+      },
+      error: (err) => console.error('Error loading users:', err),
+    });
+
   }
-};
-
-
-
-
-
-ngOnInit(): void {
-  this.userService.users$.subscribe({
-    next: (data) => {
-      this.users = data;
-      this.updateChartData();
-    },
-    error: (err) => console.error('Error loading users:', err),
-  });
-
-  this.userService.fetchUsers();
-}
   get totalUsers(): number {
     return this.users.length;
   }
