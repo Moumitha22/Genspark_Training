@@ -1,0 +1,10 @@
+<app-add-user></app-add-user>
+<hr/>
+<p>user-list works!</p>
+<div *ngIf=""loading$ | async>Loading Data</div>
+<div *ngIf="!(loading$ | async)">
+  <ul>
+    <li *ngFor="let user of users$ | async">
+      {{ user.username }}
+    </li>
+  </ul>

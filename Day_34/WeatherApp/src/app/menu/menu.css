@@ -1,0 +1,26 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+
+.navbar{
+    background-color: rgb(73, 0, 128);
+    padding: 10px 15px;
+}
+
+.navbar .menu{
+    display: flex;
+    gap: 50px;
+}
+
+.navbar .menu li{
+    list-style: none;
+    text-decoration: none;
+    color: #fff;
+}
+
+.navbar .menu li a{
+    text-decoration: none;
+    color: #fff;
+    font-size: 20px;
+}
