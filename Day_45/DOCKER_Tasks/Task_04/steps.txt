@@ -1,0 +1,144 @@
+Task 4: Docker Networking (React + Node.js)
+
+--------------------------------
+# Step 1: Backend - Node.js Setup
+--------------------------------
+
+# backend/package.json
+{
+  "name": "node-backend",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  }
+}
+
+# backend/index.js
+const express = require('express');
+const cors = require('cors'); 
+
+const app = express();
+const PORT = 3000;
+
+app.use(cors()); 
+
+app.get('/api', (req, res) => {
+  res.json({ message: 'Hello from backend!' });
+});
+
+app.listen(PORT, () => {
+  console.log(`Backend API running at http://localhost:${PORT}`);
+});
+
+# backend/Dockerfile
+FROM node:18
+
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 3000
+CMD ["node", "index.js"]
+
+--------------------------------
+# Step 2: Frontend - React Setup (Vite)
+--------------------------------
+
+# Create React app
+npm create vite@latest frontend -- --template react
+cd frontend
+npm install
+
+# frontend/src/App.jsx
+import { useEffect, useState } from 'react';
+
+function App() {
+  const [message, setMessage] = useState('Loading...');
+
+  useEffect(() => {
+    fetch(http://localhost:3000/api)
+      .then((res) => res.json())
+      .then((data) => setMessage(data.message))
+      .catch(() => setMessage("Error: could not reach backend"));
+  }, []);
+
+  return (
+    <div>
+      <h1>React Frontend</h1>
+      <p>{message}</p>
+    </div>
+  );
+}
+
+export default App;
+
+# frontend/Dockerfile
+# Stage 1: Build the React app
+FROM node:18-alpine AS build
+
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+# Stage 2: Serve with Nginx
+FROM nginx:alpine
+COPY --from=build /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+
+--------------------------------
+# Step 3: Create a Docker network
+--------------------------------
+docker network create app-network
+
+--------------------------------
+# Step 4: Build images
+--------------------------------
+
+# Build backend image
+docker build -t task_04_node_api ./backend
+
+# Build frontend image
+docker build -t task_04_react_app ./frontend
+
+--------------------------------
+# Step 5: Run containers
+--------------------------------
+
+# Run backend container
+docker run -d \
+  --name task_04_node_api_container \
+  --network app-network \
+  -p 3000:3000 \
+  task_04_node_api
+
+# Run frontend container
+docker run -d \
+  --name task_04_react_app_container \
+  --network app-network \
+  -p 5173:80 \
+  task_04_react_app
+
+--------------------------------
+# Step 6: Open frontend in browser
+--------------------------------
+http://localhost:5173
+
+Expected Output:
+-----------------
+React Frontend
+Hello from backend!
+
+--------------------------------
+# Optional Cleanup
+--------------------------------
+docker stop task_04_node_api_container task_04_react_app_container
+docker rm task_04_node_api_container task_04_react_app_container
+docker rmi task_04_node_api task_04_react_app
+docker network rm app-network

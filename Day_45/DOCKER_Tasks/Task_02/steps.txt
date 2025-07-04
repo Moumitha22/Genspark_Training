@@ -1,0 +1,49 @@
+# Step 1: Pull the MySQL Image
+docker pull mysql:latest
+
+# Step 2: Run the MySQL Container with Volume
+docker run -d \
+  --name mysql-container \
+  -e MYSQL_ROOT_PASSWORD=pass123 \
+  -v mydbdata:/var/lib/mysql \
+  -p 3307:3306 \
+  mysql:latest
+
+# Step 3: Connect to MySQL Shell Inside the Container
+docker exec -it mysql-container mysql -u root -p
+# (Enter password: pass123)
+
+# Step 4: Insert Some Data
+# Run the following SQL once inside the MySQL shell:
+CREATE DATABASE sampledb;
+USE sampledb;
+
+CREATE TABLE greetings (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  msg VARCHAR(255)
+);
+
+INSERT INTO greetings (msg) VALUES ('Hello from Docker!');
+SELECT * FROM greetings;
+
+# Exit MySQL shell
+exit;
+
+# Step 5: Stop & Remove the Container
+docker stop mysql-container
+docker rm mysql-container
+
+# Step 6: Run MySQL Again Using the Same Volume
+docker run -d \
+  --name mysql-container \
+  -e MYSQL_ROOT_PASSWORD=pass123 \
+  -v mydbdata:/var/lib/mysql \
+  -p 3307:3306 \
+  mysql:latest
+
+# Step 7: Reconnect and Verify the Data
+docker exec -it mysql-container mysql -u root -p
+# (Enter password: pass123)
+
+USE sampledb;
+SELECT * FROM greetings;

@@ -1,0 +1,112 @@
+# Task 05: Use Docker Compose to run a Node.js API with MongoDB
+
+# ─────────────────────────────────────────────────────────────
+# Step 1: index.js (Node.js app)
+
+const express = require('express');
+const { MongoClient } = require('mongodb');
+const app = express();
+const PORT = 3000;
+
+app.get('/', async (req, res) => {
+  try {
+    const client = await MongoClient.connect('mongodb://mongo:27017/db');
+    const db = client.db();
+    const collections = await db.collections();
+
+    res.json({
+      message: 'Connected to MongoDB!',
+      collections: collections.map(c => c.collectionName)
+    });
+
+    client.close();
+  } catch (err) {
+    res.status(500).json({ error: 'MongoDB connection failed', details: err.message });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Node API running at http://localhost:${PORT}`);
+});
+
+# ─────────────────────────────────────────────────────────────
+# Step 2: package.json
+
+{
+  "name": "node-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongodb": "^6.5.0"
+  }
+}
+
+# ─────────────────────────────────────────────────────────────
+# Step 3: Dockerfile
+
+FROM node:18
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+EXPOSE 3000
+CMD ["node", "index.js"]
+
+# ─────────────────────────────────────────────────────────────
+# Step 4: docker-compose.yml
+
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: task_05_mongo
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - "27017:27017"
+
+  node-api:
+    build: .
+    container_name: task_05_node_api
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/db
+    depends_on:
+      - mongo
+
+volumes:
+  mongo-data:
+
+# ─────────────────────────────────────────────────────────────
+# Step56: Build and Run
+
+# Go inside Task_05 folder:
+cd Task_05
+
+# Build and run all services
+docker compose up --build
+
+# Open your browser and visit:
+http://localhost:3000/
+
+# You should see:
+# {
+#   "message": "Connected to MongoDB!",
+#   "collections": []
+# }
+
+# ─────────────────────────────────────────────────────────────
+# Step 7: Cleanup (optional)
+
+docker compose down       # Stop and remove containers
+docker volume rm task_05_mongo        # Remove named volume if needed
