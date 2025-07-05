@@ -1,0 +1,59 @@
+<div class="payment-container">
+
+  <button *ngIf="!showForm && !result" class="primary-btn" (click)="showPaymentForm()">
+    💳 Make Payment
+  </button>
+
+  <form *ngIf="showForm" [formGroup]="paymentForm" (ngSubmit)="submit()" class="payment-form">
+    <h2>UPI Payment Form</h2>
+
+    <label>
+      Amount
+      <input type="number" formControlName="amount" placeholder="Enter amount in INR" />
+      <small *ngIf="paymentForm.get('amount')?.touched && paymentForm.get('amount')?.invalid" class="error-text">
+        Amount is required and must be greater than 0.
+      </small>
+    </label>
+
+    <label>
+      Name
+      <input type="text" formControlName="customerName" placeholder="Enter your full name" />
+      <small *ngIf="paymentForm.get('customerName')?.touched && paymentForm.get('customerName')?.invalid" class="error-text">
+        Name is required.
+      </small>
+    </label>
+
+    <label>
+      Email
+      <input type="email" formControlName="email" placeholder="you@example.com" />
+      <small *ngIf="paymentForm.get('email')?.touched && paymentForm.get('email')?.invalid" class="error-text">
+        Enter a valid email.
+      </small>
+    </label>
+
+    <label>
+      Contact Number
+      <input type="text" formControlName="contactNumber" placeholder="10-digit mobile number" />
+      <small *ngIf="paymentForm.get('contactNumber')?.touched && paymentForm.get('contactNumber')?.invalid" class="error-text">
+        Contact number must be 10 digits.
+      </small>
+    </label>
+
+    <div *ngIf="isLoading" class="loading-overlay">
+        <div class="spinner"></div>
+    </div>
+    <button type="submit" class="pay-btn" [disabled]="isLoading">
+      {{ isLoading ? 'Processing...' : 'Pay Now' }}
+    </button>
+  </form>
+
+  <div *ngIf="result" class="result-box" [class.success]="result.success" [class.fail]="!result.success">
+    <p *ngIf="result.success">✅ Payment Successful!<br />Payment ID: {{ result.paymentId }}</p>
+    <p *ngIf="!result.success">❌ {{ result.message }}</p>
+  </div>
+
+  <div *ngIf="result && !showForm">
+    <button class="primary-btn" (click)="resetPayment()">🔁 Make Another Payment</button>
+  </div>
+
+</div>
