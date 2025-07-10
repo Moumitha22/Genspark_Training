@@ -1,0 +1,69 @@
+<div class="row g-3 align-items-center">
+  <!--  Purpose -->
+  <div class="col-4 col-sm-4 col-md-2">
+    <select class="form-select" [(ngModel)]="model.listingPurpose" (change)="onFilterChange()">
+      <option [ngValue]="undefined">All Purposes</option>
+      <option [ngValue]="'Sale'">Buy</option>
+      <option [ngValue]="'Rent'">Rent</option>
+    </select>
+  </div>
+
+  <!--  Property Type -->
+  <div class="col-4 col-sm-4 col-md-2">
+    <select
+      class="form-select"
+      [(ngModel)]="selectedPropertyType"
+      (ngModelChange)="onPropertyTypeChange($event)"
+    >
+      <option [ngValue]="undefined">All Types</option>
+      <option [ngValue]="'Apartment'">Apartment</option>
+      <option [ngValue]="'House'">House</option>
+      <option [ngValue]="'Plot'">Plot</option>
+      <option [ngValue]="'CommercialSpace'">Commercial Space</option>
+    </select>
+  </div>
+
+  <!-- 🧑 Lister Type -->
+  <div class="col-4 col-sm-4 col-md-2">
+    <select class="form-select" [(ngModel)]="model.listerTypes" (change)="onFilterChange()">
+      <option [ngValue]="undefined">All Listers</option>
+      <option [ngValue]="['Owner']">Owner</option>
+      <option [ngValue]="['Agent']">Agent</option>
+    </select>
+  </div>
+
+  <!--  Sort By Dropdown -->
+  <div class="col-4 col-sm-4 col-md-2">
+    <select class="form-select" [(ngModel)]="selectedSortOption" (change)="onSortChange()">
+      <option [ngValue]="'priceAsc'">Price: Low to High</option>
+      <option [ngValue]="'priceDesc'">Price: High to Low</option>
+      <option [ngValue]="'newest'">Newest First</option>
+      <option [ngValue]="'oldest'">Oldest First</option>
+    </select>
+  </div>
+
+  <!--  City -->
+  <div class="col-4 col-sm-4 col-md-2">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Enter location"
+      [(ngModel)]="model.city"
+      (input)="onFilterChange()"
+    />
+  </div>
+
+  <!--  Keyword Search -->
+  <div class="col-4 col-sm-4 col-md-2">
+    <div class="input-group">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search by keyword"
+        [(ngModel)]="model.keyword"
+        (input)="onFilterChange()"
+      />
+      <button class="btn btn-primary" (click)="onFilterChange()"><i class="bi bi-search"></i></button>
+    </div>
+  </div>
+</div>

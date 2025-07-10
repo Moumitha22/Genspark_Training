@@ -1,0 +1,40 @@
+.property-form-wrapper {
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+.property-form-wrapper label {
+  font-weight: 600;
+  margin-bottom: 4px;
+  display: inline-block;
+}
+
+.info-box {
+  font-size: 16px;
+  background-color: #f8f9fa;
+  color: #088178;
+  border: 1px solid #088178 !important;
+  border-radius: 6px;
+}
+
+.btn-outline-primary {
+  color: #088178;
+  border-color: #088178;
+}
+
+.btn-outline-primary:hover {
+  background-color: #088178;
+  color: #fff;
+}
+
+.form-check {
+  min-width: 140px;
+}
+
+.multi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.5rem 1rem;
+}

@@ -1,0 +1,22 @@
+.property-form {
+  background-color: #ffffff;
+  border: 1px solid #e6f4ea;
+  box-shadow: 0 0 10px rgba(34, 139, 34, 0.1);
+}
+
+.custom-input:focus,
+.custom-select:focus {
+  border-color: #28a745;
+  box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+}
+
+.features-section {
+  margin-top: 2rem;
+}
+
+.section-heading {
+  border-bottom: 3px solid #008080;
+  display: inline-block;
+  padding-bottom: 4px;
+  color: #088178;
+}

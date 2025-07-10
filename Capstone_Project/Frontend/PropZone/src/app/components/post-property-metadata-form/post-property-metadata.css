@@ -1,0 +1,30 @@
+button.active {
+  font-weight: bold;
+  border-width: 2px;
+}
+
+button.btn-outline-primary,
+button.btn-outline-secondary {
+  min-width: 100px;
+}
+
+label {
+  font-weight: 500;
+  margin-top: 1rem0px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.form-box {
+  max-width: 600px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.form-box {
+  max-width: 600px;
+  width: 100%;
+}

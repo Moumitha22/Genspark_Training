@@ -1,0 +1,58 @@
+.inquiry-card {
+  max-width: 1000px;
+  transition: transform 0.3s ease;
+  border-left: 4px solid #008080;
+}
+
+.inquiry-card:hover {
+  transform: scale(1.01);
+  box-shadow: 0 0 0 2px #8abcb4;
+}
+
+.card-title {
+  color: #008080;
+}
+
+.message-text {
+  white-space: pre-line;
+  overflow: hidden;
+}
+
+.text-truncate {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.lister-box {
+  background-color: #f9fdfc;
+}
+
+.message-box {
+  background-color: #f9fdfc;
+}
+
+input.form-control {
+  border: 1px solid #088178;
+  transition: border 0.1s ease;
+}
+
+input.form-control:focus {
+  border-color: #088178;
+  border: 2px solid #088178;
+  box-shadow: 0 0 0 0.1rem rgba(35, 57, 176, 0.2);
+}
+
+.card-text{
+  color: #008080;
+  font-size: 16px;
+}
+
+.lister-box p{
+  font-size: 14px;;
+}
+
+.message-text{
+  font-size: 14px;
+}
