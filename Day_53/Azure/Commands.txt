@@ -1,0 +1,95 @@
+# ----------------------------------------
+# 0. Login and Version Check
+# ----------------------------------------
+az login --tenant <tenant-id>
+
+az version
+
+# ----------------------------------------
+# 1. Create Resource Group
+# ----------------------------------------
+az group create \
+  --name moumitha-rg \
+  --location eastus2
+
+# ----------------------------------------
+# 2. Create Storage Account
+# ----------------------------------------
+az storage account create \
+  --name moumithastorageaccount \
+  --location eastus2 \
+  --resource-group moumitha-rg \
+  --sku Standard_LRS
+
+# ----------------------------------------
+# 3. Create Function App
+# ----------------------------------------
+az functionapp create \
+  --resource-group moumitha-rg \
+  --consumption-plan-location eastus2 \
+  --name moumitha-functionapp \
+  --storage-account moumithastorageaccount \
+  --runtime dotnet-isolated \
+  --functions-version 4
+
+# ----------------------------------------
+# 4. Assign Managed Identity to Function App
+# ----------------------------------------
+az functionapp identity assign \
+  --name moumitha-functionapp \
+  --resource-group moumitha-rg
+
+# ----------------------------------------
+# 5. Grant Key Vault Permissions to Function Identity
+# ----------------------------------------
+az keyvault set-policy \
+  --name moumitha-key-vault \
+  --object-id $(az functionapp identity show \
+                  --name moumitha-functionapp \
+                  --resource-group moumitha-rg \
+                  --query principalId -o tsv) \
+  --secret-permissions set get list
+
+# ----------------------------------------
+# 6. Fetch Storage Account Key
+# ----------------------------------------
+echo "Fetching storage account key..."
+STORAGE_KEY=$(az storage account keys list \
+  --resource-group moumitha-rg \
+  --account-name moumithastorageaccount \
+  --query "[0].value" \
+  -o tsv)
+
+# ----------------------------------------
+# 7. Set App Settings for Function App
+# ----------------------------------------
+az functionapp config appsettings set \
+  --name moumitha-functionapp \
+  --resource-group moumitha-rg \
+  --settings AzureStorageConnectionString="DefaultEndpointsProtocol=https;AccountName=moumithastorageaccount;AccountKey=$STORAGE_KEY;EndpointSuffix=core.windows.net" \
+             ContainerName="moumitha-container" \
+             KeyVaultUri="https://moumitha-key-vault.vault.azure.net/"
+
+# ----------------------------------------
+# 8. Deploy the Function Code to Azure
+# ----------------------------------------
+func azure functionapp publish moumitha-functionapp
+
+# ----------------------------------------
+# 9. Get Function Key to Call the API
+# ----------------------------------------
+az functionapp function keys list \
+  --resource-group moumitha-rg \
+  --name moumitha-functionapp \
+  --function-name Function
+
+# ----------------------------------------
+# 10. Sample Usage 
+# ----------------------------------------
+curl "https://moumitha-functionapp.azurewebsites.net/api/generate-sas/yourfilename.mp4?code=YOUR_KEY"
+
+# ----------------------------------------
+# 11. Start the Function App Locally for Development
+# ----------------------------------------
+echo "To run your Azure Function locally:"
+echo "func start"
