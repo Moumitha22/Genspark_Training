@@ -1,0 +1,29 @@
+# Login to Azure
+az login
+
+# Create a resource group
+az group create --name moumi-rg --location eastus
+
+# Create Azure Container Registry (ACR)
+az acr create --name moumiacr --resource-group moumi-rg --sku Standard
+
+# Get ACR login server
+az acr show --name moumiacr --query loginServer --output tsv
+
+# Login to ACR using Azure CLI (no need for manual docker login)
+az acr login --name moumiacr
+
+# Pull sample image
+docker pull mcr.microsoft.com/hello-world
+
+# Tag the image for your ACR
+docker tag mcr.microsoft.com/hello-world moumiacr.azurecr.io/hello-world:latest
+
+# Push the image to your ACR
+docker push moumiacr.azurecr.io/hello-world:latest
+
+# List repositories in your ACR
+az acr repository list --name moumiacr --output table
+
+# Run the image from your ACR
+docker run moumiacr.azurecr.io/hello-world:latest
