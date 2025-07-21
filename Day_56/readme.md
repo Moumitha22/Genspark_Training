@@ -23,6 +23,21 @@
 
 - Verified the container deployment via the public endpoint.
 
+### 3. Training Video Portal 
+- Built a .NET 8 Web API to handle video uploads and retrieval from Azure Blob Storage.
+
+- Stored metadata (title, description, blob URL, timestamp) in Azure SQL.
+
+- Configured Blob Storage container (training-videos) using connection string for upload.
+
+- Developed Angular frontend:
+
+    - Upload form with video preview, validation, and success toast.
+
+    - Video list page with embedded `<video>` players showing streamed videos.
+
+    - Routing between /upload and /videos.
+
 ## Screenshots
 
 ### Direct Publish to App Service
@@ -30,5 +45,11 @@
 
 ### Deployment Using ACR
 ![Deployment Using ACR](./outputs/using_acr.png)
+
+
+### Training Video Portal 
+![Training Video Upload Form](./outputs/upload_video.png)
+
+![Training Video List](./outputs/video_list.png)
 
 

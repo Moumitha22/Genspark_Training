@@ -1,0 +1,25 @@
+<div class="container py-4">
+  <h2 class="text-center mb-4">Training Videos</h2>
+
+  <div class="d-flex justify-content-end mb-4">
+  <a class="btn btn-outline-primary" routerLink="/upload">
+    Upload Video
+  </a>
+</div>
+
+
+  <div class="row">
+    <div class="col-md-4 mb-4" *ngFor="let video of videos">
+      <div class="card shadow-sm h-100">
+        <video controls class="card-img-top" [src]="video.blobUrl" style="height: 200px; object-fit: cover;"></video>
+        <div class="card-body">
+          <h5 class="card-title">{{ video.title }}</h5>
+          <p class="card-text">{{ video.description }}</p>
+          <small class="text-muted">Uploaded on {{ video.uploadDate | date: 'mediumDate' }}</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p *ngIf="!videos.length" class="text-center text-muted">No videos uploaded yet.</p>
+</div>
