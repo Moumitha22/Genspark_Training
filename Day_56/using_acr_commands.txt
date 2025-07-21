@@ -1,0 +1,16 @@
+az login
+
+az acr create --name moumiacr --resource-group moumi-rg --sku Standard
+
+az acr show --name moumiacr --query loginServer --output tsv
+
+az acr login --name moumiacr --expose-token
+
+az role assignment create \
+  --assignee <object-id or client-id of user-mananged-identity> \
+  --scope $(az acr show --name moumiacr --query id --output tsv) \
+  --role AcrPull
+
+docker build -t moumiacr.azurecr.io/mydockerapiapp:latest .
+
+docker push moumiacr.azurecr.io/mydockerapiapp:latest
