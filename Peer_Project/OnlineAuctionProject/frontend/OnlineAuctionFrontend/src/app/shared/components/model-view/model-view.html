@@ -1,0 +1,15 @@
+@if (show) {
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-gray-500/45">
+  <div
+    class="bg-white dark:bg-gray-800 rounded-xl shadow-lg w-auto min-w-[400px] max-w-4xl p-6 relative"
+  >
+    <button
+      (click)="onClose()"
+      class="absolute top-2 right-3 text-red-500 hover:underline text-sm"
+    >
+      <lucide-angular [img]="closeSymbol"></lucide-angular>
+    </button>
+    <ng-content></ng-content>
+  </div>
+</div>
+}

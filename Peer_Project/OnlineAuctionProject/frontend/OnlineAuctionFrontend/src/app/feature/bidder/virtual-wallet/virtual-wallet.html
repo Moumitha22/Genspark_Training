@@ -1,0 +1,97 @@
+<app-spinner [loading]="isLoading"></app-spinner>
+@if (balance!==null) {
+<div class="relative w-full h-10">
+  <button
+    (click)="getVirtualWalletHistory()"
+    class="btn-primary absolute top-0 right-0 m-2 px-4 py-2"
+  >
+    History
+  </button>
+</div>
+}
+
+<h2 class="text-center text-2xl font-bold mb-4 mt-10">Virtual Wallet</h2>
+<div
+  class="p-4 flex justify-center mt-10 bg-white dark:bg-gray-700 w-full sm:w-2/3 md:w-1/2 lg:w-2/5  items-center mx-auto rounded-2xl shadow-lg"
+>
+  <div class="w-full">
+    @if (balance!==null) {
+    <div
+      class="flex flex-col items-center bg-gray-100 border-dotted border-2 border-[#4eadcd] rounded-xl shadow-md p-6 mb-4 dark:bg-gray-800"
+    >
+      <div class="flex items-center space-x-2 mb-2">
+        <span class="text-4xl font-bold text-primary-color"
+          >{{ balance | currency: 'INR' }}</span
+        >
+      </div>
+      <h2 class="text-md font-normal text-gray-700 dark:text-gray-500">
+        Your Virtual Wallet Balance
+      </h2>
+    </div>
+    <p class="text-[12px] font-bold text-red-500 mb-2 italic">Maximum holding limit 5_000_000</p>
+    <label class="form-label">Add Funds to your virtual wallet</label>
+    <input
+      class="form-input"
+      type="number"
+      [(ngModel)]="addingAmount"
+      placeholder="Amount to add"
+      min="1"
+    />
+    <button
+      (click)="addFundsToWallet()"
+      class="btn-primary mt-2"
+      [disabled]="addingAmount<=0"
+    >
+      Add Funds
+    </button>
+    } @else {
+    <h1>Hey, there is no virtual wallet found</h1>
+    <p class="p-2 mt-2">Are you wish to create your virtaul wallet ?</p>
+    <p class="p-2 mt-2 text-primary-color">You can enter your amount even zero balance is acceptable during wallet creation..</p>
+
+    <p class="p-2 mt-2 italic text-sm"> Come let's go, we will take the back ground process, just one click to begin</p>
+    <br />
+    <input
+      type="number"
+      class="form-input"
+      placeholder="enter the amount to create the virutal amount"
+      [(ngModel)]="newWalletBalance"
+    />
+    <button class="btn-primary mt-2 w-full" (click)="AddWallet()">
+      Create Virtual Wallet
+    </button>
+    }
+  </div>
+</div>
+
+<app-model-view
+  [show]="showHistoryModal"
+  (close)="showHistoryModal=false"
+  class="w-full"
+>
+  <div class="w-full max-h-[80vh] overflow-auto p-4">
+    <h2 class="text-lg font-bold mb-4">Wallet Transaction History</h2>
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Amount</th>
+          <th>Description</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of virtualWalletHistory; track $index) {
+        <tr>
+          <td>{{ item.id}}</td>
+          <td>{{ item.amount }}</td>
+          <td>{{ item.description || '-' }}</td>
+          <td>{{ item.transactionDate | date:'medium' }}</td>
+        </tr>
+        } @if (virtualWalletHistory.length === 0) {
+        <td class="text-center" colspan="7">No history available</td>
+        }
+      </tbody>
+    </table>
+  </div>
+</app-model-view>

@@ -1,0 +1,7 @@
+@let status = getBidStatus(bid); @if(status === 'Win'){
+<span class="win-tag">Win</span>
+} @else if (status === 'Lose'){
+<span class="lose-tag">Loss</span>
+} @else if(status === 'Pending'){
+<span class="pending-tag">Pending</span>
+}

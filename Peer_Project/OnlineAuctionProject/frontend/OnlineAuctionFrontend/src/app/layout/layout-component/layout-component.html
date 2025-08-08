@@ -1,0 +1,12 @@
+<div class="flex h-screen">
+  <app-sidebar [role]="role" class="w-20 md:w-64"></app-sidebar>
+  <div class="flex-1 flex flex-col overflow-hidden">
+    <app-header class="h-16"></app-header>
+
+    <main
+      class="flex-1 overflow-auto p-4 space-y-6 text-gray-800 dark:bg-gray-900 dark:text-gray-200"
+    >
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

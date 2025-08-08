@@ -1,0 +1,72 @@
+<div class="grid grid-cols-1 sm:grid-cols-5 gap-4 mt-10">
+  <div>
+    <app-welcome-card></app-welcome-card>
+  </div>
+  <app-summary-card
+    title="Total Users"
+    [value]="totalUsers"
+    imgSrc="assets/images/users.webp"
+    bgColor="bg-green-50 dark:bg-green-950"
+    imgAlt="Users"
+    [imgSize]="60"
+  ></app-summary-card>
+  <app-summary-card
+    title="Total Sellers"
+    [value]="totalSellers"
+    imgSrc="assets/images/seller.webp"
+    bgColor="bg-red-50 dark:bg-red-950"
+    imgAlt="Sellers"
+    [imgSize]="60"
+  ></app-summary-card>
+  <app-summary-card
+    title="Total Bidders"
+    [value]="totalBidders"
+    imgSrc="assets/images/bidder.webp"
+    bgColor="bg-yellow-50 dark:bg-yellow-950"
+    imgAlt="Bidders"
+    [imgSize]="60"
+  ></app-summary-card>
+  <app-summary-card
+    title="Total Admins"
+    [value]="totalAdmins"
+    imgSrc="assets/images/administrator.webp"
+    bgColor="bg-cyan-50 dark:bg-cyan-950"
+    imgAlt="Admins"
+    [imgSize]="60"
+  ></app-summary-card>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
+    <h2 class="text-lg font-semibold mb-4">Auction Creation Status</h2>
+    @if (auctionchartOptions) {
+    <apx-chart
+      #auctionChart
+      [series]="auctionchartOptions.series!"
+      [chart]="auctionchartOptions.chart!"
+      [theme]="auctionchartOptions.theme!"
+      [plotOptions]="auctionchartOptions.plotOptions!"
+      [dataLabels]="auctionchartOptions.dataLabels!"
+      [xaxis]="auctionchartOptions.xaxis!"
+      [yaxis]="auctionchartOptions.yaxis!"
+      [colors]="auctionchartOptions.colors!"
+    ></apx-chart>
+    }
+  </div>
+
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
+    <h2 class="text-lg font-semibold">Users creation status</h2>
+    @if (userCreationChartOptions) {
+    <apx-chart
+      #usersCreation
+      [series]="userCreationChartOptions.series!"
+      [chart]="userCreationChartOptions.chart!"
+      [theme]="userCreationChartOptions.theme!"
+      [plotOptions]="userCreationChartOptions.plotOptions!"
+      [dataLabels]="userCreationChartOptions.dataLabels!"
+      [xaxis]="userCreationChartOptions.xaxis!"
+      [yaxis]="userCreationChartOptions.yaxis!"
+      [colors]="userCreationChartOptions.colors!"
+    ></apx-chart>
+    }
+  </div>
+</div>

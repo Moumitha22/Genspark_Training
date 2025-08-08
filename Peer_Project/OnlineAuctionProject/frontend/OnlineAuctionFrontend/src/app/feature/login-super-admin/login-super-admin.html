@@ -1,0 +1,112 @@
+@if (!showAdminRegisterModal) {
+<div class="max-w-md mx-auto mt-50 p-6 rounded-lg shadow-lg bg-white">
+  <h2 class="text-2xl font-bold text-center mb-6 text-primary-color">
+    Super User Login
+  </h2>
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <label class="form-label">Email</label>
+    <input
+      formControlName="email"
+      type="email"
+      placeholder="Please enter your email"
+      class="form-input mb-2"
+      [class.border-red-500]="userForm.get('email')?.invalid && userForm.get('email')?.touched"
+      autofocus
+    />
+    @if (userForm.get('email')?.touched && userForm.get('email')?.invalid) {
+    <div class="error-msg text-red-600 mb-2">
+      @if (userForm.get('email')?.errors?.['required']) {
+      <p>Email is required.</p>
+      } @if (userForm.get('email')?.errors?.['email']) {
+      <p>Invalid email format.</p>
+      }
+    </div>
+    }
+
+    <label class="form-label">Password</label>
+    <div class="relative mb-2">
+      <input
+        #passwordInput
+        type="password"
+        formControlName="password"
+        placeholder="Please enter your password"
+        class="form-input pr-10"
+        [class.border-red-500]="userForm.get('password')?.invalid && userForm.get('password')?.touched"
+      />
+
+      <app-toggle-password
+        [targetElement]="passwordInput"
+        class="absolute right-3 top-1/2 transform -translate-y-1/2"
+      ></app-toggle-password>
+    </div>
+    @if (userForm.get('password')?.touched && userForm.get('password')?.invalid)
+    {
+    <div class="error-msg text-red-600 mb-2">
+      <p>Password is required.</p>
+    </div>
+    }
+
+    <button
+      type="submit"
+      class="btn btn-primary w-full mt-4"
+      [disabled]="userForm.invalid"
+    >
+      Login
+    </button>
+  </form>
+</div>
+}
+<app-model-view
+  [show]="showAdminRegisterModal"
+  (close)="showAdminRegisterModal = false"
+>
+  <div class="text-center">
+    <h2 class="text-lg font-black mb-2">Register New Admin</h2>
+    <form [formGroup]="adminForm" (ngSubmit)="onAdminRegister()">
+      <label class="form-label">Name</label>
+      <input
+        formControlName="username"
+        placeholder="Admin name"
+        class="form-input"
+      />
+
+      <label class="form-label">Email</label>
+      <input
+        formControlName="email"
+        placeholder="Admin email"
+        class="form-input"
+      />
+
+      <label class="form-label">Role</label>
+      <input formControlName="role" class="form-input" value="Admin" readonly />
+
+      <label class="form-label">Password</label>
+      <input
+        #passwordInput
+        formControlName="password"
+        type="password"
+        class="form-input"
+        value="{{ defaultPassword }}"
+        placeholder="Default: first 2 letters of name + @123"
+      />
+      <app-toggle-password
+        [targetElement]="passwordInput"
+        class="absolute right-8 transform translate-y-1/2"
+      ></app-toggle-password>
+
+      <small class="text-gray-500 block mb-2">
+        Password will be: first 2 letters of name + &#64;123
+      </small>
+
+      <button
+        type="submit"
+        class="btn btn-primary w-full"
+        [disabled]="adminForm.invalid"
+      >
+        Create Admin
+      </button>
+    </form>
+  </div>
+</app-model-view>
+
+<app-spinner [loading]="isLoading"></app-spinner>

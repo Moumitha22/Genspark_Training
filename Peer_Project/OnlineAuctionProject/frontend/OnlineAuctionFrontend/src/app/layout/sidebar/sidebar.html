@@ -1,0 +1,306 @@
+<div class="h-screen w-screen flex bg-gray-200 dark:bg-gray-900">
+  <aside
+    class="bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 shadow h-full w-16 sm:w-60 flex flex-col transition-all duration-300"
+  >
+    <div
+      class="h-16 flex items-center justify-center sm:justify-start sm:px-4 border-b border-gray-300 dark:border-gray-700"
+    >
+      <a class="h-6 w-40 mx-auto hidden md:flex" href=".">
+        <h1 class="text-gray-900 dark:text-gray-100 text-lg">
+          @if (role === "Seller") {
+          <span>Seller</span>
+          } @else if (role === "Bidder") {
+          <span>Bidder</span>
+          } @else if (role === "Admin") {
+          <span>Admin</span>
+          } Dashboard
+        </h1>
+      </a>
+    </div>
+
+    <ul>
+      @if (role === 'Seller') {
+      <div>
+        <li class="hover:bg-gray-100 dark:hover:bg-gray-700">
+          <a
+            routerLink="/seller/dashboard"
+            class="h-16 px-6 flex items-center w-full justify-center sm:justify-start focus:text-primary-color"
+            routerLinkActive="bg-gray-100 dark:bg-gray-700"
+            [routerLinkActiveOptions]="{exact:true}"
+          >
+            <lucide-angular
+              [img]="homeIcon"
+              class="my-icon ml-3"
+            ></lucide-angular>
+            <span class="hidden sm:inline-block ml-3">Dashboard</span>
+          </a>
+        </li>
+
+        <li class="hover:bg-gray-100 dark:hover:bg-gray-700">
+          <a
+            routerLink="/seller/create-auction"
+            routerLinkActive="bg-gray-100 dark:bg-gray-700"
+            [routerLinkActiveOptions]="{exact:true}"
+            class="h-16 px-6 flex items-center w-full justify-center sm:justify-start focus:text-primary-color"
+          >
+            <lucide-angular
+              [img]="fadingPlus"
+              class="my-icon ml-2"
+            ></lucide-angular>
+            <span class="hidden sm:inline-block ml-3">Create Auction</span>
+          </a>
+        </li>
+
+        <li class="hover:bg-gray-100 dark:hover:bg-gray-700">
+          <a
+            routerLink="/seller/view-auctions"
+            routerLinkActive="bg-gray-100 dark:bg-gray-700"
+            [routerLinkActiveOptions]="{exact:true}"
+            class="h-16 px-6 flex items-center w-full justify-center sm:justify-start focus:text-primary-color"
+          >
+            <lucide-angular
+              [img]="hammer"
+              class="my-icon ml-2"
+            ></lucide-angular>
+            <span class="hidden sm:inline-block ml-3">View Auctions</span>
+          </a>
+        </li>
+
+        <li class="hover:bg-gray-100 dark:hover:bg-gray-700">
+          <a
+            routerLink="/seller/update-auction-winner"
+            routerLinkActive="bg-gray-100 dark:bg-gray-700"
+            [routerLinkActiveOptions]="{exact:true}"
+            class="h-16 px-6 flex items-center w-full justify-center sm:justify-start focus:text-primary-color"
+          >
+            <lucide-angular [img]="crown" class="my-icon ml-2"></lucide-angular>
+            <span class="hidden sm:inline-block ml-3">Update Winner</span>
+          </a>
+        </li>
+      </div>
+      } @if (role === 'Admin') {
+      <div>
+        <li class="hover:bg-gray-100 dark:hover:bg-gray-700">
+          <a
+            routerLink="/admin/dashboard"
+            routerLinkActive="bg-gray-100 dark:bg-gray-700"
+            [routerLinkActiveOptions]="{exact:true}"
+            class="h-16 px-6 flex items-center w-full justify-center sm:justify-start focus:text-primary-color"
+          >
+            <lucide-angular
+              [img]="homeIcon"
+              class="my-icon ml-3"
+            ></lucide-angular>
+            <span class="hidden sm:inline-block ml-3">Dashboard</span>
+          </a>
+        </li>
+
+        <li class="hover:bg-gray-100 dark:hover:bg-gray-700">
+          <a
+            routerLink="/admin/manage-users"
+            routerLinkActive="bg-gray-100 dark:bg-gray-700"
+            [routerLinkActiveOptions]="{exact:true}"
+            class="h-16 px-6 flex items-center w-full justify-center sm:justify-start focus:text-primary-color"
+          >
+            <lucide-angular
+              [img]="userIcon"
+              class="my-icon ml-2"
+            ></lucide-angular>
+            <span class="hidden sm:inline-block ml-3">Users</span>
+          </a>
+        </li>
+
+        <li class="hover:bg-gray-100 dark:hover:bg-gray-700">
+          <a
+            routerLink="/admin/manage-auctions"
+            routerLinkActive="bg-gray-100 dark:bg-gray-700"
+            [routerLinkActiveOptions]="{exact:true}"
+            class="h-16 px-6 flex items-center w-full justify-center sm:justify-start focus:text-primary-color"
+          >
+            <lucide-angular
+              [img]="auctionIcon"
+              class="my-icon ml-2"
+            ></lucide-angular>
+            <span class="hidden sm:inline-block ml-3">Auctions</span>
+          </a>
+        </li>
+        
+          <li class="hover:bg-gray-100 dark:hover:bg-gray-700">
+            <a
+              routerLink="/admin/manage-bids"
+              routerLinkActive="bg-gray-100 dark:bg-gray-700"
+              [routerLinkActiveOptions] = "{exact:true}"
+              class="h-16 px-6 flex items-center w-full justify-center sm:justify-start focus:text-[#4eadcd]"
+            >
+              <lucide-angular [img]="bidsIcon" class="my-icon ml-2"></lucide-angular>
+              <span class="hidden sm:inline-block ml-3">Bids</span>
+            </a>
+          </li>
+      </div>
+      } @if (role === 'Bidder') {
+      <div>
+        <li class="hover:bg-gray-100 dark:hover:bg-gray-700">
+          <a
+            routerLink="/bidder/dashboard"
+            routerLinkActive="bg-gray-100 dark:bg-gray-700"
+            [routerLinkActiveOptions]="{exact:true}"
+            class="h-16 px-6 flex items-center w-full justify-center sm:justify-start focus:text-primary-color"
+          >
+            <lucide-angular
+              [img]="homeIcon"
+              class="my-icon ml-2"
+            ></lucide-angular>
+            <span class="hidden sm:inline-block ml-3">Home</span>
+          </a>
+        </li>
+
+        <li class="hover:bg-gray-100 dark:hover:bg-gray-700">
+          <a
+            routerLink="/bidder/find-auctions"
+            routerLinkActive="bg-gray-100 dark:bg-gray-700"
+            [routerLinkActiveOptions]="{exact:true}"
+            class="h-16 px-6 flex items-center w-full justify-center sm:justify-start focus:text-primary-color"
+          >
+            <lucide-angular
+              [img]="searchicon"
+              class="my-icon ml-2"
+            ></lucide-angular>
+            <span class="hidden sm:inline-block ml-3">Find Auctions</span>
+          </a>
+        </li>
+
+        <li class="hover:bg-gray-100 dark:hover:bg-gray-700">
+          <a
+            routerLink="/bidder/my-bids"
+            routerLinkActive="bg-gray-100 dark:bg-gray-700"
+            [routerLinkActiveOptions]="{exact:true}"
+            class="h-16 px-6 flex items-center w-full justify-center sm:justify-start focus:text-primary-color"
+          >
+            <lucide-angular
+              [img]="bidsIcon"
+              class="my-icon ml-2"
+            ></lucide-angular>
+            <span class="hidden sm:inline-block ml-3">My Bids</span>
+          </a>
+        </li>
+
+        <li class="hover:bg-gray-100 dark:hover:bg-gray-700">
+          <a
+            routerLink="/bidder/vitual-wallet"
+            routerLinkActive="bg-gray-100 dark:bg-gray-700"
+            [routerLinkActiveOptions]="{exact:true}"
+            class="h-16 px-6 flex items-center w-full justify-center sm:justify-start focus:text-primary-color"
+          >
+            <lucide-angular
+              [img]="virtualWallet"
+              class="my-icon ml-2"
+            ></lucide-angular>
+            <span class="hidden sm:inline-block ml-3">Virtual Wallet</span>
+          </a>
+        </li>
+
+        <li class="hover:bg-gray-100 dark:hover:bg-gray-700">
+          <a
+            routerLink="/bidder/e-agreements"
+            routerLinkActive="bg-gray-100 dark:bg-gray-700"
+            [routerLinkActiveOptions]="{exact:true}"
+            class="h-16 px-6 flex items-center w-full justify-center sm:justify-start focus:text-primary-color"
+          >
+            <lucide-angular
+              [img]="invoice"
+              class="my-icon ml-2"
+            ></lucide-angular>
+            <span class="hidden sm:inline-block ml-3">E-Agreements</span>
+          </a>
+        </li>
+      </div>
+      }
+    </ul>
+
+    <div
+      class="mt-auto w-[90%] mx-auto mb-5 border border-dotted border-gray-400 rounded-full px-4 py-2 flex flex-col md:flex-row md:items-center md:justify-between gap-3"
+    >
+      <div
+        class="w-10 h-10 flex items-center justify-center rounded-full bg-primary-color text-white text-lg font-semibold cursor-pointer relative transition-transform duration-200 hover:scale-105 hover:border-2 border-double -mx-2 md:mx-0 flex-shrink-0"
+        (click)="showModel('profile')"
+      >
+        {{ username.charAt(0).toUpperCase() }}
+      </div>
+
+      <div
+        class="flex-col text-center md:text-left hidden md:flex flex-grow overflow-hidden min-w-0"
+      >
+        @if ((username.length || 0) <= 15) {
+        <div class="text-gray-800 dark:text-white font-medium truncate">
+          {{ username }}
+        </div>
+        } @if ((email.length || 0) <= 34) {
+        <div
+          class="text-gray-500 dark:text-gray-400 text-sm truncate max-w-xs mx-auto md:mx-0"
+        >
+          {{ email }}
+        </div>
+        }
+      </div>
+
+      <div class="flex justify-center md:justify-end">
+        <button (click)="showModel('logout')" class="text-center">
+          <lucide-angular
+            [img]="logout"
+            class="hover:text-red-500"
+            title="Logout"
+          ></lucide-angular>
+        </button>
+      </div>
+    </div>
+
+    <app-confirm-modal
+      [show]="showLogoutModal"
+      [icon]="logout"
+      [message]="'Are you sure you want to logout?'"
+      [showInput]="false"
+      (close)="closeModel('logout')"
+      (confirm)="onLogout()"
+    ></app-confirm-modal>
+    <app-model-view
+      [show]="showProfileModal"
+      (close)="closeModel('profile')"
+      class="flex items-center justify-center w-full"
+    >
+      <div
+        class="p-8 max-w-xs w-full mx-auto flex flex-col items-center space-y-4"
+      >
+        <div
+          class="w-20 h-20 rounded-full bg-primary-color text-white text-3xl flex items-center justify-center font-bold border-4 border-white dark:border-gray-700 shadow-lg mb-2"
+        >
+          {{ firstLetter }}
+        </div>
+        <div class="text-xl font-bold text-gray-900 dark:text-white">
+          {{ username }}
+        </div>
+        <div
+          class="text-sm text-gray-600 dark:text-gray-400 font-medium capitalize"
+        >
+          {{ role }}
+        </div>
+        <div class="text-sm text-gray-600 dark:text-gray-400">{{ email }}</div>
+        <div class="text-xs text-gray-400 mt-1">
+          Created At: {{ createdAt | date:'medium'}}
+        </div>
+        <a
+          routerLink="/change-password"
+          class="px-4 py-1 rounded-full bg-cyan-100 dark:bg-cyan-900 text-cyan-600 dark:text-cyan-300 text-xs font-semibold hover:bg-cyan-200 dark:hover:bg-cyan-800 transition"
+        >
+          Change password
+        </a>
+        <button
+          (click)="onLogout()"
+          class="px-8 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition font-semibold shadow-lg mt-2"
+        >
+          Logout
+        </button>
+      </div>
+    </app-model-view>
+  </aside>
+</div>
+<app-spinner [loading]="isLoading"></app-spinner>

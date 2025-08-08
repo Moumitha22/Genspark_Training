@@ -1,0 +1,44 @@
+@if (selectedAuction) {
+<div class="p-6 w-full max-w-2xl mx-auto rounded-lg relative">
+  <h3 class="text-lg font-semibold mb-4 text-center">Auction Details</h3>
+  <div class="grid grid-cols-2 gap-x-4 gap-y-2">
+    <div class="model-label">ID:</div>
+    <div class="light-text whitespace-nowrap">{{ selectedAuction.id }}</div>
+
+    <div class="model-label">Name:</div>
+    <div class="light-text">{{ selectedAuction.name }}</div>
+
+    <div class="model-label">Description:</div>
+    <div
+      class="light-text col-span-1 truncate"
+      title="{{ selectedAuction.description }}"
+    >
+      {{ selectedAuction.description }}
+    </div>
+
+    <div class="model-label">Start Price:</div>
+    <div class="light-text">
+      {{ selectedAuction.startingPrice | currency:'INR' }}
+    </div>
+
+    <div class="model-label">Reserve Price:</div>
+    <div class="light-text">
+      {{ selectedAuction.reservePrice | currency:'INR' }}
+    </div>
+
+    <div class="model-label">End Time:</div>
+    <div class="light-text">{{ selectedAuction.endTime | date:'medium' }}</div>
+
+    <div class="model-label">Status:</div>
+    <div class="light-text">{{ selectedAuction.status }}</div>
+
+    <div class="model-label">Winner ID:</div>
+    <div class="light-text whitespace-nowrap">
+      {{ selectedAuction.winnerId || 'Not decided' }}
+    </div>
+  </div>
+  <button class="btn-primary mt-6 w-full" (click)="closeAuctionModal()">
+    Close
+  </button>
+</div>
+}

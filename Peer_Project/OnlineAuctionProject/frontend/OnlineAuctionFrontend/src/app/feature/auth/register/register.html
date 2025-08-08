@@ -1,0 +1,157 @@
+<div class="flex flex-col md:flex-row h-screen">
+  <div
+    class="w-80 md:w-1/2 flex flex-col items-center justify-center bg-gray-100 h-screen md:h-auto ml-auto mr-auto dark:bg-gray-900"
+  >
+    <h1 class="font-semibold text-2xl md:text-3xl text-primary-color">
+      Online Auction Platform
+    </h1>
+
+    <br />
+    <div class="form-container max-w-md">
+      <form [formGroup]="userForm" (ngSubmit)="onFormSubmit()">
+        <label class="form-label">Username</label>
+        <input
+          formControlName="username"
+          placeholder="Please enter the username"
+          class="form-input"
+        />
+        @if (userForm.get('username')?.touched &&
+        userForm.get('username')?.invalid) {
+        <div class="error-msg">
+          @if (userForm.get('username')?.errors?.['required']) {
+          <p>Username is required.</p>
+          } @if (userForm.get('username')?.errors?.['bannedWord']) {
+          <p>Username contains a banned word.</p>
+          }
+        </div>
+        }
+
+        <label class="form-label">Email</label>
+        <input
+          formControlName="email"
+          placeholder="Please enter the email"
+          class="form-input"
+        />
+        @if (userForm.get('email')?.touched && userForm.get('email')?.invalid) {
+        <div class="error-msg">
+          @if (userForm.get('email')?.errors?.['required']) {
+          <p>Email is required.</p>
+          } @if (userForm.get('email')?.errors?.['email']) {
+          <p>Invalid email format.</p>
+          }
+        </div>
+        }
+
+        <label class="form-label">Password</label>
+        <input
+          #passwordInput
+          type="password"
+          formControlName="password"
+          placeholder="Please enter the password"
+          class="form-input"
+        />
+        <app-toggle-password
+          [targetElement]="passwordInput"
+          class="absolute -translate-x-10 mt-3"
+        ></app-toggle-password>
+
+        @if (userForm.get('password')?.touched &&
+        userForm.get('password')?.invalid) {
+        <div class="error-msg">
+          @if (userForm.get('password')?.errors?.['required']) {
+          <p>Password is required.</p>
+          } @if (userForm.get('password')?.errors?.['weakPassword']) {
+          <p>
+            Password must be at least 6 characters, contain a number and symbol.
+          </p>
+          }
+        </div>
+        }
+
+        <label class="form-label">Confirm Password</label>
+        <input
+          #confirmPasswordInput
+          type="password"
+          formControlName="confirmPassword"
+          placeholder="Please confirm the password"
+          class="form-input"
+        />
+        <app-toggle-password
+          [targetElement]="confirmPasswordInput"
+          class="absolute -translate-x-10 mt-3"
+        ></app-toggle-password>
+        @if (userForm.get('confirmPassword')?.touched &&
+        userForm.get('confirmPassword')?.invalid) {
+        <div class="error-msg">
+          @if (userForm.get('confirmPassword')?.errors?.['required']) {
+          <p>Confirm Password is required.</p>
+          }
+        </div>
+        } @if (userForm.errors?.['passWordDifferent'] &&
+        userForm.get('confirmPassword')?.touched) {
+        <div class="error-msg">
+          <p class="error-msg">Passwords do not match.</p>
+        </div>
+        }
+
+        <label class="form-label">Role</label>
+        <select formControlName="role" class="form-input">
+          <option value="" disabled>Select role</option>
+          <option value="Bidder">Bidder</option>
+          <option value="Seller">Seller</option>
+        </select>
+        @if (userForm.get('role')?.touched && userForm.get('role')?.invalid) {
+        <div class="error-msg">
+          @if (userForm.get('role')?.errors?.['required']) {
+          <p>Role is required.</p>
+          }
+        </div>
+        }
+
+        <button
+          type="submit"
+          class="mt-2 btn-primary w-full"
+          [disabled]="userForm.invalid"
+        >
+          Add User
+        </button>
+
+        <div class="text-center mt-3">
+          <a
+            class="text-[#4eadcd] hover:text-[#3489a8] hover:underline hover:cursor-pointer"
+            routerLink="/login"
+          >
+            Already have an account?
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div
+    class="hidden w-1/2 bg-primary-color h-screen md:flex items-center justify-center"
+  >
+    <div class="max-w-xl flex items-center justify-center floating-img">
+      <img src="assets/images/In sync-cuate.png" />
+    </div>
+  </div>
+</div>
+
+<app-model-view
+  [show]="showAdminInfoModel"
+  (close)="showAdminInfoModel = false"
+>
+  <div class="text-center">
+    <h2 class="text-lg font-black">You were the previous user</h2>
+    <p>For some reason you were inactive</p>
+    <p class="text-gray-500 mt-3">
+      Please contact at
+      <br />
+      <span class="text-primary-color">
+        supportOnlineAuction&#64;gmail.com
+      </span>
+    </p>
+  </div>
+</app-model-view>
+
+<app-spinner [loading]="isLoading"></app-spinner>

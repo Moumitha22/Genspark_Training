@@ -1,0 +1,16 @@
+appsettings.Development.json
+secrets.json
+
+bin/
+obj/
+
+.vscode/
+*.user
+*.suo
+
+.DS_Store
+Thumbs.db
+
+logs/
+
+GeneratedPdfs/

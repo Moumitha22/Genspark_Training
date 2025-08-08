@@ -1,0 +1,88 @@
+<div class="flex flex-col md:flex-row h-screen">
+  <div
+    class="hidden w-1/2 bg-[#4eabcd] h-screen md:flex items-center justify-center"
+  >
+    <div class="max-w-xl flex items-center justify-center floating-img">
+      <img src="assets/images/login-img.png" />
+    </div>
+  </div>
+  <div
+    class="w-full md:w-1/2 flex flex-col items-center justify-center bg-gray-100 h-screen md:h-auto ml-auto mr-auto dark:bg-gray-900"
+  >
+    <h1 class="font-semibold text-2xl md:text-3xl text-primary-color">
+      Online Auction Platform
+    </h1>
+
+    <br />
+    <div class="form-container md:max-w-md max-w-sm">
+      <form [formGroup]="loginForm" (submit)="onLogin()">
+        <h2 class="text-center font-bold mb-2.5 text-gray-400">
+          Login to Continue
+        </h2>
+        <label class="form-label"> Email </label>
+        <input
+          class="form-input"
+          formControlName="email"
+          type="email"
+          placeholder="please enter the register email"
+        />
+
+        <div class="error-msg">
+          @if(email?.touched && email?.errors?.['required']){
+          <p>Email is required</p>
+          } @else if(email?.touched && email?.errors?.['email']){
+          <p>Please enter valid email</p>
+          }
+        </div>
+        <br />
+        <label class="form-label"> Password </label>
+        <div class="relative">
+          <input
+            #passwordInput
+            class="form-input"
+            formControlName="password"
+            type="password"
+            placeholder="please enter valid password"
+          />
+          <app-toggle-password
+            [targetElement]="passwordInput"
+            class="absolute -translate-x-10 mt-3"
+          ></app-toggle-password>
+        </div>
+        <div class="error-msg">
+          @if(password?.touched && password?.invalid){
+          <p>Password is required</p>
+          }
+        </div>
+        <div class="mb-2 mt-2">
+          <a
+            class="text-primary-color hover:text-secondary-color hover:underline hover:cursor-pointer"
+            routerLink="/forget-password"
+            >Forget Password?</a
+          >
+        </div>
+        <button
+          class="btn-primary w-full inline-flex items-center justify-center"
+          type="submit"
+          [disabled]="loginForm.invalid"
+        >
+          Login
+          <lucide-angular
+            [img]="ArrowRightwards"
+            class="my-icon ml-2 text-white"
+          ></lucide-angular>
+        </button>
+
+        <div class="text-center mt-3">
+          <a
+            class="text-[#4eadcd] hover:text-[#3489a8] hover:underline hover:cursor-pointer"
+            routerLink="/register"
+          >
+            Don't have an account? Click here
+          </a>
+        </div>
+        <app-spinner [loading]="isLoading"></app-spinner>
+      </form>
+    </div>
+  </div>
+</div>

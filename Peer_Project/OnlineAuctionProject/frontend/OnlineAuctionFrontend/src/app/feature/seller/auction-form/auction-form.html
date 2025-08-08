@@ -1,0 +1,103 @@
+<div class="flex mt-5">
+  <h1>Create the auction here</h1>
+  <lucide-angular [img]="goal" class="my-icon ml-3"></lucide-angular>
+</div>
+
+<div class="form-container mt-10 max-w-dvw">
+  <form [formGroup]="auctionForm" (ngSubmit)="submitAuction()">
+    <div class="flex justify-between flex-col md:flex-row md:gap-20">
+      <div class="w-full md:w-1/2">
+        <label class="form-label">Auction Title</label>
+        <input
+          class="form-input mb-4"
+          formControlName="name"
+          type="text"
+          placeholder="Please enter valid name"
+        />
+
+        <label class="form-label">Auction Description</label>
+        <textarea
+          class="form-input mb-4"
+          formControlName="description"
+          placeholder="Please enter description of the auction"
+        ></textarea>
+
+        <label class="form-label">Auction Starting Price</label>
+
+        <input
+          formControlName="startingPrice"
+          type="number"
+          class="form-input mb-4"
+          placeholder="Please enter valid startingPrice"
+        />
+
+        <label class="form-label">Auction Reserve Price</label>
+        <input
+          formControlName="reservePrice"
+          type="number"
+          class="form-input mb-4"
+          placeholder="Please enter valid reservePrice"
+        />
+
+        <label class="form-label">Auction Starting Time</label>
+        <input
+          class="form-input mb-4"
+          formControlName="startTime"
+          type="datetime-local"
+        />
+      </div>
+
+      <div class="w-px hidden md:block bg-gray-300 dark:bg-gray-600"></div>
+      <div class="w-full md:w-1/2">
+        <label class="form-label">Auction Ending Time</label>
+        <input
+          class="form-input mb-4"
+          formControlName="endTime"
+          type="datetime-local"
+        />
+
+        <label class="form-label">Auction Status</label>
+        <select class="form-input mb-4" formControlName="status">
+          <option value="" disabled selected>Select status</option>
+          <option value="Upcoming">Upcoming</option>
+          <option value="Live">Live</option>
+        </select>
+
+        <label class="form-label">Seller ID</label>
+        <input
+          class="form-input mb-4"
+          formControlName="sellerId"
+          type="text"
+          autocomplete="off"
+          placeholder="Enter seller ID"
+        />
+
+        <label class="form-label">Upload Auction Images</label>
+        <div
+          class="form-input mb-4 border-2 border-dotted border-gray-400 p-4 flex items-center space-x-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600"
+        >
+          <lucide-angular
+            [img]="upload"
+            class="w-5 h-5 text-gray-500"
+          ></lucide-angular>
+          <input
+            class="w-full"
+            (change)="onFileChange($event)"
+            type="file"
+            multiple
+          />
+        </div>
+
+        <button
+          class="mt-auto btn-primary w-full inline-flex justify-center"
+          [disabled]="auctionForm.invalid"
+          type="submit"
+        >
+          Create Auction
+        </button>
+
+        <app-spinner [loading]="isloading"></app-spinner>
+      </div>
+    </div>
+  </form>
+</div>

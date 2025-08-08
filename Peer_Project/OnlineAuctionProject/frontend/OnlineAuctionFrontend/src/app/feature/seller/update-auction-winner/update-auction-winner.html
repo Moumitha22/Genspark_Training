@@ -1,0 +1,139 @@
+<br />
+<h1>Update the auction based on highest bidding</h1>
+<div class="flex justify-between flex-col md:flex-row md:gap-20">
+  <div class="w-full md:w-1/2 mx-auto mt-8">
+    <label for="auctionDropdown" class="form-label"> Select Auction: </label>
+
+    <div class="relative">
+      <button
+        type="button"
+        (click)="toggleDropdown()"
+        class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-800 dark:text-white font-medium py-3 px-4 rounded-lg shadow-sm text-left flex justify-between items-center"
+      >
+        {{ selectedAuctionName || 'Select an auction' }} @if (dropdownOpen) {
+        <lucide-angular [img]="dropUp" class="my-icon"></lucide-angular>
+        } @else {
+        <lucide-angular [img]="dropDown" class="my-icon"></lucide-angular>
+
+        }
+      </button>
+
+      @if (dropdownOpen) {
+      <ul
+        class="absolute z-10 mt-2 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+      >
+        @for (auction of filteredAuctions; track $index) {
+        <li
+          (click)="selectAuction(auction)"
+          class="px-4 py-6 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-800 dark:text-white border-b-gray-200 border-b dark:border-b-gray-400"
+        >
+          <div class="font-semibold">
+            <span class="caption-text">Name: </span>{{ auction.name }}
+          </div>
+          <div class="text-sm text-gray-500 dark:text-gray-400">
+            <span class="caption-text">Des: </span> {{ auction.description }} |
+            <span class="caption-text">Starting Price: </span> ₹{{
+            auction.startingPrice }} |
+            <span class="caption-text">Reserve Price: </span> ₹{{
+            auction.reservePrice }}
+            <br />
+            <span class="caption-text">Starting Time: </span>{{
+            auction.startTime | date: 'medium' }} |
+            <span class="caption-text">Ending Time: </span>{{ auction.endTime |
+            date: 'medium' }}
+
+            <br />
+            <span class="caption-text">Auction id: </span>{{ auction.id }}
+          </div>
+        </li>
+        } @if (filteredAuctions.length === 0) {
+        <li class="px-4 py-6 text-gray-500 text-center">
+          No live auctions found
+        </li>
+        }
+      </ul>
+      }
+    </div>
+
+    <button
+      (click)="fetchHighestBid()"
+      [disabled]="!selectedAuctionId || loadingBid"
+      class="mt-6 w-full btn-primary"
+    >
+      Get Highest Bid
+    </button>
+
+    <app-spinner [loading]="loadingBid"></app-spinner>
+
+    @if (errorMsg) {
+    <div class="text-center mt-4 text-red-600">{{ errorMsg }}</div>
+    } @if (showHighestBidDetails) {
+    <div class="max-w-md mx-auto mt-6 bg-white rounded-lg shadow p-6">
+      <h3 class="text-lg font-bold mb-4 text-gray-800">Highest Bid Details</h3>
+      @if (highestBid) {
+      <div>
+        <p class="mb-2"><strong>Bidder:</strong> {{ highestBid.userId }}</p>
+        <p class="mb-2"><strong>Bidding Id:</strong> {{ highestBid.id }}</p>
+        <p class="mb-2"><strong>Amount:</strong> ₹{{ highestBid.amount }}</p>
+        <p><strong>Time:</strong> {{ highestBid.bidTime | date:'short' }}</p>
+      </div>
+      } @else {
+      <p class="text-gray-500">No bids found for this auction.</p>
+      }
+    </div>
+    }
+  </div>
+
+  <div class="w-full md:w-1/2 mx-auto mt-8">
+    <form class="form-container rounded-lg shadow p-6 space-y-6">
+      <div>
+        <label class="form-label">Auction ID</label>
+        <input
+          type="text"
+          class="form-input"
+          [value]="selectedAuctionId"
+          readonly
+        />
+      </div>
+
+      <div>
+        <label class="form-label">Winner ID</label>
+        <select
+          class="form-input"
+          [(ngModel)]="selectedWinningId"
+          name="winnerId"
+        >
+          <option value="" disabled selected>Select Winning Bid id</option>
+          @if (highestBid) {
+          <option [value]="highestBid.id">
+            {{ highestBid.bidderName || highestBid.id }}
+          </option>
+          }
+        </select>
+
+        <button
+          (click)="onWinneringBidUpdate()"
+          class="btn-primary w-full mt-5"
+        >
+          Complete the auction now
+        </button>
+      </div>
+
+      <!-- <div>
+        <label class="block mb-1 font-semibold text-gray-700">Status</label>
+        <select
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-700"
+          [(ngModel)]="selectedStatus"
+          name="status"
+        >
+          <option value="" disabled selected>Select status</option>
+          <option value="Upcoming">Upcoming</option>
+          <option value="Live">Live</option>
+          <option value="Completed">Completed</option>
+          <option value="Closed">Closed</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+      </div> -->
+    </form>
+  </div>
+</div>

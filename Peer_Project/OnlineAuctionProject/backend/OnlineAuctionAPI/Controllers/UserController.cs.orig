@@ -1,0 +1,367 @@
+using Azure.Security.KeyVault.Secrets;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using OnlineAuctionAPI.Helpers;
+using OnlineAuctionAPI.Interfaces;
+using OnlineAuctionAPI.Models;
+using OnlineAuctionAPI.Models.DTO;
+
+namespace OnlineAuctionAPI.Controllers;
+
+[ApiController]
+[Route("api/v{version:apiVersion}/[controller]")]
+[ApiVersion("1.0")]
+public class UserController : ControllerBase
+{
+    private readonly IUserService _userService;
+    private readonly IVirtualWalletService _virtualWalletService;
+    private readonly ILogger<UserController> _logger;
+<<<<<<< HEAD
+    private readonly SecretClient _secretClient;
+=======
+
+    // private readonly SecretClient _secretClient;
+>>>>>>> origin/master
+    private readonly IConfiguration _configuration;
+
+    public UserController(
+        IUserService userService,
+        ILogger<UserController> logger,
+        IVirtualWalletService virtualWalletService,
+<<<<<<< HEAD
+        SecretClient secretClient,
+=======
+>>>>>>> origin/master
+        IConfiguration configuration
+    )
+    {
+        _userService = userService;
+        _virtualWalletService = virtualWalletService;
+        _logger = logger;
+<<<<<<< HEAD
+        _secretClient = secretClient;
+=======
+        // _secretClient = secretClient;
+>>>>>>> origin/master
+        _configuration = configuration;
+    }
+
+    [HttpGet("{id}")]
+    [Authorize(Roles = "Seller,Bidder,Admin")]
+    public async Task<ActionResult<User>> GetUserById(Guid id)
+    {
+        var user = await _userService.GetUserByIdAsync(id);
+        _logger.LogInformation("Attempted to retrieve user with ID {UserId}", id);
+        if (user == null)
+        {
+            _logger.LogWarning("User with ID {UserId} not found", id);
+            return NotFound(ApiResponseHelper.CreateNotFound<string>("User not found"));
+        }
+        _logger.LogInformation("User with ID {UserId} retrieved successfully", id);
+        return Ok(ApiResponseHelper.CreateSuccess(user, "User retrieved successfully"));
+    }
+
+    [HttpGet("GetByEmail")]
+    // [Authorize(Roles = "Seller,Bidder,Admin")]
+    public async Task<ActionResult> GetByEmail([FromQuery] string email)
+    {
+        var user = await _userService.GetUserByEmailAsync(email);
+        _logger.LogInformation("Attempted to retrieve user with email {Email}", email);
+        return Ok(ApiResponseHelper.CreateSuccess(user, "User retrieved successfully"));
+    }
+
+    [HttpPost]
+    // [Authorize(Roles = "Admin")]
+    public async Task<ActionResult<User>> CreateUser([FromBody] UserRegisterRequestDto userDto)
+    {
+        var newUser = await _userService.CreateUserAsync(userDto);
+        _logger.LogInformation("User created successfully with ID {UserId}", newUser.Id);
+        return CreatedAtAction(
+            nameof(GetUserById),
+            new { id = newUser.Id },
+            ApiResponseHelper.CreateSuccess(newUser, "User created successfully")
+        );
+    }
+
+    // [HttpDelete]
+    // [Authorize(Roles = "Admin")]
+    // public async Task<ActionResult> DeleteUser(UserDeleteRequest userDeleteDto)
+    // {
+    //     await _userDeletionService.SoftDeleteUserAsync(userDeleteDto);
+    //     _logger.LogInformation("User with ID {UserId} deleted successfully", userDeleteDto.UserId);
+    //     return Ok(ApiResponseHelper.CreateSuccess<string>(null, "User deleted successfully"));
+    // }
+
+    [HttpPut("UpdateUser")]
+    [Authorize(Roles = "Seller,Bidder, Admin")]
+    public async Task<ActionResult> Updateuser(
+        [FromQuery] Guid id,
+        [FromBody] UserUpdateRequestDto updatedto
+    )
+    {
+        var user = await _userService.UpdateUserInfoAsync(id, updatedto);
+        _logger.LogInformation("User with ID {UserId} updated successfully", id);
+        return Ok(ApiResponseHelper.CreateSuccess(user, "User updated successfully"));
+    }
+
+    [HttpPatch("change-password")]
+    [Authorize(Roles = "Seller,Bidder")]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequestDto dto)
+    {
+        await _userService.ChangePasswordAsync(dto);
+        _logger.LogInformation("Password changed successfully for user {UserId}", dto.UserId);
+        return Ok(ApiResponseHelper.CreateSuccess<string>(null, "Password changed successfully"));
+    }
+
+    [HttpPatch("forget-password")]
+    [AllowAnonymous]
+    public async Task<IActionResult> ForgetPassword([FromBody] ForgetPasswordRequestDto dto)
+    {
+        if (string.IsNullOrEmpty(dto.Email) || string.IsNullOrEmpty(dto.NewPassword))
+        {
+            _logger.LogWarning("Email or new password is null or empty");
+            return BadRequest(
+                ApiResponseHelper.CreateBadRequest<string>("Email and new password are required.")
+            );
+        }
+        var result = await _userService.ForgetPasswordAsync(dto);
+        if (!result)
+        {
+            _logger.LogWarning("Failed to reset password for email {Email}", dto.Email);
+            return NotFound(
+                ApiResponseHelper.CreateNotFound<string>("User not found with the provided email.")
+            );
+        }
+        _logger.LogInformation("Password reset successfully for email {Email}", dto.Email);
+        return Ok(ApiResponseHelper.CreateSuccess<string>(null, "Password reset successfully."));
+    }
+
+    [HttpGet("GetWalletByUserId")]
+    [Authorize(Roles = "Bidder")]
+    public async Task<ActionResult<VirtualWalletResponseDto>> GetUserWithWalletByUserId()
+    {
+        var userIdClaim = User.FindFirst("sub") ?? User.FindFirst("UserId");
+        if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out var userId))
+        {
+            _logger.LogWarning("Invalid or missing userId in token");
+            return BadRequest(
+                ApiResponseHelper.CreateBadRequest<string>("Please provide a valid userId.")
+            );
+        }
+
+        var user = await _userService.GetUserWithWalletByUserIdAsync(userId);
+        if (user == null)
+        {
+            _logger.LogWarning("No user found with User ID {UserId}", userId);
+            return NotFound(
+                ApiResponseHelper.CreateNotFound<string>("No user found with the given User Id")
+            );
+        }
+        if (user.VirtualWallet == null)
+        {
+            _logger.LogWarning("No virtual wallet found for user {UserId}", userId);
+            return NotFound(
+                ApiResponseHelper.CreateNotFound<string>(
+                    "No virtual wallet found for the given User Id"
+                )
+            );
+        }
+        _logger.LogInformation("User with User ID {UserId} retrieved successfully", userId);
+        var data = new VirtualWalletResponseDto
+        {
+            Id = user.VirtualWallet.Id,
+            UserId = user.Id,
+            Balance = user.VirtualWallet.Balance,
+        };
+        return Ok(ApiResponseHelper.CreateSuccess(data, "User with wallet retrieved successfully"));
+    }
+
+    [HttpPost("AddVirtualWalletToUser")]
+    [Authorize(Roles = "Bidder")]
+    public async Task<ActionResult<VirtualWalletResponseDto>> AddVirtualWalletToUser(
+        [FromBody] VirtualWalletAddDto virtualWallet
+    )
+    {
+        var userIdClaim = User.FindFirst("sub") ?? User.FindFirst("UserId");
+        if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out var userId))
+        {
+            _logger.LogWarning("Invalid or missing userId in token");
+            return BadRequest(
+                ApiResponseHelper.CreateBadRequest<string>("Please provide a valid userId.")
+            );
+        }
+
+        var user = await _virtualWalletService.AddVirtualWalletToUserAsync(userId, virtualWallet);
+
+        _logger.LogInformation(
+            "Virtual wallet added to user with ID {UserId} successfully",
+            userId
+        );
+
+        var wallet = user.VirtualWallet!;
+        var walletDto = new VirtualWalletResponseDto
+        {
+            Id = wallet.Id,
+            UserId = wallet.UserId,
+            Balance = wallet.Balance,
+            UpdatedAt = wallet.UpdatedAt,
+        };
+
+        return Ok(ApiResponseHelper.CreateSuccess(walletDto, "Virtual wallet added successfully"));
+    }
+
+    [HttpPatch("AddFundsToWallet")]
+    [Authorize(Roles = "Bidder")]
+    public async Task<ActionResult<VirtualWalletResponseDto>> AddFundsToWallet(
+        [FromQuery] decimal amount
+    )
+    {
+        var userIdClaim = User.FindFirst("sub") ?? User.FindFirst("UserId");
+        if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out var userId))
+        {
+            return BadRequest(
+                ApiResponseHelper.CreateBadRequest<string>("Please provide a valid userId.")
+            );
+        }
+
+        var user = await _virtualWalletService.AddFundsToVirtualWalletAsync(userId, amount);
+        var wallet = user.VirtualWallet!;
+        var walletDto = new VirtualWalletResponseDto
+        {
+            Id = wallet.Id,
+            UserId = wallet.UserId,
+            Balance = wallet.Balance,
+            UpdatedAt = wallet.UpdatedAt,
+        };
+
+        return Ok(ApiResponseHelper.CreateSuccess(walletDto, "Funds added successfully"));
+    }
+
+    [HttpGet("GetWalletHistoryByUserId")]
+    [Authorize(Roles = "Bidder,Admin")]
+    public async Task<ActionResult<List<VirtualWalletHistory>>> GetWalletHistoryByUserId()
+    {
+        var userIdClaim = User.FindFirst("sub") ?? User.FindFirst("UserId");
+        if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out var userId))
+        {
+            return BadRequest(
+                ApiResponseHelper.CreateBadRequest<string>("Please provide a valid userId.")
+            );
+        }
+        var history = await _virtualWalletService.GetVirtualWalletHistoryByUserIdAsync(userId);
+        if (history == null || history.Count == 0)
+        {
+            _logger.LogWarning("No wallet history found for user {UserId}", userId);
+            return NotFound(
+                ApiResponseHelper.CreateNotFound<string>(
+                    "No wallet history found for the given User Id"
+                )
+            );
+        }
+
+        return Ok(
+            ApiResponseHelper.CreateSuccess(history, "Wallet history retrieved successfully")
+        );
+    }
+
+    [HttpGet("GetAll")]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult<User>> GetAll()
+    {
+        var users = await _userService.GetAllUsers();
+        if (users == null)
+        {
+            return BadRequest(ApiResponseHelper.CreateBadRequest<string>("No users found"));
+        }
+        return Ok(users);
+    }
+
+    [HttpGet("search")]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult<IEnumerable<User>>> GetSearchData(
+        [FromQuery] UserSearchDto searchDto
+    )
+    {
+        var users = await _userService.SearchUsersAsync(searchDto);
+        if (users == null || !users.Any())
+        {
+            _logger.LogWarning(
+                "No users found matching the search term {SearchTerm}",
+                searchDto.SearchTerm
+            );
+            return NotFound(
+                ApiResponseHelper.CreateNotFound<string>("No users found matching the search term.")
+            );
+        }
+
+        _logger.LogInformation(
+            "Users found matching the search term {SearchTerm}",
+            searchDto.SearchTerm
+        );
+
+        return Ok(ApiResponseHelper.CreateSuccess(users, "Users retrieved successfully"));
+    }
+
+    [HttpPost("super-admin-login")]
+    [AllowAnonymous]
+    public async Task<ActionResult> SuperAdminLogin([FromBody] SuperAdminLoginDto loginDto)
+    {
+        // KeyVaultSecret emailSecret = await _secretClient.GetSecretAsync("SuperAdminEmail");
+        // KeyVaultSecret passwordSecret = await _secretClient.GetSecretAsync("SuperAdminPassword");
+
+        // var envEmail = emailSecret.Value;
+        // var envPassword = passwordSecret.Value;
+
+<<<<<<< HEAD
+        var envEmail = _configuration["SuperAdminEmail"];
+        var envPassword = _configuration["SuperAdminPassword"];
+=======
+        // var envEmail = Environment.GetEnvironmentVariable("SUPER_ADMIN_EMAIL");
+        // var envPassword = Environment.GetEnvironmentVariable("SUPER_ADMIN_PASSWORD");
+
+        var envEmail = _configuration["SuperAdmin:Email"];
+        var envPassword = _configuration["SuperAdmin:Password"];
+>>>>>>> origin/master
+
+        if (string.IsNullOrEmpty(envEmail) || string.IsNullOrEmpty(envPassword))
+        {
+            _logger.LogWarning("Super admin credentials are not set in environment variables.");
+            return StatusCode(
+                500,
+                ApiResponseHelper.CreateFailure<string>("Super admin credentials not configured.")
+            );
+        }
+
+        bool isValid = loginDto.Email == envEmail && loginDto.Password == envPassword;
+
+        if (isValid)
+        {
+            _logger.LogInformation(
+                "Super admin login successful for email {Email}",
+                loginDto.Email
+            );
+            return Ok(
+                ApiResponseHelper.CreateSuccess<string>(null, "Super admin login successful.")
+            );
+        }
+        else
+        {
+            _logger.LogWarning("Super admin login failed for email {Email}", loginDto.Email);
+            return Unauthorized(
+                ApiResponseHelper.CreateFailure<string>("Invalid super admin credentials.")
+            );
+        }
+    }
+
+    [HttpPost("register-admin")]
+    public async Task<ActionResult<User>> RegisterAdmin([FromBody] UserRegisterRequestDto userDto)
+    {
+        var newUser = await _userService.CreateAdminAsync(userDto);
+        _logger.LogInformation("Admin user created successfully with ID {UserId}", newUser.Id);
+        return CreatedAtAction(
+            nameof(GetUserById),
+            new { id = newUser.Id },
+            ApiResponseHelper.CreateSuccess(newUser, "Admin user created successfully")
+        );
+    }
+}

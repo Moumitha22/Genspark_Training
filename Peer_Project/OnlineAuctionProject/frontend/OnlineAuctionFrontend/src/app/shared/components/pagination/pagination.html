@@ -1,0 +1,29 @@
+<div class="flex justify-center items-center gap-2 mt-4">
+  <button
+    class="px-3 py-1 rounded btn-primary"
+    [disabled]="page === 1"
+    (click)="prevPage()"
+  >
+    Prev
+  </button>
+  <span
+    >
+    <input
+      #pageInput
+      type="number"
+      min="1"
+      [max]="totalPages"
+      [value]="page"
+      (change)="onPageInput(pageInput.value)"
+      class="w-12 text-center border rounded justify-center border-gray-400"
+    />
+    of {{ totalPages }}</span
+  >
+  <button
+    class="px-3 py-1 rounded btn-primary"
+    [disabled]="page === totalPages"
+    (click)="nextPage()"
+  >
+    Next
+  </button>
+</div>

@@ -1,0 +1,71 @@
+<div class="p-4 bg-white dark:bg-gray-800 rounded-xl max-w-md mx-auto">
+  <h2 class="text-lg font-semibold mb-4">Filter Auctions</h2>
+
+  <form [formGroup]="filterForm" (ngSubmit)="onApply()" class="mt-4">
+
+    <div class="mt-2 mb-2">
+      <label class="inline-flex items-center">
+        <input type="checkbox" formControlName="hasFileAttachments" class="form-checkbox">
+        <span class="ml-2">Has File Attachments</span>
+      </label>
+    </div>
+    <div *ngIf="!isBidder">
+      <label class="form-label mt-1">Status</label>
+      <select class="form-input" formControlName="status">
+        <option value="">All Status</option>
+        <option value="Completed">Completed</option>
+        <option value="Cancelled">Cancelled</option>
+        <option value="Live">Live</option>
+        <option value="Upcoming">Upcoming</option>
+        <option value="Closed">Closed</option>
+      </select>
+    </div>
+
+    <label class="form-label mt-1">Start Date</label>
+    <input class="form-input" type="datetime-local" formControlName="startTime"/>
+
+    <label class="form-label mt-1">End Date</label>
+    <input class="form-input" type="datetime-local" formControlName="endTime" />
+
+    <div>
+      <label class="form-label mt-1">Starting Price Range</label>
+      <div class="flex gap-2">
+        <input type="number" formControlName="startingPriceMin" class="form-input w-full" placeholder="Min" />
+        <span class="self-center mx-3">to</span>
+        <input type="number" formControlName="startingPriceMax" class="form-input w-full" placeholder="Max" />
+      </div>
+    </div>
+
+    <div>
+      <label class="form-label mt-1">Reserve Price Range</label>
+      <div class="flex gap-2">
+        <input type="number" formControlName="reservePriceMin" class="form-input w-full" placeholder="Min" />
+        <span class="self-center mx-3">to</span>
+        <input type="number" formControlName="reservePriceMax" class="form-input w-full" placeholder="Max" />
+      </div>
+    </div>
+
+    <!-- <div *ngIf="!isBidder">
+      <label class="form-label mt-1">Sort</label>
+      <select class="form-input" formControlName="sort">
+        <option value="name_asc">Name (A → Z)</option>
+        <option value="name_desc">Name (Z → A)</option>
+        <option value="startTime_asc">Start Time (Oldest → Newest)</option>
+        <option value="startTime_desc">Start Time (Newest → Oldest)</option>
+        <option value="endTime_asc">End Time (Oldest → Newest)</option>
+        <option value="endTime_desc">End Time (Newest → Oldest)</option>
+        <option value="createdAt_asc">Created At (Oldest → Newest)</option>
+        <option value="createdAt_desc">Created At (Newest → Oldest)</option>
+        <option value="deleterequest_asc">Delete Request (Low → High)</option>
+        <option value="deleterequest_desc" selected>Delete Request (High → Low)</option>
+      </select>
+    </div> -->
+
+    <div class="flex justify-between mt-4">
+      <button type="submit" class="btn-primary">Apply</button>
+      <button type="button" class="btn-secondary" (click)="onReset()">
+        Reset
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,264 @@
+<div class="p-6 dark:bg-gray-900 min-h-screen">
+  <h1
+    class="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-100 flex items-center gap-2"
+  >
+    <lucide-angular [img]="gavel" class="w-7 h-7"></lucide-angular>
+    Live Auctions
+  </h1>
+
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between md:flex-nowrap gap-4 mb-8">
+
+    <div class="flex flex-wrap md:flex-nowrap gap-2  md:gap-4 w-full md:w-3/4">
+      <div class="flex flex-col w-full md:flex-1 min-w-0">
+        <label
+          class="mb-1 text-sm font-medium text-gray-700 dark:text-gray-200"
+          for="searchInput"
+        >
+          Search by name
+        </label>
+        <input
+          id="searchInput"
+          type="text"
+          [(ngModel)]="searchString"
+          (input)="onSearchProducts()"
+          placeholder="Search by name"
+          class="form-input px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+        />
+      </div>
+
+      <div class="flex flex-col w-full md:flex-1 min-w-0">
+        <label
+          class="mb-1 text-sm font-medium text-gray-700 dark:text-gray-200"
+          for="searchInput"
+        >
+          Search by file name
+        </label>
+        <input
+          id="searchFileInput"
+          type="text"
+          [(ngModel)]="searchFileName"
+          (input)="onSearchFileName()"
+          placeholder="Search by file name"
+          class="form-input px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+        />
+      </div>
+
+      <!-- <div class="flex flex-col w-full md:w-1/3">
+        <label
+          class="mb-1 text-sm font-medium text-gray-700 dark:text-gray-200"
+          for="startPriceSlider"
+        >
+          Min Start Price: <span class="font-semibold">{{ minStartPrice }}</span>
+        </label>
+        <div
+          class="flex items-center gap-2 bg-white dark:bg-gray-700 p-2 rounded-md mb-1"
+        >
+          <input
+            type="range"
+            id="startPriceSlider"
+            [min]="startPriceRange.min"
+            [max]="startPriceRange.max"
+            [(ngModel)]="minStartPrice"
+            (input)="onSliderChange()"
+            class="w-full accent-[#0091c1]"
+          />
+          <span class="ml-2 text-gray-700 dark:text-gray-200"
+            >{{ minStartPrice }}</span
+          >
+        </div>
+      </div> -->
+
+      <div class="flex flex-col w-full md:flex-1 min-w-0">
+        <label class="mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">
+          Sort By
+        </label>
+        <select
+          [(ngModel)]="selectedSort"
+          (change)="fetchLiveAuctions()"
+          class="form-select px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+        >
+          <option value="createdAt-desc">Newest First</option>
+          <option value="createdAt-asc">Oldest First</option>
+          <option value="startingPrice-asc">Starting Price: Low → High</option>
+          <option value="startingPrice-desc">Starting Price: High → Low</option>
+          <option value="reservePrice-asc">Reserve Price: Low → High</option>
+          <option value="reservePrice-desc">Reserve Price: High → Low</option>
+          <option value="endTime-asc">Ending Soon</option>
+          <option value="endTime-desc">Ending Late</option>
+          <option value="startTime-desc">Recently Started</option>
+          <option value="startTime-asc">Started Earlier</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="w-full md:w-auto flex justify-end md:mt-3">
+      <button (click)="showFiltersModal = true" class="btn-primary">
+        @if(filtersApplied){ Filter Applied } @else { Filter }
+      </button>
+    </div>
+
+  </div>
+  @if (liveAuctions.length === 0) {
+  <div class="flex flex-col items-center justify-center py-12">
+    <lucide-angular
+      [img]="ban"
+      class="w-10 h-10 text-gray-400 dark:text-gray-600 mb-2"
+    ></lucide-angular>
+    <p class="text-lg text-gray-500 dark:text-gray-400">
+      No live auctions available
+    </p>
+  </div>
+  } @if(liveAuctions.length>0){
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    @for (auction of liveAuctions; track $index) {
+    <div
+      class="border border-gray-200 dark:border-gray-700 rounded-xl p-5 shadow-lg bg-white dark:bg-gray-800 transition"
+    >
+      <div class="flex items-center gap-3 mb-2">
+        <lucide-angular [img]="package" class="w-6 h-6"></lucide-angular>
+        <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-100">
+          {{ auction.name }}
+        </h3>
+      </div>
+      <p class="text-gray-600 dark:text-gray-300 mb-3">
+        {{ auction.description }}
+      </p>
+      <div class="flex flex-wrap gap-2 mb-4">
+        <span
+          class="inline-flex items-center px-2 py-1 bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 rounded text-xs font-medium"
+        >
+          <lucide-angular
+            [img]="hash"
+            class="w-4 h-4 mr-1 text-slate-700 dark:text-slate-300"
+          ></lucide-angular>
+          {{ auction.id }}
+        </span>
+        <span
+          class="bg-lime-100 dark:bg-lime-900 text-lime-700 dark:text-lime-300 label-container"
+        >
+          <lucide-angular
+            [img]="clock"
+            class="w-4 h-4 mr-1 text-lime-700 dark:text-lime-300"
+          ></lucide-angular>
+
+          Started At: {{ auction.startTime | date:'short' }}
+        </span>
+        <span
+          class="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 label-container"
+        >
+          <lucide-angular
+            [img]="clock"
+            class="w-4 h-4 mr-1 text-green-700 dark:text-green-300"
+          ></lucide-angular>
+
+          Ends: {{ auction.endTime | date:'short' }}
+        </span>
+      </div>
+
+      <div class="flex flex-wrap gap-2 mb-4">
+        <span
+          class="bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-300 label-container"
+        >
+          <lucide-angular
+            [img]="startprice"
+            class="w-4 h-4 mr-1 text-yellow-800 dark:text-yellow-300"
+          ></lucide-angular>
+
+          Start Price: {{ auction.startingPrice | currency:'INR' }}
+        </span>
+        <span
+          class="bg-pink-100 dark:bg-pink-900 text-pink-700 dark:text-pink-300 label-container"
+        >
+          <lucide-angular
+            [img]="tag"
+            class="w-4 h-4 mr-1 text-pink-700 dark:text-pink-300"
+          ></lucide-angular>
+
+          Reserve Price: {{ auction.reservePrice | currency:'INR' }}
+        </span>
+      </div>
+
+      <div class="flex flex-wrap gap-3 mb-4">
+        @let auctionFiles = auction.files.$values; @for (auctionFile of
+        auctionFiles; track $index) {
+        <span
+          (click)="viewFile(auction.id, auctionFile.name)"
+          class="bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 label-container cursor-pointer hover:scale-95"
+        >
+          <lucide-angular
+            [img]="attachment"
+            class="w-4 h-r mr-1 text-blue-700 dark:text-blue-300"
+          >
+          </lucide-angular>
+          {{auctionFile.name}}
+        </span>
+        }
+      </div>
+      <button
+        class="btn-primary w-full flex items-center justify-center"
+        (click)="openBidModel(auction.id)"
+      >
+        <lucide-angular
+          [img]="shield"
+          class="w-4 h-4 mr-1 text-white"
+        ></lucide-angular>
+
+        Place Bid
+      </button>
+    </div>
+    }
+  </div>
+  }
+
+  <app-model-view [show]="showModel" (close)="closeModel()">
+    <div class="dark:bg-gray-800 rounded-lg p-6 w-96 relative m-0">
+      <h3
+        class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-100 flex items-center gap-2"
+      >
+        <lucide-angular [img]="handcoins" class="w-5 h-5"></lucide-angular>
+
+        Place a bid
+      </h3>
+      <p class="mb-3 text-gray-700 dark:text-gray-300 flex items-center gap-2">
+        <lucide-angular
+          [img]="trophy"
+          class="w-4 h-4 text-yellow-500"
+        ></lucide-angular>
+        Highest Bid: @if(highestBid){
+        <span class="font-bold">{{highestBid | currency: 'INR'}}</span>
+        } @else {
+        <span class="italic text-gray-400">No bids yet</span>
+        }
+      </p>
+      <label class="block mb-2 text-sm text-gray-600 dark:text-gray-300"
+        >Your Bid</label
+      >
+      <input
+        type="number"
+        [(ngModel)]="bidAmount"
+        class="form-input w-full mb-4 px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+        placeholder="Enter bid amount"
+      />
+
+      <div class="flex justify-end gap-2">
+        <button
+          class="btn-primary bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+          (click)="closeModel()"
+        >
+          Cancel
+        </button>
+        <button class="btn-primary" (click)="submitBid()">Place Bid</button>
+      </div>
+    </div>
+  </app-model-view>
+
+  <app-spinner [loading]="isLoading"></app-spinner>
+</div>
+
+<!-- More Filters Modal -->
+<app-model-view [show]="showFiltersModal" (close)="showFiltersModal = false">
+  <app-auction-filter
+    [isBidder]="true"
+    (applyFilters)="applyFilters($event)"
+  ></app-auction-filter>
+</app-model-view>

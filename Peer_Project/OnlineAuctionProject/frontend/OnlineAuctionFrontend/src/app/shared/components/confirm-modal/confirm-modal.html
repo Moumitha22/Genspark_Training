@@ -1,0 +1,30 @@
+<app-model-view [show]="show" (close)="close.emit()">
+  <div class="flex flex-col items-center justify-center w-full">
+    <lucide-angular
+      [img]="icon"
+      class="text-red-500 my-icon"
+      size="64"
+    ></lucide-angular>
+    <div class="flex flex-col gap-4 items-center mt-4 w-full">
+      <h2 class="font-bold w-full text-center">{{ message }}</h2>
+      @if (showInput) {
+      <div class="w-full">
+        <textarea
+          class="form-input w-full"
+          [placeholder]="inputPlaceholder"
+          [(ngModel)]="inputValue"
+          rows="2"
+          style="resize: vertical; min-height: 40px;"
+        ></textarea>
+      </div>
+      }
+      <button
+        class="btn-primary bg-red-500 hover:bg-red-600 w-full"
+        (click)="onConfirm()"
+        [disabled]="showInput && !inputValue"
+      >
+        Confirm
+      </button>
+    </div>
+  </div>
+</app-model-view>

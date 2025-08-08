@@ -1,0 +1,582 @@
+<div class="mt-10">
+  <div class="flex flex-col gap-4 md:flex-row md:justify-between">
+    <h1>Created Auctions</h1>
+     
+    <div class="flex flex-col gap-3 md:flex-row md:items-center md:gap-5">
+      <input
+        type="text"
+        class="form-input w-full md:w-62 h-10"
+        placeholder="Search by auction name"
+        [(ngModel)]="auctionName"
+        (ngModelChange)="auctionNameChanged.next($event)"
+      />
+
+      <input
+        type="text"
+        class="form-input w-full md:w-62 h-10"
+        placeholder="Search by file name"
+        [(ngModel)]="fileName"
+        (ngModelChange)="fileNameChanged.next($event)"
+      />
+
+      <select class="form-input w-full md:w-48 h-10" [(ngModel)]="selectedSort" (change)="onSortChange($event)">
+        <option value="name_asc">Name (A → Z)</option>
+        <option value="name_desc">Name (Z → A)</option>
+        <option value="startTime_asc">Start Time (Oldest → Newest)</option>
+        <option value="startTime_desc">Start Time (Newest → Oldest)</option>
+        <option value="endTime_asc">End Time (Oldest → Newest)</option>
+        <option value="endTime_desc">End Time (Newest → Oldest)</option>
+        <option value="createdAt_asc">Created At (Oldest → Newest)</option>
+        <option value="createdAt_desc">Created At (Newest → Oldest)</option>
+        <option value="deleterequest_asc">Delete Request (Low → High)</option>
+        <option value="deleterequest_desc">Delete Request (High → Low)</option>
+      </select>
+
+      <div class="w-full md:w-auto flex justify-end">
+        <button (click)="showModel('filter', '')" class="btn-primary">
+          @if(filtersApplied){ Filter Applied } @else { Filters }
+        </button>
+      </div>
+    </div>
+  </div>
+
+  @if (auctions) {
+  <div class="table-container mt-5">
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Status</th>
+          <th>Starting Price</th>
+          <th>Reserve Price</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>Winning Bid</th>
+          <th>File Attachments</th>
+          <th>Cancel Auction</th>
+          <th>Edit Auction</th>
+          @if(role === 'Admin'){
+          <th>Delete</th>
+          <th>Delete Request</th>
+          } @else if (role==='Seller') {
+          <th>Request to Delete</th>
+          <th>Remarks for the deletion (from admin)</th>
+          <th>IsAdminApproved</th>
+
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (auction of auctions; track $index) {
+        <tr>
+          <td>
+            <p
+              (click)="showModel('bids',auction)"
+              class="text-primary-color underline hover:text-[#85bdd0] cursor-pointer"
+            >
+              {{ auction.name }}
+            </p>
+          </td>
+          <td>
+            <span
+              class="status-label"
+              [ngClass]="{
+            'status-upcoming': auction.status === 'Upcoming',
+            'status-live': auction.status === 'Live',
+            'status-completed': auction.status === 'Completed',
+            'status-closed': auction.status === 'Closed',
+            'status-cancelled': auction.status === 'Cancelled'
+          }"
+            >
+              {{ auction.status }}
+            </span>
+          </td>
+          <td>{{ auction.startingPrice }}</td>
+          <td>{{ auction.reservePrice }}</td>
+          <td>{{ auction.startTime | date:'short' }}</td>
+          <td>{{ auction.endTime | date:'short' }}</td>
+          <td>
+            <p
+              (click)="showModel('bidsData', auction)"
+              class="text-primary-color hover:underline cursor-pointer"
+            >
+              {{ auction.winnerId?? '-' }}
+            </p>
+          </td>
+          <td>
+            @if (auction.files?.$values?.length>0) {
+            <button
+              class="ml-2 hover:text-red-400 hover:cursor-pointer"
+              (click)="onViewAttachements(auction.id)"
+            >
+              <lucide-angular
+                [img]="fileAttachment"
+                class="my-icon ml-2 hover:text-red-400"
+              ></lucide-angular>
+            </button>
+            <div class="mt-1 flex flex-wrap gap-1 max-w-[200px]">
+              <span
+                *ngFor="let file of auction.files.$values"
+                class="text-[10px] text-gray-500 bg-gray-100 dark:bg-gray-800 px-1 py-[1px] rounded max-w-[50px] truncate"
+                title="{{ file.name }}"
+              >
+                {{ file.name }}
+              </span>
+            </div>
+            } @else {
+            <lucide-angular
+              [img]="nofileAttachement"
+              class="my-icon ml-2 text-gray-200 dark:text-gray-700"
+            ></lucide-angular>
+            }
+          </td>
+
+          <td>
+            <button
+              (click)="showModel('cancel',auction)"
+              class="btn-primary bg-red-400 hover:bg-red-500"
+              [disabled]="!(auction.status === 'Live' || auction.status === 'Upcoming')"
+            >
+              Cancel
+            </button>
+          </td>
+
+          <td>
+            <button
+              (click)="openEditModel(auction)"
+              class="btn-primary ml-2"
+              [disabled]="!(auction.status === 'Live' || auction.status === 'Upcoming' || role === 'Admin')"
+            >
+              Edit
+            </button>
+          </td>
+
+          @if(role==='Admin'){
+          <td>
+            <button
+              class="btn-primary p-2 bg-red-500 hover:bg-red-600"
+              (click)="showModel('delete',auction)"
+            >
+              <lucide-angular [img]="trash" class="text-white"></lucide-angular>
+            </button>
+          </td>
+          <td>
+            @if(auction.deleteRequest){
+            <div
+              class="relative flex items-center bg-red-100 hover:bg-red-200 cursor-pointer text-sm text-red-500 rounded-full px-4 py-1 text-center min-w-[120px] dark:bg-red-900 dark:hover:bg-red-800 dark:text-red-300"
+              (click)="showModel('request-reason',auction.deleteRequest)"
+            >
+              <span class="relative flex h-3 w-3 mr-2">
+                @if(!auction.deleteRequest.approvalDate){
+                  <span
+                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75 dark:bg-red-700"
+                  ></span>
+                }
+                <span
+                  class="relative inline-flex rounded-full h-3 w-3 bg-red-500 dark:bg-red-400"
+                ></span>
+              </span>
+              Seller Req
+            </div>
+            } @else {
+            <p>-</p>
+            }
+          </td>
+          } @else if (role === 'Seller') {
+          <td>
+            @if (!auction.deleteRequest) {
+            <button
+              [disabled]="!(auction.status === 'Live' || auction.status === 'Upcoming')"
+              class="btn-primary bg-red-500 hover:bg-red-600"
+              (click)="showModel('delete', auction)"
+            >
+              Request
+            </button>
+            } @else {
+            <span class="text-gray-400 italic">Already requested</span>
+            }
+          </td>
+          } @if (role === 'Seller') {
+          <td>
+            <span
+              class="inline-block px-3 py-1 bg-gray-100 text-gray-700 rounded text-sm italic min-w-sm text-center dark:bg-gray-900 dark:text-gray-400"
+            >
+              {{ auction.deleteRequest?.remarks || '-' }}
+            </span>
+          </td>
+          } @if (role === 'Seller') {
+          <td>
+            @if (auction.deleteRequest?.isApproved === true) {
+            <span
+              class="inline-block px-3 py-1 bg-green-100 text-green-700 rounded text-sm italic min-w-[80px] text-center dark:bg-green-900 dark:text-green-300"
+            >
+              Yes
+            </span>
+            } @else if (auction.deleteRequest?.isApproved === false) {
+            <span
+              class="inline-block px-3 py-1 bg-red-100 text-red-700 rounded text-sm italic min-w-[80px] text-center dark:bg-red-900 dark:text-red-300"
+            >
+              No
+            </span>
+            } @else {
+            <span
+              class="inline-block px-3 py-1 bg-gray-100 text-gray-700 rounded text-sm italic min-w-[80px] text-center dark:bg-gray-900 dark:text-gray-400"
+            >
+              -
+            </span>
+            }
+          </td>
+          }
+        </tr>
+
+        } @if(auctions.length === 0){
+        <tr>
+          <td class="text-center py-4" colspan="15">No data available</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }
+</div>
+<app-model-view [show]="showRequestReason" (close)="showRequestReason = false">
+  <div class="p-4 max-w-md mx-auto">
+    <h2 class="text-lg font-semibold mb-4">Delete Request Details</h2>
+    @if (deleteRequest) {
+    <div class="mb-4">
+      <div class="mb-2">
+        <span class="font-medium">Reason:</span>
+        <span>{{ deleteRequest.reason || '-' }}</span>
+      </div>
+      <div class="mb-2">
+        <span class="font-medium">Requested By (User ID):</span>
+        <span>{{ deleteRequest.userId || '-' }}</span>
+      </div>
+      <div class="mb-2">
+        <span class="font-medium">Request Date:</span>
+        <span>{{ deleteRequest.requestDate | date:'medium' }}</span>
+      </div>
+      <div class="mb-2">
+        <span class="font-medium">Approved:</span>
+        <span>{{ deleteRequest.isApproved ? 'Yes' : 'No' }}</span>
+      </div>
+    </div>
+    @if (deleteRequest.remarks && deleteRequest.approvalDate) {
+    <div
+      class="bg-red-50 border border-red-200 text-red-700 rounded px-4 py-2 mb-3 dark:bg-red-900 dark:border-red-700 dark:text-red-200"
+    >
+      <span class="font-semibold">This delete request was rejected.</span>
+      <div class="mt-1">
+        <span class="font-medium">Remarks:</span>
+        <span>{{ deleteRequest.remarks }}</span>
+      </div>
+      <div>
+        <span class="font-medium">Rejected On:</span>
+        <span>{{ deleteRequest.approvalDate | date:'medium' }}</span>
+      </div>
+    </div>
+    } @else if (deleteRequest.isApproved === true && deleteRequest.approvalDate)
+    {
+    <div
+      class="bg-green-50 border border-green-200 text-green-700 rounded px-4 py-2 mb-3 dark:bg-green-900 dark:border-green-700 dark:text-green-200"
+    >
+      <span class="font-semibold">This delete request was approved.</span>
+      <div>
+        <span class="font-medium">Approved On:</span>
+        <span>{{ deleteRequest.approvalDate | date:'medium' }}</span>
+      </div>
+    </div>
+    } @else {
+    <div class="flex gap-3">
+      <button
+        class="btn-primary bg-green-500 hover:bg-green-600 text-white px-4 py-1 rounded"
+        (click)="onApproveDeleteRequest(deleteRequest)"
+      >
+        Accept
+      </button>
+      <button
+        class="btn-primary bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded"
+        (click)="showRejectInput = true"
+      >
+        Reject
+      </button>
+    </div>
+    @if (showRejectInput) {
+    <div class="mt-4">
+      <label class="block mb-1 font-medium">Remarks for Rejection:</label>
+      <input
+        type="text"
+        class="form-input w-full border border-gray-300 rounded px-3 py-2 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
+        [(ngModel)]="rejectRemarks"
+        placeholder="Enter remarks"
+      />
+      <button
+        class="btn-primary bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded mt-2"
+        (click)="onRejectDeleteRequest(deleteRequest, rejectRemarks)"
+        [disabled]="!rejectRemarks"
+      >
+        Submit Rejection
+      </button>
+    </div>
+    } } } @else {
+    <div>
+      <span>No delete request details available.</span>
+    </div>
+    }
+  </div>
+</app-model-view>
+@if(role === 'Seller') {
+<app-confirm-modal
+  [show]="showDelete"
+  [icon]="warning"
+  [message]="'Are you sure want to request for deletion?'"
+  [showInput]="true"
+  [inputPlaceholder]="'Ensure the requesting reason for deletion'"
+  (close)="closeModel('delete')"
+  (confirm)="($event ? onDeleteRequest($event) : null)"
+></app-confirm-modal>
+}
+
+<app-confirm-modal
+  [show]="showCancelModel"
+  [icon]="cancel"
+  [message]="'Are you sure want to cancel the auction'"
+  [showInput]="false"
+  [inputPlaceholder]="''"
+  (close)="closeModel('cancel')"
+  (confirm)="onAuctionCancel(auctionToCancel)"
+></app-confirm-modal>
+
+<app-pagination
+  [page]="page"
+  [totalPages]="totalPages"
+  (pageChange)="goToPage($event)"
+></app-pagination>
+
+<app-spinner [loading]="isLoading"></app-spinner>
+
+<app-model-view [show]="showFilter" (close)="closeModel('filter')">
+  <app-auction-filter
+    [isBidder]="false"
+    (applyFilters)="onFilterApplied($event)"
+  ></app-auction-filter>
+</app-model-view>
+
+<app-model-view
+  [show]="showEditModel"
+  (close)="closeModel('edit')"
+  class="w-full"
+>
+  @if (auctionToEdit) {
+  <div class="w-ful overflow-auto p-4">
+    <form (ngSubmit)="onEditSave(auctionToEdit)">
+      <div class="mb-2">
+        <label class="form-label">Name:</label>
+        <input
+          [(ngModel)]="auctionToEdit.name"
+          name="name"
+          class="form-input"
+          required
+        />
+      </div>
+      <div class="mb-2">
+        <label class="form-label">Description:</label>
+        <textarea
+          [(ngModel)]="auctionToEdit.description"
+          name="description"
+          class="form-input"
+        ></textarea>
+      </div>
+      <div class="mb-2">
+        <label class="form-label">Start Time:</label>
+        <input
+          type="datetime-local"
+          [(ngModel)]="auctionToEdit.startTime"
+          name="startTime"
+          class="form-input"
+          required
+        />
+      </div>
+      <div class="mb-2">
+        <label class="form-label">End Time:</label>
+        <input
+          type="datetime-local"
+          [(ngModel)]="auctionToEdit.endTime"
+          name="endTime"
+          class="form-input"
+          required
+        />
+      </div>
+      <div class="mb-2">
+        <label class="form-label">Starting Price:</label>
+        <input
+          type="number"
+          [(ngModel)]="auctionToEdit.startingPrice"
+          name="startingPrice"
+          class="form-input"
+          required
+        />
+      </div>
+      <div class="mb-2">
+        <label class="form-label">Reserve Price:</label>
+        <input
+          type="number"
+          [(ngModel)]="auctionToEdit.reservePrice"
+          name="reservePrice"
+          class="form-input"
+          required
+        />
+      </div>
+      <div class="mb-2" *ngIf="auctionToEdit?.files?.$values?.length">
+        <label class="form-label">Existing Attachments:</label>
+        <ul>
+          <li *ngFor="let file of auctionToEdit.files.$values">
+            {{ file.name }} ({{ file.contentType }})
+          </li>
+        </ul>
+      </div>
+      <div class="mb-2">
+        <label class="form-label">File:</label>
+        <input type="file" class="form-input" (change)="onFileChange($event)" />
+      </div>
+      <button type="submit" class="btn-primary">Save</button>
+    </form>
+  </div>
+  }
+</app-model-view>
+
+@if(role === 'Admin') {
+<app-model-view [show]="showDelete" (close)="closeModel('delete')">
+  <div class="flex justify-center items-center flex-col">
+    <lucide-angular
+      [img]="warning"
+      class="text-red-500"
+      size="50"
+    ></lucide-angular>
+    <h2>Are you sure want to delete?</h2>
+    <button
+      (click)="onAuctionDelete()"
+      class="btn-primary bg-red-500 hover:bg-red-600 mt-7"
+    >
+      Confirm
+    </button>
+  </div>
+  <br />
+</app-model-view>
+}
+
+<app-model-view [show]="showBidModel" (close)="closeModel('bids')">
+  <table class="custom-table">
+    <thead>
+      <tr>
+        <th>Bidding Id</th>
+        <th>Bid Time</th>
+        <th>Amount</th>
+        <th>User id</th>
+        <th>Outcome</th>
+        @if(role === 'Admin') {
+          <th>Action</th>
+          <th>Delete</th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (bids of bidsForAuction; track $index) {
+      <tr>
+        <td>{{ bids.id }}</td>
+        <td>{{ bids.bidTime | date: "short"}}</td>
+        <td>{{ bids.amount }}</td>
+        <td>{{ bids.userId }}</td>
+        <td>
+          <app-bids-winning-status
+            [bid]="bids"
+            [auctionItems]="auctions">
+          </app-bids-winning-status>
+        </td>
+        @if(role === 'Admin') {
+          <td>
+            <button *ngIf="bids.status === 'Active'" 
+              class="btn-primary"
+              (click)="openArchiveModal(bids.id, selectedAuctionId, 'Archive')"
+              [disabled]="bids.id === winnerId"
+            >
+              Archive
+            </button>
+            <button *ngIf="bids.status === 'Archived'" 
+              class="btn-primary bg-yellow-500 hover:bg-yellow-600"
+              (click)="openArchiveModal(bids.id, selectedAuctionId, 'Unarchive')"
+            >
+              Unarchive
+            </button>
+
+          </td>
+          <td>
+            <button
+              class="btn-primary bg-red-500 hover:bg-red-600"
+              (click)="openDeleteBidModal(bids.id, selectedAuctionId)"
+              [disabled]="bids.id === winnerId"
+            >
+              Delete
+            </button> 
+          </td>
+        }
+      </tr>
+      } @if(bidsForAuction.length===0){
+      <tr>
+        <td colspan="4" class="text-center">No bids available</td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</app-model-view>
+
+<app-model-view [show]="showBidsData" (close)="closeModel('bidsData')">
+  <div class="px-1 py-3">
+    <div>
+      <label class="model-label">Auction Id: </label>
+      <span class="light-text">{{ bidsData?.auctionItemId }}</span>
+    </div>
+    <br />
+    <div>
+      <label class="model-label">User Id: </label>
+      <span class="light-text">{{ bidsData?.userId }}</span>
+    </div>
+    <br />
+
+    <div>
+      <label class="model-label">User Details: </label>
+      <span class="light-text">{{ userDetails.email }}</span>
+    </div>
+    <br />
+    <div>
+      <label class="model-label">Amount: </label>
+      <span class="light-text">{{ bidsData?.amount }}</span>
+    </div>
+
+    <br />
+    <div>
+      <label class="model-label">Bid Time: </label>
+      <span class="light-text">{{ bidsData?.bidTime | date:'short' }}</span>
+    </div>
+  </div>
+</app-model-view>
+
+<app-confirm-modal
+  [show]="showArchiveModal"
+  [icon]="archiveIcon"
+  [message]="archiveMessage"
+  [showInput]="false"
+  [inputPlaceholder]="''"
+  (close)="closeArchiveModal()"
+  (confirm)="onConfirmArchive()"
+/>
+
+<app-confirm-modal
+  [show]="showDeleteBidModal"
+  [icon]="warning"
+  [message]="'Are you sure you want to delete this bid?'"
+  [showInput]="false"
+  [inputPlaceholder]="''"
+  (close)="closeDeleteBidModal()"
+  (confirm)="onConfirmDeleteBid()"
+/>

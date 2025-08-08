@@ -1,0 +1,32 @@
+<div class="p-4 bg-white dark:bg-gray-800 rounded-xl max-w-md mx-auto">
+  <h2 class="text-lg font-semibold mb-4">Filter Bids</h2>
+
+  <form (ngSubmit)="apply()" class="mt-4">
+
+    <div>
+      <label for="amountMin" class="form-label mt-1">Amount Min</label>
+      <input id="amountMin" type="number" [(ngModel)]="filters.amountMin" name="amountMin" class="form-input w-full" placeholder="Min Amount" />
+    </div>
+
+    <div class="mt-3">
+      <label for="amountMax" class="form-label mt-1">Amount Max</label>
+      <input id="amountMax" type="number" [(ngModel)]="filters.amountMax" name="amountMax" class="form-input w-full" placeholder="Max Amount" />
+    </div>
+
+    <div class="mt-3">
+      <label for="dateMin" class="form-label mt-1">Start Date</label>
+      <input id="dateMin" type="datetime-local" [(ngModel)]="filters.dateMin" name="dateMin" class="form-input w-full" />
+    </div>
+
+    <div class="mt-3">
+      <label for="dateMax" class="form-label mt-1">End Date</label>
+      <input id="dateMax" type="datetime-local" [(ngModel)]="filters.dateMax" name="dateMax" class="form-input w-full" />
+    </div>
+
+    <div class="flex justify-between mt-6">
+      <button type="submit" class="btn-primary">Apply</button>
+      <button type="button" class="btn-secondary" (click)="reset()">Reset</button>
+    </div>
+
+  </form>
+</div>

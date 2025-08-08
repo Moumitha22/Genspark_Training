@@ -1,0 +1,118 @@
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-10">
+  <app-welcome-card></app-welcome-card>
+
+  <app-summary-card
+    title="Total Bids - Overall"
+    [value]="biddingItems.length"
+    imgSrc="assets/images/bids.webp"
+    bgColor="bg-cyan-50 dark:bg-cyan-950"
+    imgAlt="Total Bids"
+    [imgSize]="60"
+  >
+  </app-summary-card>
+
+  <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+    <h2 class="font-normal text-gray-400">Main Balance in Wallet</h2>
+    <div class="flex justify-between mt-4">
+      <p class="text-2xl font-bold">
+        {{virtualWalletBalance | currency:'INR'}}
+      </p>
+      <lucide-angular [img]="walletIcon" size="40"></lucide-angular>
+    </div>
+
+    <div
+      class="w-full bg-gray-200 dark:bg-gray-900 rounded-full h-4 overflow-hidden mt-4"
+    >
+      <div
+        class="h-4 rounded-full transition-all duration-300"
+        ngClass="bg-primary-color"
+        [style.width.%]="balanceUsed"
+      ></div>
+    </div>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 h-80" id="chart">
+    <p class="text-sm italic text-center mb-1">Auction Status</p>
+    @if (statusChartOptions) {
+    <apx-chart
+      #statusChart
+      [series]="statusChartOptions.series!"
+      [chart]="statusChartOptions.chart!"
+      [dataLabels]="statusChartOptions.dataLabels!"
+      [plotOptions]="statusChartOptions.plotOptions!"
+      [xaxis]="statusChartOptions.xaxis!"
+      [colors]="statusChartOptions.colors!"
+      [theme]="statusChartOptions.theme!"
+    ></apx-chart>
+    }
+  </div>
+
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 h-80">
+    <p class="text-sm italic text-center mb-1">Bidding Done (last 6 months)</p>
+    @if (monthlyChartOptions) {
+    <apx-chart
+      #monthlyChart
+      [series]="monthlyChartOptions.series!"
+      [chart]="monthlyChartOptions.chart!"
+      [xaxis]="monthlyChartOptions.xaxis!"
+      [yaxis]="monthlyChartOptions.yaxis!"
+      [plotOptions]="monthlyChartOptions.plotOptions!"
+      [dataLabels]="monthlyChartOptions.dataLabels!"
+      [colors]="monthlyChartOptions.colors!"
+      [theme]="monthlyChartOptions.theme!"
+    >
+    </apx-chart>
+    }
+  </div>
+</div>
+
+<div class="table-container md:w-full mt-5">
+  <p class="chart-label">Last five bids history</p>
+  <table class="custom-table">
+    <thead>
+      <tr>
+        <th>Bid Id</th>
+        <th>Auction Id</th>
+        <th>Amount</th>
+        <th>Bid Time</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @if (latestBiddingItems && latestBiddingItems.length > 0) { @for (bid of
+      latestBiddingItems; track $index) {
+      <tr>
+        <td>{{ bid.id }}</td>
+        <td
+          class="text-primary-color hover:underline hover:cursor-pointer"
+          (click)="showAucrionModel(bid.auctionItemId)"
+        >
+          {{ bid.auctionItemId }}
+        </td>
+        <td>{{ bid.amount }}</td>
+        <td>{{ bid.bidTime | date:'short'}}</td>
+        <td>
+          <app-bids-winning-status
+            [bid]="bid"
+            [auctionItems]="auctionItems"
+          ></app-bids-winning-status>
+        </td>
+      </tr>
+      } } @else {
+      <tr>
+        <td colspan="5" class="text-center">No data available</td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+<app-model-view [show]="showModal" (close)="closeAuctionModel()">
+  <app-auction-details-card
+    [selectedAuction]="selectedAuction"
+    (close)="closeAuctionModel()"
+  ></app-auction-details-card>
+</app-model-view>

@@ -1,0 +1,13 @@
+.floating-img {
+  animation: floatX 9s ease-in-out infinite;
+}
+
+@keyframes floatX {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateX(-30px);
+  }
+}
+

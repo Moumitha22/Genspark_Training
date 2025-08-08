@@ -1,0 +1,102 @@
+<br />
+
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+  <div>
+    <app-welcome-card></app-welcome-card>
+  </div>
+  <app-summary-card
+    title="Total Auctions Created - Overall"
+    [value]="auctionItems.length"
+    imgSrc="assets/images/auctions.webp"
+    bgColor="bg-cyan-50 dark:bg-cyan-950"
+    [imgSize]="60"
+  >
+  </app-summary-card>
+
+  <app-summary-card
+    title="Total Sales - Overall"
+    [value]="totalSales?? 0"
+    [isCurrency]="true"
+    imgSrc="assets/images/shopping.webp"
+    bgColor="bg-cyan-50 dark:bg-cyan-950"
+    [imgSize]="60"
+  ></app-summary-card>
+</div>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-10">
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 h-96" id="chart">
+    <p class="chart-label">Auction Status</p>
+    @if (statusChartOptions) {
+    <apx-chart
+      #statusChart
+      [series]="statusChartOptions.series!"
+      [chart]="statusChartOptions.chart!"
+      [dataLabels]="statusChartOptions.dataLabels!"
+      [plotOptions]="statusChartOptions.plotOptions!"
+      [xaxis]="statusChartOptions.xaxis!"
+      [colors]="statusChartOptions.colors!"
+      [theme]="statusChartOptions.theme!"
+    ></apx-chart>
+    }
+  </div>
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 h-96">
+    <p class="chart-label">Auction Creation (last 6 months)</p>
+    @if (monthlyChartOptions) {
+    <apx-chart
+      #monthlyChart
+      [series]="monthlyChartOptions.series!"
+      [chart]="monthlyChartOptions.chart!"
+      [xaxis]="monthlyChartOptions.xaxis!"
+      [yaxis]="monthlyChartOptions.yaxis!"
+      [plotOptions]="monthlyChartOptions.plotOptions!"
+      [dataLabels]="monthlyChartOptions.dataLabels!"
+      [colors]="monthlyChartOptions.colors!"
+      [theme]="monthlyChartOptions.theme!"
+    >
+    </apx-chart>
+    }
+  </div>
+</div>
+
+<div class="table-container md:w-1/2 mt-5">
+  <p class="chart-label">Latest Auction</p>
+  <table class="custom-table">
+    <thead
+      class="text-xs text-gray-700 dark:text-gray-200 uppercase bg-gray-100 dark:bg-gray-700"
+    >
+      <tr>
+        <th>Auction ID</th>
+        <th>Name</th>
+        <th>End Time</th>
+        <th>Winning Bid</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (item of pagedAuctions; track $index) {
+      <tr class="border-b dark:border-gray-700">
+        <td>{{ item.id }}</td>
+        <td>{{ item.name }}</td>
+        <td>{{ item.endTime | date:'short' }}</td>
+        <td>{{ item.winnerId || "-" }}</td>
+      </tr>
+      } @if (pagedAuctions.length === 0) {
+      <tr>
+        <td
+          colspan="4"
+          class="text-center py-4 text-gray-500 dark:text-gray-400"
+        >
+          No auctions available.
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+
+  <div class="flex justify-end mt-5">
+    <app-pagination
+      [page]="currentPage"
+      [totalPages]="totalPages"
+      (pageChange)="goToPage($event)"
+    ></app-pagination>
+  </div>
+</div>
