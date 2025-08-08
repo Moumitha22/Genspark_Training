@@ -1,0 +1,70 @@
+<div class="container d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 56px); padding-top: 56px;">
+  <div class="card p-4 shadow-sm auth-card w-100" style="max-width: 400px">
+    <h3 class="text-center mb-3">Sign Up</h3>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <!-- Username -->
+      <div class="mb-3">
+        <label class="form-label">Name</label>
+        <input
+          type="text"
+          class="form-control"
+          formControlName="username"
+          [class.is-invalid]="isInvalid('username')"
+        />
+        <div class="invalid-feedback" *ngIf="isInvalid('username')">
+          Name is required.
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input
+          type="email"
+          class="form-control"
+          formControlName="email"
+          [class.is-invalid]="isInvalid('email')"
+        />
+        <div class="invalid-feedback" *ngIf="isInvalid('email')">
+          Valid email is required.
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div>
+        <label class="form-label">Password</label>
+        <div class="input-group has-validation">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            class="form-control"
+            formControlName="password"
+            [class.is-invalid]="isInvalid('password')"
+          />
+          <span class="input-group-text bg-light password-toggle" (click)="togglePassword()">
+            <i [ngClass]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+          </span>
+          <div class="invalid-feedback" *ngIf="isInvalid('password')">
+            Password is required (min 6 chars).
+          </div>
+        </div>
+      </div>
+
+      <!-- Error Message -->
+      <div class="text-danger mb-2" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" class="btn btn-primary w-100 mt-4" [disabled]="loading">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+        {{ loading ? 'Registering...' : 'Register' }}
+      </button>
+    </form>
+
+    <p class="mt-3 text-center">
+      Already have an account?
+      <a routerLink="/login">Login</a>
+    </p>
+  </div>
+</div>

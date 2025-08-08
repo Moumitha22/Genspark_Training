@@ -1,0 +1,210 @@
+<!-- <nav id="mainNavbar" class="navbar sticky-top navbar-expand-lg">
+  <div class="container d-flex align-items-center">
+
+    <a class="navbar-brand d-flex align-items-center flex-shrink-0" routerLink="/">
+      <i class="bi bi-house-fill me-2 text-white fs-3"></i>
+      <span class="fw-bold text-white brand-text">CHIENVH SHOP</span>
+    </a>
+
+    <div class="collapse navbar-collapse order-3 order-lg-2" id="navbarContent">
+      <ul class="navbar-nav mb-2 mb-lg-0 ms-auto align-items-lg-center">
+        <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+          <a class="nav-link text-white" routerLink="/products">Products</a>
+        </li>
+        
+        <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+          <a class="nav-link text-white" routerLink="/news">News</a>
+        </li>
+        <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+          <a class="nav-link text-white" routerLink="/post-product">Post Products</a>
+        </li>
+        <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+          <a class="nav-link text-white" routerLink="/post-news">Post News</a>
+        </li>
+        <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+          <a class="nav-link text-white" routerLink="/manage-attributes">Attributes</a>
+        </li>
+        <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+          <a class="nav-link text-white" routerLink="/contact-us">Contact Us</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="d-flex align-items-center ms-auto order-2 order-lg-3">
+    
+      <div class="nav-item me-lg-4  mb-lg-0">
+        <a class="text-white cart-link" routerLink="/cart">
+          <i class="bi bi-cart-fill fs-5"></i>
+          <span *ngIf="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
+        </a>
+      </div>
+
+      <div class="dropdown">
+        <button
+            class="dropdown-toggle d-flex align-items-center text-white border-0 bg-transparent p-0"
+            id="profileDropdown"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i class="bi bi-person-fill fs-4 me-1"></i>
+            <i class="bi bi-caret-down-fill fs-6 mt-2"></i>
+        </button>
+
+        <ul
+          class="dropdown-menu dropdown-menu-end mt-3 mb-2"
+          aria-labelledby="profileDropdown"
+        >
+          <li><a class="dropdown-item" routerLink="/bookings-summary">My Products</a></li>
+
+          <li><a class="dropdown-item" routerLink="/my-orders">My Orders</a></li>
+
+          <li><hr class="dropdown-divider" /></li>
+          <li>
+            <span class="dropdown-item text-danger" role="button">Logout</span>
+          </li>
+        </ul>
+      </div>
+         
+      <button class="navbar-toggler ms-2 d-lg-none"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarContent"
+              aria-controls="navbarContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+
+  </div>
+</nav> -->
+
+<nav id="mainNavbar" class="navbar sticky-top navbar-expand-lg">
+  <div class="container d-flex align-items-center">
+
+    <a class="navbar-brand d-flex align-items-center flex-shrink-0" routerLink="/">
+      <i class="bi bi-house-fill me-2 text-white fs-3"></i>
+      <span class="fw-bold text-white brand-text">CHIENVH SHOP</span>
+    </a>
+
+    <div class="collapse navbar-collapse order-3 order-lg-2" id="navbarContent">
+      <ul class="navbar-nav mb-2 mb-lg-0 ms-auto align-items-lg-center">
+
+        <ng-container *ngIf="(userRole$ | async) === null; else authLinks">
+          <!-- <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+            <a class="nav-link text-white" routerLink="/products">Products</a>
+          </li> -->
+          
+          <!-- <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+            <a class="nav-link text-white" routerLink="/news">News</a>
+          </li>
+
+          <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+            <a class="nav-link text-white" routerLink="/post-product">Post Products</a>
+          </li>
+
+          <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+            <a class="nav-link text-white" routerLink="/contact-us">Contact Us</a>
+          </li> -->
+        </ng-container>
+        
+        <ng-template #authLinks>
+          <ng-container *ngIf="userRole$ | async as role">
+            <ng-container *ngIf="role === 'User'">
+              <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+                <a class="nav-link text-white" routerLink="/products">Products</a>
+              </li>
+              
+              <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+                <a class="nav-link text-white" routerLink="/news">News</a>
+              </li>
+
+              <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+                <a class="nav-link text-white" routerLink="/post-product">Post Products</a>
+              </li>
+
+              <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+                <a class="nav-link text-white" routerLink="/contact-us">Contact Us</a>
+              </li>
+            </ng-container>
+
+            <ng-container *ngIf="role === 'Admin'">
+              <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+                <a class="nav-link text-white" routerLink="/products">Products</a>
+              </li>
+
+               <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+                <a class="nav-link text-white" routerLink="/news">News</a>
+              </li>
+
+              <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+                <a class="nav-link text-white" routerLink="/post-news">Post News</a>
+              </li>
+
+              <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+                <a class="nav-link text-white" routerLink="/manage-attributes">Attributes</a>
+              </li>
+            </ng-container>
+          </ng-container>
+        </ng-template>
+      </ul>
+    </div>
+
+    <!-- RIGHT SIDE: CART + PROFILE + TOGGLER -->
+    <div class="d-flex align-items-center ms-auto order-2 order-lg-3">
+
+    <ng-container *ngIf="userRole$ | async as role">
+      <div *ngIf="role === 'User'" class="nav-item me-lg-4  mb-lg-0">
+        <a class="text-white cart-link" routerLink="/cart">
+          <i class="bi bi-cart-fill fs-5"></i>
+          <span *ngIf="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
+        </a>
+      </div>
+
+      <ng-container *ngIf="isLoggedIn$ | async">
+        <span class="text-white me-2 d-none d-lg-inline nav-user-name">{{ userName }}</span>
+      </ng-container>
+
+      <!-- Profile Dropdown -->
+      <div class="dropdown">
+        <button
+            class="dropdown-toggle d-flex align-items-center text-white border-0 bg-transparent p-0"
+            id="profileDropdown"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i class="bi bi-person-fill fs-4 me-1"></i>
+            <i class="bi bi-caret-down-fill fs-6 mt-2"></i>
+        </button>
+
+        <ul
+          class="dropdown-menu dropdown-menu-end mt-3 mb-2"
+          aria-labelledby="profileDropdown"
+        >
+          <li *ngIf="role === 'User'"><a class="dropdown-item" routerLink="/my-products">My Products</a></li>
+
+          <li *ngIf="role === 'User'"><a class="dropdown-item" routerLink="/my-orders">My Orders</a></li>
+
+          <li><hr class="dropdown-divider" /></li>
+          <li>
+            <span class="dropdown-item text-danger" role="button" (click)="logout()">Logout</span>
+          </li>
+        </ul>
+      </div>
+      </ng-container>
+         
+      <!-- Toggler -->
+      <button class="navbar-toggler ms-2 d-lg-none"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarContent"
+              aria-controls="navbarContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+
+  </div>
+</nav>
+

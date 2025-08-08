@@ -1,0 +1,40 @@
+<div class="container p-4">
+  <h3 class="mb-4 fw-bold text-center">Post News</h3>
+  <form [formGroup]="newsForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+    <div class="mb-3">
+      <label class="form-label">Title</label>
+      <input type="text" formControlName="title" class="form-control" />
+      <div *ngIf="newsForm.get('title')?.touched && newsForm.get('title')?.invalid" class="text-danger">
+        Title is required
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Short Description</label>
+      <textarea formControlName="shortDescription" class="form-control" rows="2"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Content</label>
+      <textarea formControlName="content" class="form-control" rows="4"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Image</label>
+      <input type="file" (change)="onFileChange($event)" class="form-control" />
+      <img *ngIf="previewUrl" [src]="previewUrl" class="img-preview mt-2" />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Status</label>
+      <select formControlName="status" class="form-select">
+        <option [value]="1">Published</option>
+        <option [value]="0">Draft</option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="newsForm.invalid">
+      Post
+    </button>
+  </form>
+</div>

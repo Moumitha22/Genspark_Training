@@ -1,0 +1,35 @@
+.product-card {
+  border-radius: 12px;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.product-card button {
+  background-color: rgb(117, 63, 210);
+  border: none;
+}
+
+.card-img-top {
+  object-fit: cover;
+  height: 250px;
+}
+
+.card-img-top:hover {
+  scale: 1.05;
+  object-fit: cover;
+  height: 250px;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.feature-icon{
+  color: rgb(117, 63, 210);
+}

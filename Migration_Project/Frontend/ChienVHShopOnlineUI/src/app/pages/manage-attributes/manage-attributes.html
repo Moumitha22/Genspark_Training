@@ -1,0 +1,51 @@
+<div class="container my-4">
+  
+  <h3 class="mb-4 text-center fw-semibold">Manage Attributes</h3>
+
+  <div class="row">
+    <div class="col-md-6 col-lg-3" *ngFor="let attr of attributes">
+      <div class="card mb-3 shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <strong>{{ attr.title }}</strong>
+          <button class="btn btn-sm btn-primary" (click)="openCreate(attr)">Add</button>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+            *ngFor="let item of attr.items"
+          >
+            <span>{{ item.name }}</span>
+            <div>
+              <button class="btn btn-sm btn-outline-secondary me-2" (click)="openEdit(attr, item)">Edit</button>
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteItem(attr, item.id)">Delete</button>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="attributeModal" tabindex="-1" aria-labelledby="attributeModalLabel" aria-hidden="true" #modal>
+    <div class="modal-dialog custom-offset">
+      <form (submit)="onSubmit()">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="attributeModalLabel">{{ editingTitle }}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label>Name</label>
+              <input [(ngModel)]="formValue" name="name" required class="form-control" />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button class="btn btn-primary" type="submit">Save</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

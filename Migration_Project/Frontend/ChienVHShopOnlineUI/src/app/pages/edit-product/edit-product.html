@@ -1,0 +1,82 @@
+<div class="container py-4">
+  <h3 class="fw-bold text-center mb-4">Edit Product</h3>
+
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Product Name</label>
+        <input type="text" class="form-control" formControlName="productName" />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Price</label>
+        <input type="number" class="form-control" formControlName="price" />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Category</label>
+        <select class="form-select" formControlName="categoryId">
+          <option value="">Select Category</option>
+          <option *ngFor="let c of categories" [value]="c.id">{{ c.name }}</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Model</label>
+        <select class="form-select" formControlName="modelId">
+          <option value="">Select Model</option>
+          <option *ngFor="let m of models" [value]="m.id">{{ m.name }}</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Color</label>
+        <select class="form-select" formControlName="colorId">
+          <option value="">Select Color</option>
+          <option *ngFor="let c of colors" [value]="c.id">{{ c.name }}</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Storage</label>
+        <select class="form-select" formControlName="storageId">
+          <option value="">Select Storage</option>
+          <option *ngFor="let s of storages" [value]="s.id">{{ s.name }}</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Sell Start Date</label>
+        <input type="date" class="form-control" formControlName="sellStartDate" />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Sell End Date</label>
+        <input type="date" class="form-control" formControlName="sellEndDate" />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Is New</label>
+        <select class="form-select" formControlName="isNew">
+          <option [value]="1">Yes</option>
+          <option [value]="0">No</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Image</label>
+        <input type="file" class="form-control" accept="image/*" (change)="onFileSelected($event)" />
+      </div>
+
+      <div class="col-12 text-end mt-4">
+        <button type="submit" class="btn btn-primary" [disabled]="isSubmitting || productForm.invalid">
+          {{ isSubmitting ? 'Updating...' : 'Update Product' }}
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <div *ngIf="errorMessage" class="alert alert-danger mt-3 text-center">
+    {{ errorMessage }}
+  </div>
+</div>

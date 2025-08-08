@@ -1,0 +1,65 @@
+<div class="container mt-4" *ngIf="cartItems.length > 0; else emptyCart">
+  <h3 class="mb-4 text-center fw-bold">Your Cart</h3>
+
+  <table class="table table-bordered align-middle text-center">
+    <thead class="table-light">
+      <tr>
+        <th>Product ID</th>
+        <th>Product Name</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Subtotal</th>
+        <th>Remove</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of cartItems">
+        <td>{{ item.productId }}</td>
+        <td>{{ item.productName }}</td>
+        <td>
+          <div class="d-flex justify-content-center align-items-center gap-2">
+            <button class="btn btn-outline-secondary btn-sm" (click)="decrement(item)">
+              <i class="bi bi-dash"></i>
+            </button>
+            <span class="fw-semibold mx-2">{{ item.quantity }}</span>
+            <button class="btn btn-outline-secondary btn-sm" (click)="increment(item)">
+              <i class="bi bi-plus"></i>
+            </button>
+          </div>
+        </td>
+        <td>{{ item.unitPrice }}$</td>
+        <td>{{ item.quantity * item.unitPrice }}$</td>
+        <td>
+          <button class="btn btn-sm btn-danger" (click)="removeItem(item.productId)">
+            <i class="bi bi-trash"></i> 
+          </button>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr class="fw-bold bg-light">
+        <td colspan="4" class="text-end">Grand Total:</td>
+        <td colspan="2">{{ getGrandTotal() }}$</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <div class="d-flex justify-content-end gap-3 mt-4">
+    <button class="btn btn-danger" (click)="clearCart()">
+      <i class="bi bi-cart-x-fill"></i> Clear Cart
+    </button>
+
+    <a routerLink="/place-order" class="btn btn-primary">
+      <i class="bi bi-credit-card"></i> Place Order
+    </a>
+  </div>
+</div>
+
+<ng-template #emptyCart>
+  <div class="text-center mt-5">
+    <h4>Your cart is empty</h4>
+    <a routerLink="/products" class="btn btn-primary mt-3">
+      <i class="bi bi-house-door-fill"></i> Continue Shopping
+    </a>
+  </div>
+</ng-template>

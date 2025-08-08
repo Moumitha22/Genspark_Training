@@ -1,0 +1,9 @@
+.auth-card {
+  border-radius: 1rem;
+  background-color: #ffffff;
+}
+
+.password-toggle {
+  cursor: pointer;
+  user-select: none;
+}

@@ -1,0 +1,55 @@
+<div class="container py-4">
+
+  <h3 class="mb-4 text-center fw-semibold">My Products</h3>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="text-center my-5">
+    <div class="spinner-border text-primary" role="status"></div>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="alert alert-danger text-center">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Products Grid -->
+  <div *ngIf="!isLoading && !errorMessage && products.length > 0" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+    <div class="col" *ngFor="let product of products">
+      <app-product-card
+        [product]="product"
+        [role]="'Admin'"
+        (delete)="deleteProduct($event)"
+      ></app-product-card>
+    </div>
+  </div>
+
+  <!-- No Products Found -->
+  <div *ngIf="!isLoading && !errorMessage && products.length === 0" class="text-muted text-center mt-5">
+    <i class="bi bi-calendar-x fs-3"></i>
+    <p class="mt-2">No products found.</p>
+  </div>
+
+  <!-- Pagination Controls -->
+  <div *ngIf="!isLoading && !errorMessage && products.length > 0" class="d-flex justify-content-center mt-4">
+    <nav>
+      <ul class="pagination stylish-pagination">
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <button class="page-link" (click)="onPrevPage()" [disabled]="currentPage === 1">
+            <i class="bi bi-chevron-left"></i>
+          </button>
+        </li>
+        <li class="page-item active">
+          <span class="page-link">
+            Page {{ currentPage }}
+          </span>
+        </li>
+        <li class="page-item" [class.disabled]="products.length < pageSize">
+          <button class="page-link" (click)="onNextPage()" [disabled]="products.length < pageSize">
+            <i class="bi bi-chevron-right"></i>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+</div>

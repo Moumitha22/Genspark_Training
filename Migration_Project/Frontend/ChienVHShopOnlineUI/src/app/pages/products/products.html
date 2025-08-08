@@ -1,0 +1,83 @@
+
+<div class="container-fluid py-4 px-3 px-md-5">
+
+  <h3 class="mb-4 text-center fw-semibold">Products</h3>
+
+  <div class="row">
+    <!-- Filter Sidebar -->
+    <div class="col-md-3 mb-3">
+      <div class="card shadow-sm mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Filter by Category</h5>
+          <ul class="list-group list-group-flush">
+              <li
+                class="list-group-item"
+                [class.active]="categoryId === null"
+                (click)="onCategorySelected(null)"
+                style="cursor: pointer"
+              >
+                All
+              </li>
+              <li
+                class="list-group-item"
+                *ngFor="let category of categories"
+                [class.active]="categoryId === category.id"
+                (click)="onCategorySelected(category.id)"
+                style="cursor: pointer"
+              >
+                {{ category.name }}
+              </li>
+            </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="col-md-9">
+      <div *ngIf="isLoading" class="text-center my-5">
+        <div class="spinner-border text-primary" role="status"></div>
+      </div>
+
+      <div *ngIf="errorMessage" class="alert alert-danger text-center">
+        {{ errorMessage }}
+      </div>
+
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+        <div class="col" *ngFor="let product of products">
+          <app-product-card
+            [product]="product"
+            [role]="'User'"
+            (delete)="deleteProduct($event)"
+          ></app-product-card>
+        </div>
+      </div>
+      <!-- Pagination Controls -->
+      <div class="d-flex justify-content-center mt-4" *ngIf="!isLoading && !errorMessage">
+        <nav>
+          <ul class="pagination stylish-pagination">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <button class="page-link" (click)="onPrevPage()" [disabled]="currentPage === 1">
+                <i class="bi bi-chevron-left"></i>
+              </button>
+            </li>
+            <li class="page-item active">
+              <span class="page-link">
+                Page {{ currentPage }}
+              </span>
+            </li>
+            <li class="page-item" [class.disabled]="products.length < pageSize">
+              <button class="page-link" (click)="onNextPage()" [disabled]="products.length < pageSize">
+                <i class="bi bi-chevron-right"></i>
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <div *ngIf="!isLoading && !errorMessage && products.length === 0" class="text-muted text-center mt-5">
+        <i class="bi bi-calendar-x fs-3"></i>
+        <p class="mt-2">No products found.</p>
+      </div>
+    </div>
+  </div>
+</div>

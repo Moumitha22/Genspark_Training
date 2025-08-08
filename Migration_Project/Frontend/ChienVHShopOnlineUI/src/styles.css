@@ -1,0 +1,29 @@
+/* You can add global styles to this file, and also import other style files */
+.btn.btn-primary{
+  background-color: rgb(117, 63, 210);
+  color: #fff;
+  font-weight: 600;
+  padding: 0.6rem 2rem;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+  border: none;
+}
+
+.btn.btn-primary:hover:not(:disabled) {
+  background-color: #4a1ac4;
+}
+
+input.form-control,
+textarea.form-control,
+select.form-select {
+  border: 1px solid #d4bbfb;
+  transition: all 0.2s ease;
+}
+
+input.form-control:focus,
+textarea.form-control:focus,
+select.form-select:focus {
+  border-color: #5e23dc;
+  box-shadow: 0 0 0 0.15rem rgba(94, 35, 220, 0.2);
+  outline: none;
+}

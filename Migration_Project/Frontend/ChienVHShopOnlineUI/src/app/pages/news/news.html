@@ -1,0 +1,58 @@
+<div class="container py-5">
+  <h3 class="text-center mb-5 fw-bold">Latest News</h3>
+
+  <div *ngIf="isAdmin" class="mb-4 d-flex flex-wrap gap-2 align-items-center justify-content-between">
+  <div class="d-flex gap-2">
+    <button class="btn btn-outline-primary shadow-sm px-4" (click)="downloadCsv()">
+      <i class="bi bi-download me-2"></i> Export CSV
+    </button>
+    <button (click)="downloadExcel()" class="btn btn-success shadow-sm px-4">
+      <i class="bi bi-file-earmark-excel me-2"></i> Export to Excel
+    </button>
+  </div>
+
+  <!-- 📰 Post News Button -->
+  <button class="btn btn-primary shadow-sm px-4" [routerLink]="['/post-news']">
+    <i class="bi bi-plus-circle me-2"></i> Post News
+  </button>
+</div>
+
+
+  <div *ngFor="let news of newsList" class="news-banner shadow-sm mb-4">
+    <div class="row g-0">
+      <div class="col-md-5">
+        <img
+          *ngIf="news.image"
+          [src]="imageBaseUrl + news.image"
+          alt="News Image"
+          class="banner-img"
+        />
+      </div>
+      <div class="col-md-7 p-4 d-flex flex-column justify-content-between">
+        <div>
+          <h4 class="fw-semibold mb-2 text-dark">{{ news.title }}</h4>
+          <p class="text-muted mb-2 small">{{ news.shortDescription }}</p>
+          <p class="text-secondary mb-3 small content-snippet">{{ news.content }}</p>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center">
+          <span class="badge px-3 py-2 rounded-pill"
+            [ngClass]="news.status === 1 ? 'bg-success' : 'bg-secondary'">
+            {{ news.status === 1 ? 'Published' : 'Draft' }}
+          </span>
+          <span class="text-muted small">#{{ news.id }}</span>
+        </div>
+
+        <div *ngIf="isAdmin" class="mt-3 d-flex gap-2">
+          <button class="btn btn-sm btn-outline-primary px-3" >
+            <i class="bi bi-pencil me-1"></i> Edit
+          </button>
+          <button class="btn btn-sm btn-outline-danger px-3" (click)="deleteNews(news.id)">
+            <i class="bi bi-trash me-1"></i> Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

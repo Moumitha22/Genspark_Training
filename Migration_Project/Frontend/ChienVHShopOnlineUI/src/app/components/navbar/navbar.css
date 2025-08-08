@@ -1,0 +1,111 @@
+#mainNavbar {
+  background-color: #5e23dc !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.navbar {
+  width: 100%;
+  z-index: 1500;   
+  padding: 0.5rem 1rem;
+}
+
+.navbar-brand i {
+  color: #fff;
+}
+
+.navbar-brand span {
+  color: #5e23dc;
+}
+
+.navbar .nav-link {
+  position: relative;
+  color: #fff !important;
+  font-weight: 600;
+  font-size: 18px;
+  text-decoration: none;
+  display: inline-block;
+  padding-bottom: 4px;
+  transition: color 0.3s ease;
+}
+
+.navbar .nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0;
+  background-color: #ffffff;
+  transition: width 0.3s ease;
+}
+
+.navbar .nav-link:hover::after {
+  width: 100%;
+}
+
+.navbar .navbar-toggler {
+  border: 2px solid #ffffff;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+.navbar .dropdown-toggle::after {
+  content: none !important;
+}
+
+.navbar .dropdown-toggle:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.btn-login {
+  background-color: #ffffff;
+  color: #5e23dc;
+  font-weight: 600;
+  border-radius: 7px;
+  padding: 6px 16px;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.btn-login:hover {
+  background-color: #e0f7f4;
+  color: #3e1bb0;
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.cart-link {
+  position: relative;
+  display: inline-block;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -4px;
+  right: -8px;
+  background-color: red;
+  color: white;
+  font-size: 0.65rem;
+  padding: 0.3em 0.5em;
+  border-radius: 50%;
+  font-weight: bold;
+  line-height: 1;
+  z-index: 2;
+}
+
+
+@media (max-width: 991.98px) {
+  .navbar-nav .nav-item {
+    margin-bottom: 0.5rem;
+  }
+
+  .cart-link {
+    position: relative;
+    display: inline-block;
+  }
+}
+
+
