@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PropFinder - Property Upload Alerts</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 35px;
+        }
+
+        #notifications {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .notification {
+            background-color: #ffffff;
+            border-left: 5px solid #3498db;
+            padding: 15px 20px;
+            margin-bottom: 18px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s;
+        }
+
+        .notification:hover {
+            transform: translateY(-5px);
+        }
+
+        .timestamp {
+            font-size: 0.85em;
+            color: #888;
+            margin-bottom: 5px;
+        }
+
+        .message-text {
+            font-size: 1em;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h2>PropFinder - Property Upload Notifications</h2>
+    <div id="notifications"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@microsoft/signalr@8.0.7/dist/browser/signalr.min.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("http://localhost:5138/notificationHub", {
+                withCredentials: true
+            })
+            .withAutomaticReconnect()
+            .build();
+
+        connection.on("NewPropertyUploaded", (propertyName, location) => {
+            console.log("SignalR Event Received:", propertyName, location);
+
+            const notificationsDiv = document.getElementById("notifications");
+
+            const notification = document.createElement("div");
+            notification.className = "notification";
+
+            const time = document.createElement("div");
+            time.className = "timestamp";
+            time.textContent = new Date().toLocaleTimeString();
+
+            const message = document.createElement("div");
+            message.className = "message-text";
+            message.textContent = `New property uploaded!! ${propertyName} at ${location}`;
+
+            notification.appendChild(time);
+            notification.appendChild(message);
+            notificationsDiv.prepend(notification);
+        });
+
+        connection.start()
+            .then(() => console.log("Connected to NotifyHub"))
+            .catch(err => console.error("SignalR connection error:", err));
+    </script>
+</body>
+</html>
