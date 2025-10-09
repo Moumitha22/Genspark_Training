@@ -1,5 +1,0 @@
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 0.5rem 1.5rem;
-}
