@@ -1,0 +1,93 @@
+<div class="container mt-5">
+  <div class="card shadow-sm mx-auto" style="max-width: 600px;">
+    <div class="card-body">
+      <h3 class="text-center mb-3">Profile</h3>
+
+      <div class="text-center mb-3">
+        <!-- <img
+          [src]="profilePictureUrl || defaultAvatarUrl"
+          class="rounded-circle shadow"
+          alt="Profile"
+          width="100"
+          height="100"
+        /> -->
+        <div class="rounded-circle shadow text-white d-flex justify-content-center align-items-center mx-auto"
+            style="width: 80px; height: 80px; font-size: 36px; background-color: var(--color-primary);"
+            *ngIf="!profilePictureUrl">
+          {{ userInitial }}
+        </div>
+
+        <img
+          *ngIf="profilePictureUrl"
+          [src]="profilePictureUrl"
+          class="rounded-circle shadow"
+          alt="Profile"
+          width="100"
+          height="100"
+        />
+      </div>
+
+      <form [formGroup]="userForm" (ngSubmit)="onUserSubmit()">
+        <h5 class="section-heading mb-3">User Information</h5>
+
+        <div class="mb-3">
+          <label>Name</label>
+          <input class="form-control" formControlName="name" [readonly]="!isUserEdit" />
+          <div *ngIf="userForm.get('name')?.invalid && userForm.get('name')?.touched" class="text-danger small">
+            Name is required
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label>Email</label>
+          <input class="form-control" formControlName="email" readonly />
+        </div>
+
+        <div class="mb-3">
+          <label>Phone Number</label>
+          <input class="form-control" formControlName="phoneNumber" [readonly]="!isUserEdit" />
+          <div *ngIf="userForm.get('phoneNumber')?.invalid && userForm.get('phoneNumber')?.touched" class="text-danger small">
+            Valid 10-digit phone number required
+          </div>
+        </div>
+
+
+        <div class="d-flex justify-content-end gap-2 mb-4">
+          <button *ngIf="!isUserEdit" type="button" class="btn btn-primary" (click)="onUserEdit()">Edit</button>
+          <button *ngIf="isUserEdit" type="submit" class="btn btn-success">Save</button>
+          <button *ngIf="isUserEdit" type="button" class="btn btn-secondary" (click)="onUserCancel()">Cancel</button>
+        </div>
+      </form>
+
+      <form *ngIf="role === 'Lister'" [formGroup]="profileForm" (ngSubmit)="onProfileSubmit()">
+        <hr />
+        <h5 class="section-heading mb-3">Lister Profile</h5>
+
+        <div class="mb-3">
+          <label>Agency Name</label>
+          <input class="form-control" formControlName="agencyName" [readonly]="!isProfileEdit" />
+        </div>
+
+        <div class="mb-3">
+          <label>License Number</label>
+          <input class="form-control" formControlName="licenseNumber" [readonly]="!isProfileEdit" />
+        </div>
+
+        <div class="mb-3">
+          <label>Business Phone Number</label>
+          <input class="form-control" formControlName="businessPhoneNumber" [readonly]="!isProfileEdit" />
+          <div *ngIf="profileForm.get('businessPhoneNumber')?.invalid && profileForm.get('businessPhoneNumber')?.touched" class="text-danger small">
+            Valid 10-digit phone number required
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2">
+        <button *ngIf="!isProfileEdit" type="button" class="btn btn-primary" (click)="onProfileEdit()">Edit</button>
+        <button *ngIf="isProfileEdit" type="submit" class="btn btn-success">Save</button>
+        <button *ngIf="isProfileEdit && profileExists" type="button" class="btn btn-secondary" (click)="onProfileCancel()">Cancel</button>
+      </div>
+      
+      </form>
+    </div>
+  </div>
+</div>

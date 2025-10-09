@@ -1,0 +1,29 @@
+<div class="notification-container position-relative">
+  <button (click)="toggleDropdown()" class="btn btn-light position-relative py-1 px-2">
+    <i class="bi bi-bell fs-5"></i>
+    <span 
+      *ngIf="pushService.unseenCount > 0" 
+      class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+      {{ pushService.unseenCount }}
+    </span>
+  </button>
+
+  <div 
+    class="dropdown-menu dropdown-menu-end p-2 shadow-lg mt-3" 
+    [class.show]="dropdownOpen"
+    style="min-width: 300px; max-height: 400px; overflow-y: auto; max-width: 600px">
+    
+    <div *ngIf="pushService.notifications.length === 0" class="text-muted text-center">
+      No new notifications.
+    </div>
+    
+    <div *ngFor="let notif of pushService.notifications; let i = index">
+      <div class="border-bottom pb-2 mb-2">
+        <p class="mb-0">{{ notif.message }}</p>
+        <small class="text-muted">{{ notif.timestamp }}</small>
+        <button class="btn-close btn-sm float-end" aria-label="Close" (click)="pushService.removeNotification(i)"></button>
+      </div>
+    </div>
+  </div>
+</div>
+

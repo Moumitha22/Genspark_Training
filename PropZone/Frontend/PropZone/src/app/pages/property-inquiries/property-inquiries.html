@@ -1,0 +1,58 @@
+<div class="container mt-4">
+  <div *ngIf="loading" class="text-center mt-5">
+    <div class="spinner-border text-primary" role="status"></div>
+  </div>
+
+  <div *ngIf="!loading && errorMessage" class="alert alert-danger text-center">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="!loading && inquiries.length === 0" class="text-muted text-center mt-4">
+    No inquiries for this property yet.
+  </div>
+
+  <div *ngIf="!loading && inquiries.length > 0">
+    <!-- Property info (use first inquiry for title/location) -->
+    <div class="mb-4 text-center">
+      <h4 class="mb-1">{{ inquiries[0].propertyTitle }}</h4>
+      <p class="text-muted fs-6 fs-md-5">{{ inquiries[0].location }}</p>
+    </div>
+
+    <div class="custom-scroll-wrapper shadow">
+      <table *ngIf="!loading" class="table table-hover align-middle hover-table">
+        <thead class="sticky-header">
+          <tr>
+            <th>#</th>
+            <th>Buyer Contact</th>
+            <th>Message</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let inquiry of inquiries; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>
+              <div><strong>Email:</strong> {{ inquiry.buyerEmail }}</div>
+              <div><strong>Phone:</strong> {{ inquiry.buyerPhoneNumber }}</div>
+            </td>
+            <td>
+              <div
+                [ngClass]="{ 'text-truncate': !inquiry.showFullMessage }"
+                style="max-width: 250px;"
+              >
+                {{ inquiry.message }}
+              </div>
+              <a
+                href="#"
+                (click)="inquiry.showFullMessage = !inquiry.showFullMessage; $event.preventDefault()"
+              >
+                {{ inquiry.showFullMessage ? 'Show less' : 'Read more' }}
+              </a>
+            </td>
+            <td>{{ inquiry.createdAt | date: 'short' }}</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+  </div>
+</div>

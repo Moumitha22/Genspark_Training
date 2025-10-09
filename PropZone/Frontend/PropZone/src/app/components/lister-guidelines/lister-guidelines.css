@@ -1,0 +1,40 @@
+.guideline-card {
+  background: linear-gradient(135deg, var(--color-white), #f7fffe);
+  border-left: 5px solid var(--color-primary);
+  border-radius: 12px;
+  padding: 20px 30px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.guideline-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+}
+
+.icon-wrap {
+  background: linear-gradient(145deg, #0FC2B4, var(--color-primary));
+  min-width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon-wrap i{
+  font-size: 25px;
+  color: var(--color-white);
+}
+
+.card-title {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary-hover);
+}
+
+.card-text {
+  font-size: var(--font-size-sm);
+  color: #444;
+  line-height: 1.5;
+}

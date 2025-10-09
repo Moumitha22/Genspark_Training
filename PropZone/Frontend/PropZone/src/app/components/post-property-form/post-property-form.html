@@ -1,0 +1,256 @@
+<div class="container mb-4 d-flex justify-content-center">
+  <div class="w-100" style="max-width: 900px">
+    <div class="mb-3 text-start">
+      <button type="button" class="btn btn-secondary" (click)="back.emit()">
+        ← Back
+      </button>
+    </div>
+
+    <div class="property-form-wrapper border p-4">
+      <form [formGroup]="propertyForm" (ngSubmit)="onSubmit()">
+        <!-- Static Info Fields -->
+        <div class="row static-info-row mb-4 text-center">
+          <div class="col-md-4">
+            <div class="info-box p-2 border rounded bg-light mb-2">
+              <strong>Role:</strong> {{ listerType }}
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="info-box p-2 border rounded bg-light mb-2">
+              <strong>Purpose:</strong> {{ listingPurpose }}
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="info-box p-2 border rounded bg-light mb-2">
+              <strong>Type:</strong> {{ propertyType }}
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <label>Title</label>
+          <input type="text" class="form-control" formControlName="title" />
+          <div
+            class="text-danger small mt-1"
+            *ngIf="propertyForm.get('title')?.touched && propertyForm.get('title')?.invalid"
+          >
+            <div *ngIf="propertyForm.get('title')?.errors?.['required']">
+              Title is required.
+            </div>
+            <div *ngIf="propertyForm.get('title')?.errors?.['maxlength']">
+              Title is too long.
+            </div>
+          </div>
+        </div>
+
+        <div class="col mt-3">
+          <label>Description</label>
+          <textarea
+            rows="3"
+            class="form-control"
+            formControlName="description"
+          ></textarea>
+        </div>
+
+        <div class="row mt-3">
+          <div class="col-md-6">
+            <label>Price</label>
+            <input
+              type="number"
+              class="form-control"
+              formControlName="price"
+              min="1"
+              (change)="onPriceChange()"
+            />
+            <div
+              class="text-danger small mt-1"
+              *ngIf="propertyForm.get('price')?.touched && propertyForm.get('price')?.invalid"
+            >
+              <div *ngIf="propertyForm.get('price')?.errors?.['required']">
+                Price is required.
+              </div>
+              <div *ngIf="propertyForm.get('price')?.errors?.['min']">
+                Price must be greater than 0.
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label>Area (Sq Ft)</label>
+            <input
+              type="number"
+              class="form-control"
+              formControlName="areaSqFt"
+              min="1"
+            />
+            <div
+              class="text-danger small mt-1"
+              *ngIf="propertyForm.get('areaSqFt')?.touched && propertyForm.get('areaSqFt')?.invalid"
+            >
+              <div *ngIf="propertyForm.get('areaSqFt')?.errors?.['required']">
+                Area is required.
+              </div>
+              <div *ngIf="propertyForm.get('areaSqFt')?.errors?.['min']">
+                Area must be greater than 0.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col mt-3">
+            <label>Discount Codes (optional, max 3)</label>
+            <app-discount-code-drop-down
+              [discountCodes]="activeDiscountCodes"
+              [control]="discountCodeIdsControl"
+              [maxSelectedItems]="3"
+              (selectionChange)="onDiscountCodesChanged($event)"
+            ></app-discount-code-drop-down>
+          </div>
+        </div>
+
+        <hr class="mt-4" />
+
+        <div class="mt-5">
+          <h5 class="section-heading fw-bold pb-2 mb-5">Location</h5>
+          <div formGroupName="location" class="row">
+            <div class="col-md-4 mb-2">
+              <input
+                type="text"
+                placeholder="Locality"
+                class="form-control"
+                formControlName="locality"
+              />
+              <div
+                class="text-danger small mt-1"
+                *ngIf="propertyForm.get('location.locality')?.touched && propertyForm.get('location.locality')?.invalid"
+              >
+                Locality is required.
+              </div>
+            </div>
+            <div class="col-md-4 mb-2">
+              <input
+                type="text"
+                placeholder="City"
+                class="form-control"
+                formControlName="city"
+              />
+              <div
+                class="text-danger small mt-1"
+                *ngIf="propertyForm.get('location.city')?.touched && propertyForm.get('location.city')?.invalid"
+              >
+                City is required.
+              </div>
+            </div>
+            <div class="col-md-4 mb-2">
+              <input
+                type="text"
+                placeholder="State"
+                class="form-control"
+                formControlName="state"
+              />
+              <div
+                class="text-danger small mt-1"
+                *ngIf="propertyForm.get('location.state')?.touched && propertyForm.get('location.state')?.invalid"
+              >
+                State is required.
+              </div>
+            </div>
+          </div>
+          <div class="mt-3">
+            <label class="form-label">Select Property Location on Map</label>
+            <div
+              id="locationPickerMap"
+              style="height: 400px"
+              class="rounded border"
+            ></div>
+          </div>
+        </div>
+
+        <hr class="mt-4" />
+        <div class="mt-5">
+          <h5 class="section-heading pb-2 mb-4 fw-semibold">
+            Property Features
+          </h5>
+          <div class="row g-4" formArrayName="features">
+            <div
+              class="col-md-6"
+              *ngFor="let feature of dynamicFeatures; let i = index"
+              [formGroupName]="i"
+            >
+              <div class="p-3 bg-white h-100">
+                <label class="form-label fw-semibold">{{ feature.name }}</label>
+
+                <!-- Text -->
+                <input
+                  *ngIf="feature.dataType === 'text'"
+                  type="text"
+                  class="form-control"
+                  formControlName="value"
+                />
+
+                <!-- Number -->
+                <input
+                  *ngIf="feature.dataType === 'number'"
+                  type="number"
+                  class="form-control"
+                  formControlName="value"
+                />
+
+                <!-- Boolean -->
+                <div
+                  *ngIf="feature.dataType === 'boolean'"
+                  class="form-check form-switch mt-1"
+                >
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    formControlName="value"
+                  />
+                </div>
+
+                <!-- Dropdown -->
+                <select
+                  *ngIf="feature.dataType === 'dropdown'"
+                  class="form-select"
+                  formControlName="optionId"
+                >
+                  <option value="" disabled selected>Select</option>
+                  <option *ngFor="let opt of feature.options" [value]="opt.id">
+                    {{ opt.value }}
+                  </option>
+                </select>
+
+                <!-- Multiselect -->
+                <div
+                  *ngIf="feature.dataType === 'multiselect'"
+                  class="multi-grid"
+                >
+                  <div *ngFor="let opt of feature.options" class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      [value]="opt.id"
+                      (change)="onMultiSelectCheckboxChange($event, i, opt.id)"
+                      [checked]="featuresFormArray.at(i).get('selectedOptionIds')?.value?.includes(opt.id)"
+                    />
+                    <label class="form-check-label">{{ opt.value }}</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-end mt-4">
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="propertyForm.invalid"
+          >
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

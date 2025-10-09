@@ -1,0 +1,174 @@
+<div
+  class="core-filters-sticky bg-light shadow-sm justify-content-center"
+  *ngIf="!errorMessage"
+>
+  <div class="container py-3">
+    <app-core-filters
+      [model]="coreFilters"
+      (filtersChanged)="onCoreFiltersChanged($event)"
+    ></app-core-filters>
+  </div>
+</div>
+
+<div class="container-fluid my-4">
+  <div class="container">
+    <div class="d-lg-none text-end mb-2" *ngIf="!errorMessage">
+      <button class="btn btn-outline-primary mb-3 mb-md-0" (click)="toggleMobileFilters()">
+        <i class="fas fa-sliders-h me-1"></i>
+        {{ showMobileFilters ? 'Hide' : 'Show' }} Filters
+      </button>
+    </div>
+
+    <div class="row">
+      <!-- Error Message -->
+      <div *ngIf="errorMessage && !loading" class="alert alert-danger mb-4">
+        <div class="text-center">{{ errorMessage }}</div>
+      </div>
+
+      <div
+        class="col-lg-3 mb-4"
+        [ngClass]="{
+          'd-none d-lg-block': !showMobileFilters,
+          'd-block': showMobileFilters
+        }"
+      >
+        <div
+          class="sticky-filter-card card p-3 shadow-sm"
+          *ngIf="!errorMessage"
+        >
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h5 class="mb-0">Filters</h5>
+            <button class="btn btn-sm btn-primary" (click)="clearAllFilters()">
+              Clear All
+            </button>
+          </div>
+
+          <hr class="mt-0" />
+
+          <div class="filter-scroll-area">
+            <div class="mb-4">
+              <div class="mb-2 fw-semibold">Price</div>
+              <div class="row g-2 align-items-center">
+                <div class="col">
+                  <input
+                    type="number"
+                    class="form-control"
+                    placeholder="Min"
+                    min="0"
+                    [(ngModel)]="coreFilters.minPrice"
+                    (ngModelChange)="onCoreFiltersChanged(coreFilters)"
+                  />
+                </div>
+                <div class="col">
+                  <input
+                    type="number"
+                    class="form-control"
+                    placeholder="Max"
+                    min="0"
+                    [(ngModel)]="coreFilters.maxPrice"
+                    (ngModelChange)="onCoreFiltersChanged(coreFilters)"
+                  />
+                </div>
+              </div>
+              <hr />
+            </div>
+
+            <div class="mb-4">
+                <div class="mb-2 fw-semibold">Has Discount</div>
+                <div class="form-check form-switch">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    [id]="coreFilters.isDiscountAvailable"
+                    [(ngModel)]="coreFilters.isDiscountAvailable"
+                    (ngModelChange)="onCoreFiltersChanged(coreFilters)"
+                  />
+                  <label class="form-check-label" [for]="coreFilters.isDiscountAvailable">Yes</label>
+                </div>
+                <hr />
+            </div>
+            
+            <app-dynamic-filters
+              [dynamicFilters]="dynamicFilters"
+              (filtersChanged)="onDynamicFiltersChanged($event)"
+            ></app-dynamic-filters>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-9">
+        <!-- Loading Spinner -->
+        <div *ngIf="loading" class="text-center mb-4">
+          <div class="spinner-border text-success" role="status"></div>
+        </div>
+
+        <!-- Empty state -->
+        <div
+          *ngIf="!loading && !errorMessage && properties.length === 0"
+          class="text-center text-muted my-4"
+        >
+          <p>No properties match the selected filters.</p>
+          <button
+            *ngIf="hasActiveFilters"
+            class="btn btn-primary"
+            (click)="clearAllFilters()"
+          >
+            Clear Filters
+          </button>
+        </div>
+
+        <div *ngIf="!loading && properties.length > 0">
+          <div class="text-center mb-3 sticky-compare" *ngIf="canCompare">
+            <button class="btn btn-warning" (click)="openCompareModal()">
+              Compare Selected ({{ selectedPropertiesForComparison.length }})
+            </button>
+          </div>
+
+          <div
+            class="d-flex flex-column gap-3"
+            *ngIf="!loading && !errorMessage && properties.length > 0"
+          >
+            <app-property-card
+              *ngFor="let property of properties"
+              [property]="property"
+              [selected]="isPropertySelected(property.id)"
+              (compareClicked)="toggleCompare(property)"
+              (contactClicked)="handleContactClicked($event)"
+              [isDicountClickable]="true"
+              [selectedDiscountIds]="selectedDiscountIdsMap[property.id] || []"
+              [discountedPrice]="discountedPrices[property.id] ?? undefined"
+              (simulateDiscount)="onDiscountSelection($event, property.id)"
+              context="public"
+              class="w-100"
+            ></app-property-card>
+          </div>
+        </div>
+
+        <div *ngIf="pagination.totalPages > 1" class="mt-4">
+          <app-pagination
+            [currentPage]="pagination.currentPage"
+            [totalPages]="pagination.totalPages"
+            (pageChange)="onPageChange($event)"
+          >
+          </app-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact Lister Modal -->
+  <app-contact-lister-form
+    *ngIf="selectedPropertyForContact"
+    [property]="selectedPropertyForContact"
+    (closed)="selectedPropertyForContact = null"
+  >
+  </app-contact-lister-form>
+
+  <!-- Compare Modal -->
+  <app-compare-modal
+    *ngIf="showCompareModal"
+    [selectedProperties]="selectedPropertiesForComparison"
+    (closed)="clearComparison()"
+  >
+  </app-compare-modal>
+</div>

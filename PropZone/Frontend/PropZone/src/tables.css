@@ -1,0 +1,87 @@
+.custom-scroll-wrapper {
+  max-height: 700px;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 0.5rem;
+}
+
+.sticky-header th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.hover-table {
+  min-width: 800px;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 0.5rem;
+  table-layout: auto;
+}
+
+.hover-table th {
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-md);
+  padding: 12px;
+}
+
+.hover-table td {
+  vertical-align: top;
+  padding: 12px;
+  font-size: 15px;
+}
+
+.hover-table td .fw-semibold {
+  color: #2339b0;
+}
+
+.hover-table td button {
+  text-decoration: none;
+  font-size: var(--font-size-xs);
+  padding: 3px 6px;
+}
+
+.hover-table td.date {
+  font-size: var(--font-size-sm);
+}
+
+.hover-table .hover-scale {
+  transition: all 0.3s ease;
+}
+
+.hover-table .hover-scale:hover {
+  transform: scale(1.015);
+  box-shadow: 0 0 0 1px var(--color-light-border);
+}
+
+.hover-table .hover-scale:hover td {
+  background-color: #e9ebfa !important;
+  color: #18106e;
+}
+
+.feature-table tbody tr:hover td .table-sm tr td,
+.feature-table tbody tr:hover td .table-sm tr {
+  background-color:  transparent;
+}
+
+.feature-table .table-sm td {
+  padding-bottom: 5px;
+  line-height: 1.2;
+}
+
+
+@media (max-width: 576px) {
+  .hover-table th,
+  .hover-table td {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  .custom-scroll-wrapper{
+    margin: 8px;
+  }
+}
+
+

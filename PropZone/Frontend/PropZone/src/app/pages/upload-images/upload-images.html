@@ -1,0 +1,93 @@
+<div class="container mt-5">
+  <h4 class="text-center mb-5">Update Property Images</h4>
+
+  <!-- Image Grid -->
+  <div class="row g-3 mb-5">
+    <!-- Existing Images -->
+    <div
+      class="col-6 col-sm-4 col-md-3"
+      *ngFor="let image of existingImages"
+      style="position: relative;"
+    >
+      <!-- <img
+        [src]="image?.imageUrl ? apiBaseUrl + '/' + image.imageUrl : ''"
+        class="img-thumbnail"
+        style="width: 100%; height: 250px; object-fit: cover;"
+      /> -->
+      <img
+        [src]="image?.imageUrl?.startsWith('http') ? image.imageUrl : apiBaseUrl + image.imageUrl"
+        class="img-thumbnail"
+        style="width: 100%; height: 250px; object-fit: cover;"
+      />
+
+      <button
+        type="button"
+        class="btn btn-sm btn-danger"
+        (click)="deleteImage(image.id)"
+        style="position: absolute; top: 1px; right: 1px;"
+        aria-label="Delete"
+      >
+        <i class="fa-solid fa-x"></i>
+      </button>
+    </div>
+
+    <!-- Selected Images -->
+    <div
+      class="col-6 col-sm-4 col-md-3"
+      *ngFor="let file of selectedFilePreviews; let i = index"
+      style="position: relative;"
+    >
+      <img
+        [src]="file.previewUrl"
+        class="img-thumbnail"
+        style="width: 100%; height: 250px; object-fit: cover;"
+      />
+      <button
+        type="button"
+        class="btn btn-sm btn-danger"
+        (click)="removeSelectedFile(i)"
+        style="position: absolute; top: 1px; right: 1px;"
+        aria-label="Remove"
+      >
+        <i class="fa-solid fa-x"></i>
+      </button>
+    </div>
+
+
+
+    <!-- Add New Image Box -->
+    <div class="col-6 col-sm-4 col-md-3">
+      <label
+        for="fileInput"
+        class="d-flex flex-column align-items-center justify-content-center border border-2 border-dashed rounded"
+        style="width: 100%; height: 250px; cursor: pointer; text-align: center;"
+      >
+        <i class="fa-solid fa-plus fs-3 text-muted"></i>
+        <span class="text-muted">Add Image</span>
+      </label>
+      <input
+        type="file"
+        id="fileInput"
+        (change)="onFileChange($event)"
+        multiple
+        accept=".jpg,.jpeg,.png,.webp"
+        hidden
+      />
+    </div>
+  </div>
+
+  <!-- Upload Button -->
+  <div class="d-flex justify-content-center mt-3">
+    <button
+      id="main-btn"
+      type="button"
+      class="btn btn-primary"
+      (click)="upload()"
+      [disabled]="uploading || selectedFilePreviews.length === 0"
+    >
+      {{ uploading ? 'Uploading...' : 'Upload Images' }}
+    </button>
+  </div>
+
+
+</div>

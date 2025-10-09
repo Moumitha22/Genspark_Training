@@ -1,0 +1,26 @@
+.form-box {
+  max-width: 600px;
+  width: 100%;
+  border: 1px solid var(--color-light-border);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: var(--color-white);
+}
+
+label {
+  font-weight: var(--font-weight-semibold);
+  margin-top: 1rem;
+  margin-bottom: 10px;
+  display: block;
+}
+
+button.active {
+  font-weight: var(--font-weight-bold);
+  border-width: 2px;
+}
+
+button.btn-outline-primary,
+button.btn-outline-secondary {
+  min-width: 100px;
+}
+

@@ -1,0 +1,229 @@
+<div class="container mt-4" *ngIf="propertyForm">
+  <form
+    [formGroup]="propertyForm"
+    (ngSubmit)="onSubmit()"
+    class="p-5 rounded shadow-sm property-form"
+  >
+    <!-- Inside property card -->
+
+    <!-- Core Fields -->
+    <div class="row mb-5">
+      <div class="col-md-3">
+        <label class="form-label fw-semibold">Lister Type</label>
+        <select class="form-select custom-select" formControlName="listerType">
+          <option value="Agent">Agent</option>
+          <option value="Owner">Owner</option>
+        </select>
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label fw-semibold">Listing Purpose</label>
+        <select
+          class="form-select custom-select"
+          formControlName="listingPurpose"
+        >
+          <option value="Sale">Sale</option>
+          <option value="Rent">Rent</option>
+        </select>
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label fw-semibold">Property Type</label>
+        <select
+          class="form-select custom-select"
+          formControlName="propertyType"
+        >
+          <option value="House">House</option>
+          <option value="Apartment">Apartment</option>
+          <option value="CommercialSpace">Commercial Space</option>
+          <option value="Plot">Plot</option>
+        </select>
+      </div>
+
+      <div class="col-md-3 mb-2">
+        <label class="form-label fw-semibold">Status</label>
+        <select class="form-select custom-select" formControlName="status">
+          <option value="Available">Available</option>
+          <option value="Sold">Sold</option>
+          <option value="Rented">Rented</option>
+        </select>
+      </div>
+    </div>
+
+    <hr />
+
+    <div class="mb-5">
+      <h5 class="section-heading fw-bold pb-2 mb-4">Key Details</h5>
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Title</label>
+          <input
+            type="text"
+            class="form-control custom-input"
+            formControlName="title"
+          />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Description</label>
+          <input
+            type="text"
+            class="form-control custom-input"
+            formControlName="description"
+          />
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Price</label>
+          <input
+            type="number"
+            class="form-control custom-input"
+            formControlName="price"
+            (change)="onPriceChange()"
+          />
+        </div>
+        <div class="col-md-6 mb-2">
+          <label class="form-label fw-semibold">Area (Sq Ft)</label>
+          <input
+            type="number"
+            class="form-control custom-input"
+            formControlName="areaSqFt"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="row mb-3 w-100">
+        <label>Discount Codes (optional, max 3)</label>
+        <app-discount-code-drop-down
+        *ngIf="discountCodes.length"
+          [discountCodes]="discountCodes"
+          [control]="discountCodeIdsControl"
+          [maxSelectedItems]="3"
+          (selectionChange)="onDiscountCodesChanged($event)"
+        ></app-discount-code-drop-down>
+      </div>
+    <hr />
+
+    <div formGroupName="location" class="mb-5">
+      <h5 class="section-heading fw-bold pb-2 mb-4">Location</h5>
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">Locality</label>
+          <input
+            type="text"
+            placeholder="Locality"
+            class="form-control mb-2 custom-input"
+            formControlName="locality"
+          />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">City</label>
+          <input
+            type="text"
+            placeholder="City"
+            class="form-control mb-2 custom-input"
+            formControlName="city"
+          />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">State</label>
+          <input
+            type="text"
+            placeholder="State"
+            class="form-control custom-input"
+            formControlName="state"
+          />
+        </div>
+        <div class="mt-4 mb-2">
+          <div
+            id="locationPickerMap"
+            style="height: 400px"
+            class="rounded border"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <hr />
+
+    <div class="features-section mt-2">
+      <h5 class="section-heading fw-bold pb-2 mb-4">Features</h5>
+      <div formArrayName="features" class="row g-5">
+        <div
+          *ngFor="let feature of dynamicFeatures; let i = index"
+          [formGroupName]="i"
+          class="col-md-6 mb-2"
+        >
+          <label class="form-label fw-semibold">{{ feature.name }}</label>
+
+          <input
+            *ngIf="feature.dataType === 'text'"
+            type="text"
+            class="form-control custom-input mb-2"
+            formControlName="value"
+          />
+          <input
+            *ngIf="feature.dataType === 'number'"
+            type="number"
+            class="form-control custom-input mb-2"
+            formControlName="value"
+          />
+          <div *ngIf="feature.dataType === 'boolean'" class="form-check mb-2">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              formControlName="value"
+            />
+            <label class="form-check-label">Yes</label>
+          </div>
+
+          <div *ngIf="feature.dataType === 'dropdown'">
+            <select
+              class="form-select mb-2 custom-select"
+              formControlName="optionId"
+            >
+              <option *ngFor="let opt of feature.options" [value]="opt.id">
+                {{ opt.value }}
+              </option>
+            </select>
+          </div>
+
+          <div *ngIf="feature.dataType === 'multiselect'">
+            <div class="form-check" *ngFor="let opt of feature.options">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                [value]="opt.id"
+                (change)="onMultiSelectCheckboxChange($event, i, opt.id)"
+                [checked]="featuresFormArray.at(i).get('selectedOptionIds')?.value?.includes(opt.id)"
+                [disabled]="mode === 'view'"
+              />
+              <label class="form-check-label">{{ opt.value }}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-end">
+      <button
+        *ngIf="mode === 'edit'"
+        type="submit"
+        class="btn btn-primary mt-4 me-2"
+      >
+        <i class="fa fa-check me-1"></i> Update Property
+      </button>
+
+      <button
+        *ngIf="mode === 'edit'"
+        type="button"
+        class="btn btn-outline-secondary mt-4"
+        (click)="onCancel()"
+      >
+        <i class="fa fa-times me-1"></i> Cancel
+      </button>
+    </div>
+  </form>
+</div>

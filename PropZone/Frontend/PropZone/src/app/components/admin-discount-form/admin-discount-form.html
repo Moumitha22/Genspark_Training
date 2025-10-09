@@ -1,0 +1,135 @@
+<div class="discount-modal-overlay" *ngIf="show">
+  <div class="discount-modal-content">
+    <div class="d-flex justify-content-end mb-2">
+      <button type="button" class="btn-close ms-auto" (click)="closeModal()" aria-label="Close"></button>
+    </div>
+
+    <div class="mb-4 text-center">
+      <strong class="section-heading fs-4">
+        {{ discountToEdit? 'Edit ':'Add '}}Discount
+      </strong>
+    </div>
+
+    <div class="discount-modal-body w-full">
+      <form [formGroup]="discountForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Code</label>
+          <input
+            class="form-control"
+            formControlName="code"
+            placeholder="e.g: SUMMER2025"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Discount Value </label>
+          <input
+            type="number"
+            class="form-control"
+            formControlName="discountValue"
+            placeholder="e.g: 500 or 10"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Type</label>
+          <select class="form-select" formControlName="isPercentage">
+            <option [ngValue]="true">Percentage (%)</option>
+            <option [ngValue]="false">Fixed (₹)</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Valid From</label>
+          <input type="date" class="form-control" formControlName="fromDate" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Valid To</label>
+          <input type="date" class="form-control" formControlName="toDate" />
+        </div>
+
+        <div class="mb-3" *ngIf="editingId">
+          <label class="form-label fw-semibold">IsActive</label>
+          <select class="form-select" formControlName="isActive">
+            <option [ngValue]="null">Select Status</option>
+            <option [ngValue]="true">Active</option>
+            <option [ngValue]="false">Inactive</option>
+          </select>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label fw-semibold">Max Lister Limit</label>
+          <input
+            type="number"
+            class="form-control"
+            formControlName="maxListerLimit"
+            placeholder="e.g: 100"
+          />
+        </div>
+
+        <div formArrayName="options">
+          <h5>Applicability Rules</h5>
+          <div
+            *ngFor="let group of options?.controls; let i = index"
+            [formGroupName]="i"
+            class="border p-2 mb-2"
+          >
+            <label>Property Type</label>
+            <select class="form-select mb-2" formControlName="typeOfProperty">
+              <option value="">Select Property Type</option>
+              <option value="Apartment">Apartment</option>
+              <option value="House">House</option>
+              <option value="Plot">Plot</option>
+              <option value="CommercialSpace">Commercial</option>
+            </select>
+            <label>Purpose</label>
+            <select class="form-select mb-2" formControlName="purposeOfListing">
+              <option value="">Select Purpose</option>
+              <option value="Sale">Sale</option>
+              <option value="Rent">Rent</option>
+            </select>
+            <label>Min Price</label>
+            <input
+              type="number"
+              class="form-control mb-2"
+              formControlName="minPrice"
+            />
+            <label>Max Price</label>
+            <input
+              type="number"
+              class="form-control mb-2"
+              formControlName="maxPrice"
+            />
+            <button
+              type="button"
+              class="btn btn-danger btn-sm mt-2"
+              (click)="removeOption(i)"
+            >
+              Remove
+            </button>
+          </div>
+          <button type="button" class="btn btn-secondary" (click)="addOption()">
+            Add Applicability
+          </button>
+        </div>
+
+        <button
+          class="btn btn-success mt-3"
+          [class.w-100]="!editingId"
+          type="submit"
+          [disabled]="!discountForm.valid"
+        >
+          {{ editingId ? 'Update' : 'Create' }} Discount
+        </button>
+        <button
+          *ngIf="editingId"
+          class="btn btn-warning mt-3 ms-2"
+          type="button"
+          (click)="onCancelEdit()"
+        >
+          Cancel
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

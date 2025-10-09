@@ -1,0 +1,26 @@
+.property-form-wrapper {
+  background-color: var(--color-white);
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+.property-form-wrapper label {
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: 4px;
+  display: inline-block;
+}
+
+.info-box {
+  font-size: var(--font-size-md);
+  background-color: var(--color-light);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary) !important;
+  border-radius: 6px;
+}
+
+.multi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.5rem 1rem;
+}
+

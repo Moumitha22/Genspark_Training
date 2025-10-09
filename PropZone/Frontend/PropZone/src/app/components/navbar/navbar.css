@@ -1,0 +1,97 @@
+.navbar {
+  background-color: transparent !important;
+  width: 100%;
+  z-index: 1500;   
+  padding: 0.75rem 1rem;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.navbar .navbar-brand .brand-text{
+  font-size: var(--font-size-2xl);
+}
+
+.navbar .nav-link {
+  position: relative;
+  color: var(--color-white) !important;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-lg);
+  text-decoration: none;
+  display: inline-block;
+  padding-bottom: 4px;
+  transition: color 0.3s ease;
+}
+
+.navbar .nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0;
+  background-color: var(--color-white);
+  transition: width 0.3s ease;
+}
+
+.navbar .nav-link:hover::after,
+.navbar .nav-link.active::after,
+.navbar .nav-link.router-link-active::after {
+  width: 100%;
+}
+
+.navbar .navbar-toggler {
+  border: 2px solid var(--color-white);
+}
+
+.navbar .nav-user-name {
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-md);
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+.navbar .dropdown-toggle::after {
+  content: none !important;
+}
+
+.navbar .dropdown-toggle:focus {
+  border: none;
+  outline: none;
+}
+
+.nav-btn {
+  background-color: var(--color-white);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+  border-radius: 7px;
+  padding: 6px 16px;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.nav-btn:hover {
+  background-color: var(--color-light-hover);   /* e.g., #e0f7f4 */
+  color: var(--color-accent-hover);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+#mainNavbar.scrolled {
+  background-color: var(--color-primary) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 991.98px) {
+  .navbar .navbar-brand .brand-text{
+    font-size: var(--font-size-xl);
+  }
+
+  .navbar-nav .nav-item {
+    margin-bottom: 0.5rem;
+  }
+
+  .navbar .nav-link {
+    font-size: var(--font-size-md);
+  }
+}

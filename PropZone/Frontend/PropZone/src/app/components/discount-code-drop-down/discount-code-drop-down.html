@@ -1,0 +1,64 @@
+      <ng-select
+            class="custom w-100"
+            [items]="discountCodes"
+            bindLabel="code"
+            bindValue="id"
+            [multiple]="true"
+            [closeOnSelect]="false"
+            [maxSelectedItems]="maxSelectedItems"
+            appearance="outline"
+            [formControl]="control"
+            placeholder="Select discount codes"
+            [searchable]="true"
+            [virtualScroll]="true"
+            (change)="onChange($event)"
+            [compareWith]="compareDiscountCodes"
+          >
+          
+            <ng-template ng-option-tmp let-item="item" 
+            let-selected="selected">
+              <span class="text-wrap drop-down-custom-line-spacing">
+                <strong>{{ item.code }}</strong>
+                <span>
+                  {{ item.discountValue }}
+                  <ng-container *ngIf="item.isPercentage">%</ng-container>
+                  <ng-container *ngIf="!item.isPercentage">
+                    (Fixed)</ng-container
+                  >
+                  off
+                </span>
+                <div></div>
+                <small>
+                  <small class="fw-bold">
+                  Valid: 
+                  </small>
+                  <span class="fw-normal">{{ item.fromDate | date:'mediumDate' }} - {{
+                  item.toDate | date:'mediumDate' }}</span>
+                  <ng-container *ngIf="item.options?.length; else noOptions">
+                    <div *ngFor="let opt of item.options">
+                      <span>
+                        <small class="fw-bold">Type: <span class=" fw-normal">{{ opt.typeOfProperty }} ({{ opt.purposeOfListing
+                        }})</span> </small>
+                        <div></div>
+                        <small class="fw-bold">
+                        Min Price: <span class="fw-normal">{{ opt.minPrice != null ? (opt.minPrice
+                        * 1 | currency:'INR') : 'N/A' }}</span>, Max Price: <span class=" fw-normal">{{
+                        opt.maxPrice != null ? (opt.maxPrice * 1 |
+                        currency:'INR') : 'N/A' }}
+                        </span>
+                        </small>
+                      </span>
+                    </div>
+                  </ng-container>
+                  <ng-template #noOptions>
+                    No options available.
+                  </ng-template>
+                </small>
+              </span>
+              <hr />
+            </ng-template>   
+
+          
+          </ng-select>
+
+          

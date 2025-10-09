@@ -1,0 +1,241 @@
+<div class="container mt-4">
+  <h3 class="text-center">
+    Discount Codes <i class="bi bi-tags fs-4"></i>
+  </h3>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="loading" class="text-center mb-4">
+    <div class="spinner-border text-success" role="status"></div>
+  </div>
+
+  <div *ngIf="error&& !loading" class="alert alert-danger">{{ error }}</div>
+
+  <div class="d-none d-md-flex justify-content-between align-items-center mt-4 mb-3">
+    <div class="d-flex justify-content-start gap-4">
+      <div>
+        <input
+          class="form-control"
+          [(ngModel)]="filters.code"
+          name="Code"
+          placeholder="Search By Code"
+          (ngModelChange)="onCodeChange()"
+        />
+      </div>
+      <div>
+        <select
+          class="form-select"
+          [(ngModel)]="sortSelection"
+          (ngModelChange)="onSortChange($event)"
+          name="SortOption"
+        >
+          <option [ngValue]="'createdAt_desc'">Created At: Newest to Oldest</option>
+          <option [ngValue]="'createdAt_asc'">Created At: Oldest to Newest</option>
+          <option [ngValue]="'code_asc'">Code: A → Z</option>
+          <option [ngValue]="'code_desc'">Code: Z → A</option>
+          <option [ngValue]="'discountValue_asc'">Discount Value: Low to High</option>
+          <option [ngValue]="'discountValue_desc'">Discount Value: High to Low</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end gap-4">
+      <button class="btn btn-outline-primary responsive-btn" (click)="openDiscountModal()">
+        + Add Discount Code
+      </button>
+      <div *ngIf="!error">
+        <button class="btn btn-outline-primary responsive-btn" (click)="toggleFilters()">
+          <i class="fas fa-sliders-h me-1"></i> Filters
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-md-none mt-4 mb-3 mx-2">
+    <div class="d-flex gap-3 mb-3">
+      <input
+        class="form-control"
+        [(ngModel)]="filters.code"
+        name="Code"
+        placeholder="Search By Code"
+        (ngModelChange)="onCodeChange()"
+      />
+      <select
+        class="form-select"
+        [(ngModel)]="sortSelection"
+        (ngModelChange)="onSortChange($event)"
+        name="SortOption"
+      >
+        <option [ngValue]="'createdAt_desc'">Created At: Newest to Oldest</option>
+        <option [ngValue]="'createdAt_asc'">Created At: Oldest to Newest</option>
+        <option [ngValue]="'code_asc'">Code: A → Z</option>
+        <option [ngValue]="'code_desc'">Code: Z → A</option>
+        <option [ngValue]="'discountValue_asc'">Discount Value: Low to High</option>
+        <option [ngValue]="'discountValue_desc'">Discount Value: High to Low</option>
+      </select>
+    </div>
+    
+    <div class="d-flex gap-3">
+      <button class="btn btn-outline-primary responsive-btn" (click)="openDiscountModal()">
+        + Add Discount Code
+      </button>
+      <button class="btn btn-outline-primary responsive-btn" (click)="toggleFilters()" *ngIf="!error">
+        <i class="fas fa-sliders-h me-1"></i> Filters
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="showFilters" class="mb-3">
+    <app-admin-discount-filter (filterChange)="onFilterChange($event)" (close)="toggleFilters()"></app-admin-discount-filter>
+  </div>
+
+  <div class="custom-scroll-wrapper shadow">
+    <table
+      *ngIf="!loading && discountCodes.length > 0"
+      class="table table-hover align-middle hover-table"
+    >
+      <thead class="sticky-header">
+        <tr>
+          <th>#</th>
+          <th>Code</th>
+          <th>Discount Value</th>
+          <th>Type</th>
+          <th>Valid From</th>
+          <th>Valid To</th>
+          <th>Status</th>
+          <th>Applicability</th>
+          <th>Price Range</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let discount of discountCodes; let i = index"
+          [ngClass]="{
+            'table-secondary': discount.isDeleted,
+            'text-muted': discount.isDeleted,
+            'disabled-user': discount.isDeleted
+          }"
+        >
+          <td>
+            {{ (pagination.currentPage - 1) * pagination.pageSize + i + 1
+            }}
+          </td>
+          <td>
+            <div class="fw-semibold text">{{ discount.code }}</div>
+            <span class="badge bg-danger text-light"
+              >{{discount.isDeleted ? 'Disabled' : ''}}</span
+            >
+          </td>
+          <td>
+            {{ discount.discountValue }} {{ discount.isPercentage ? '%' :
+            '₹' }}
+          </td>
+          <td>{{ discount.isPercentage ? 'Percentage' : 'Fixed' }}</td>
+          <td>{{ discount.fromDate | date: 'shortDate' }}</td>
+          <td>{{ discount.toDate | date: 'shortDate' }}</td>
+          <td>
+            @if (discount.isActive) {
+            <span class="badge bg-success me-1 rounded-pill">Active</span>
+            } @else {
+            <span class="badge bg-secondary me-1 rounded-pill"
+              >InActive</span
+            >
+            }
+          </td>
+          <td>
+            <div *ngIf="discount.options?.length; else noOptions">
+              <div *ngFor="let opt of discount.options" class="mb-1">
+                <span class="badge bg-info me-1">
+                  <!-- Property Type: {{ opt.typeOfProperty }} -->
+                  {{ opt.typeOfProperty }}
+                </span>
+                <span class="badge bg-primary me-1">
+                  {{ opt.purposeOfListing }}
+                </span>
+                <!-- <span class="badge bg-secondary me-1">
+                  Min Price: {{ opt.minPrice }}
+                </span>
+                <span class="badge bg-success me-1">
+                  Max Price: {{ opt.maxPrice }}
+                </span> -->
+              </div>
+            </div>
+            <ng-template #noOptions>
+              <span class="text-muted">-</span>
+            </ng-template>
+          </td>
+          <td>
+            <div *ngIf="discount.options?.length; else noOptions">
+              <div *ngFor="let opt of discount.options" class="mb-1">
+                <span class="badge bg-secondary me-1">
+                  Min: {{ opt.minPrice }}
+                </span>
+                <span class="badge bg-success me-1">
+                  Max: {{ opt.maxPrice }}
+                </span>
+              </div>
+            </div>
+            <ng-template #noOptions>
+              <span class="text-muted">-</span>
+            </ng-template>
+          </td>
+          <td style="white-space: nowrap; min-width: 120px">
+            <div class="d-inline-flex gap-2">
+              <button
+                class="btn btn-sm"
+                [ngClass]="discount.isDeleted ? 'btn-secondary' : 'btn-primary'"
+                (click)="onEditDiscount(discount)"
+                [disabled]="discount.isDeleted"
+                data-toggle="tooltip"
+                title="Edit Discount Code"
+              >
+                <i class="fas fa-edit"></i>
+              </button>
+
+              <button
+                class="btn btn-sm"
+                [ngClass]="discount.isDeleted ? 'btn-success' : 'btn-danger'"
+                (click)="onDeleteDiscount(discount)"
+                data-toggle="tooltip"
+                title="Toggle Discount Status"
+              >
+                @if (!discount.isDeleted) {
+                <i class="bi bi-ban"></i>
+                } @else {
+                <i class="bi bi-check-circle"></i>
+                }
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div
+      *ngIf="!loading && discountCodes.length === 0"
+      class="text-center mt-4"
+    >
+      <p>No discounts availabe.</p>
+    </div>
+  </div>
+  <div *ngIf="pagination.totalPages > 1" class="mt-4">
+    <app-pagination
+      [currentPage]="pagination.currentPage"
+      [totalPages]="pagination.totalPages"
+      (pageChange)="onPageChange($event)"
+    >
+    </app-pagination>
+  </div>
+  <app-admin-discount-form
+    [show]="showDiscountForm"
+    [discountToEdit]="discountToEdit"
+    (close)="closeDiscountModal()"
+    (save)="onSaveDiscount()"
+  ></app-admin-discount-form>
+</div>
+   <!-- <td>
+          <span *ngFor="let type of getTypes(feature)" class="badge bg-primary me-1">{{ type }}</span>
+        </td>
+        <td>
+          <span *ngFor="let purpose of getPurposes(feature)" class="badge bg-info me-1">{{ purpose }}</span>
+        </td> -->

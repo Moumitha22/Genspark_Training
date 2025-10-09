@@ -1,0 +1,49 @@
+<div *ngFor="let feature of dynamicFilters" class="mb-4">
+  <div class="mb-2 fw-semibold">{{ feature.name }}</div>
+
+  <!-- Boolean Toggle -->
+  <div *ngIf="feature.filterMode === 'Boolean'" class="form-check form-switch">
+    <input
+      type="checkbox"
+      class="form-check-input"
+      [id]="feature.id"
+      (change)="handleToggleChange($event, feature.id)"
+    />
+    <label class="form-check-label" [for]="feature.id">Yes</label>
+  </div>
+
+  <!-- Exact Match Checkboxes -->
+  <div *ngIf="feature.filterMode === 'Exact'" class="features-grid">
+    <div *ngFor="let opt of feature.options" class="form-check">
+      <input
+        type="checkbox"
+        class="form-check-input"
+        [id]="opt.id"
+        (change)="handleCheckboxChange($event, feature.id, opt.value)"
+      />
+      <label class="form-check-label" [for]="opt.id">{{ opt.value }}</label>
+    </div>
+  </div>
+
+  <!-- Range Inputs -->
+  <div *ngIf="feature.filterMode === 'Range'" class="row g-2 align-items-center">
+    <div class="col">
+      <input
+        type="number"
+        class="form-control"
+        placeholder="Min"
+        (input)="handleRangeMinChange($event, feature.id)"
+      />
+    </div>
+    <div class="col">
+      <input
+        type="number"
+        class="form-control"
+        placeholder="Max"
+        (input)="handleRangeMaxChange($event, feature.id)"
+      />
+    </div>
+  </div>
+
+  <hr class="my-3" />
+</div>

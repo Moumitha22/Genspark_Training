@@ -1,0 +1,94 @@
+<div class="container mt-4">
+    <h4 class="text-center mb-4">My Inquiries</h4>
+
+    <!-- Loading Spinner -->
+    <div *ngIf="loading" class="text-center mt-5">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="errorMessage && !loading" class="alert alert-danger mb-4">
+      <div class="text-center">{{ errorMessage }}</div>
+    </div>
+
+    <div *ngIf="!loading && !errorMessage && inquiries.length === 0" class="text-muted text-center mt-4">
+        <p>You haven't made any inquiries yet.</p>
+        <a class="btn btn-primary" routerLink="/properties">Explore Properties</a>
+    </div>
+
+    <div *ngIf="!loading && inquiries.length > 0" class="container mb-4" style="max-width: 1000px">
+        <div class="row g-2 g-md-5 justify-content-center">
+            <div class="col-4">
+            <input
+                type="text"
+                [(ngModel)]="searchTitle"
+                (input)="onSearch()"
+                class="form-control"
+                placeholder="Search by Property Title"
+            />
+            </div>
+            <div class="col-4">
+            <input
+                type="text"
+                [(ngModel)]="searchLocation"
+                (input)="onSearch()"
+                class="form-control"
+                placeholder="Search by Location"
+            />
+            </div>
+            <div class="col-4">
+            <input
+                type="text"
+                [(ngModel)]="searchListerName"
+                (input)="onSearch()"
+                class="form-control"
+                placeholder="Search by Agent Name"
+            />
+            </div>
+        </div>
+    </div>
+    
+    <div *ngIf="!loading && inquiries.length > 0 && filteredInquiries.length === 0" class="text-muted text-center">
+        No inquiries match your filters.
+    </div>
+
+
+    <div *ngIf="!loading && inquiries.length > 0" class="d-flex flex-column align-items-center">
+        <div *ngFor="let inquiry of filteredInquiries" class="card inquiry-card mb-4 w-100">
+        <div class="card-body pt-3 pb-0">
+            <h5 class="card-title mb-2 text-dark">{{ inquiry.propertyTitle }}</h5>
+            <h6 class="card-subtitle text-muted mb-3">{{ inquiry.location }}</h6>
+
+            <div class="row">
+            <!-- Lister Details -->
+            <div class="col-md-6 mb-2">
+                <div class="lister-box border p-3 rounded h-100">
+                    <h6 class="card-text mb-2">Lister Details</h6>
+                    <p class="mb-0"><strong>Name:</strong> {{ inquiry.listerName }}</p>
+                    <p class="mb-0"><strong>Email:</strong> {{ inquiry.listerEmail }}</p>
+                    <p class="mb-0"><strong>Phone:</strong> {{ inquiry.listerPhoneNumber }}</p>
+                </div>
+            </div>
+
+          <!-- Message -->
+          <div class="col-md-6 mb-2">
+            <div class="message-box border p-3 rounded h-100">
+                <h6 class="card-text mb-2">Your Message</h6>
+                <div [ngClass]="{ 'text-truncate': !inquiry.showFullMessage }" class="message-text">
+                    {{ inquiry.message }}
+                </div>
+                <div *ngIf="inquiry.isLongMessage">
+                    <a href="#" class="message-text" (click)="inquiry.showFullMessage = !inquiry.showFullMessage; $event.preventDefault()">
+                        {{ inquiry.showFullMessage ? 'Show less' : 'Read more' }}
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <p class="text-muted small text-end mt-1">Sent on: {{ inquiry.createdAt | date: 'short' }}</p>
+      </div>
+    </div>
+  </div>
+</div>

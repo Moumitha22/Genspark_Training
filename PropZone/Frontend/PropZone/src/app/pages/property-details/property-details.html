@@ -1,0 +1,252 @@
+<div class="container my-4" *ngIf="property">
+
+    <!-- Property card -->
+    <div class="container my-4 ">
+        <div class="d-md-none d-flex justify-content-center align-items-center mb-2">
+            <a
+                *ngIf="canEditProperty()"
+                class="btn btn-outline-primary me-4 responsive-btn"
+                [routerLink]="['/property', property.id, 'upload-images']"
+                >
+                <i class="fa fa-image me-1"></i>
+                Update Images
+            </a>
+            <a
+                *ngIf="canEditProperty()"
+                class="btn btn-outline-primary responsive-btn"
+                [routerLink]="['/property', property.id, 'edit']"
+                >
+                <i class="fa fa-edit me-1"></i>
+                    Edit Details
+            </a>
+        </div>
+        <div class="card border-0 shadow p-4 rounded bg-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="text-dark fw-bold">{{ property.title }}</h4>
+                <div class="d-none d-md-flex justify-content-end align-items-center">
+                    <a
+                        *ngIf="canEditProperty()"
+                        class="btn btn-outline-primary me-4 responsive-btn"
+                        [routerLink]="['/property', property.id, 'upload-images']"
+                        >
+                        <i class="fa fa-image me-1"></i>
+                        Update Images
+                    </a>
+                    <a
+                        *ngIf="canEditProperty()"
+                        class="btn btn-outline-primary responsive-btn"
+                        [routerLink]="['/property', property.id, 'edit']"
+                        >
+                        <i class="fa fa-edit me-1"></i>
+                            Edit Details
+                    </a>
+                </div>
+            </div>
+             <div class="d-flex align-items-center mb-2">
+                <i class="fa-solid fa-location-dot text-secondary me-2"></i>
+                <span class="fs-6 fs-md-5 text-secondary" (click)="scrollToLocation()"
+    style="cursor: pointer;">
+                    {{ property.location.locality }},
+                    {{ property.location.city }},
+                    {{ property.location.state }}
+                </span>
+            </div>
+  
+            <div class="row g-4 align-items-stretch h-100">
+                <div class="col-md-6 d-flex">
+                    <div class="position-relative w-100 h-200 rounded overflow-hidden carousel-container">
+                        <img
+                            class="carousel-image"
+                            [src]="images?.length  ? images[currentIndex] : 'https://media.istockphoto.com/id/1222357475/vector/image-preview-icon-picture-placeholder-for-website-or-ui-ux-design-vector-illustration.jpg?s=612x612&w=0&k=20&c=KuCo-dRBYV7nz2gbk4J9w1WtTAgpTdznHu55W9FjimE='"
+                            [alt]="property.title"
+                        />
+                        <ng-container *ngIf="images.length > 1">
+                            <button class="carousel-nav left-btn" (click)="prevImage()">
+                            <i class="fa-solid fa-chevron-left"></i>
+                            </button>
+                            <button class="carousel-nav right-btn" (click)="nextImage()">
+                            <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                        </ng-container>
+                    </div>
+                </div>
+
+                <!-- Key Details -->
+                <div class="col-md-6 d-flex flex-column justify-content-between">
+                    <div class="border rounded p-3 h-100 feature-box">
+                        <h6 class="fw-semibold mb-3 text-secondary">Key Details</h6>
+                        <div class="row g-2 mb-3">
+
+                            <!-- Price -->
+                            <div class="col-6">
+                                <div class="feature-item p-2 border rounded d-flex align-items-center">
+                                    <i class="fa-solid fa-money-bill text-primary me-2"></i>
+                                    <div>
+                                        <small class="text-muted">Price</small><br />
+                                        <strong class="price-text">₹{{ property.price | number }}</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Ownership -->
+                            <div class="col-6">
+                                <div class="feature-item p-2 border rounded d-flex align-items-center">
+                                    <i class="fa-solid fa-user-tie text-primary me-2"></i>
+                                    <div>
+                                        <small class="text-muted">Ownership</small><br />
+                                        <strong>{{ property.listerType }}</strong>
+                                </div>
+                                </div>
+                            </div>
+
+                            <!-- Property Type -->
+                            <div class="col-6">
+                                <div class="feature-item p-2 border rounded d-flex align-items-center">
+                                    <i class="fa-solid fa-building text-primary me-2"></i>
+                                    <div>
+                                        <small class="text-muted">Property Type</small><br />
+                                        <strong>{{ property.propertyType }}</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Purpose -->
+                            <div class="col-6">
+                                <div class="feature-item p-2 border rounded d-flex align-items-center">
+                                    <i class="fa-solid fa-compass text-primary me-2"></i>
+                                    <div>
+                                        <small class="text-muted">Purpose</small><br />
+                                        <strong>{{ property.listingPurpose }}</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Status -->
+                            <div class="col-6">
+                                <div class="feature-item p-2 border rounded d-flex align-items-center">
+                                    <i class="fa-solid text-primary me-2" [ngClass]="iconMap[ property.status]"></i>
+                                    <div>
+                                        <small class="text-muted">Status</small><br />
+                                        <strong>{{ property.status }}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            
+
+
+                            <!-- Area -->
+                            <div class="col-6">
+                                <div class="feature-item p-2 border rounded d-flex align-items-center">
+                                    <i class="fa-solid fa-ruler-combined text-primary me-2"></i>
+                                    <div>
+                                        <small class="text-muted">Area</small><br />
+                                        <strong>{{ property.areaSqFt }} sqft</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div *ngIf="canEditProperty()" class="text-center mt-auto">
+                            <button class="contact-btn" (click)="handleEnquiriesClicked()" >View Enquiries</button>
+                        </div>
+                        <div *ngIf="!canEditProperty()" class="text-center mt-auto">
+                            <button class="contact-btn" (click)="handleContactClicked()" >Contact Owner</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Overview Section -->
+    <div class="container my-4 ">
+        <div class="card shadow p-4 rounded">
+            <div class="description-card p-4 rounded shadow-sm">
+                <h5 class="section-heading mb-4">Overview</h5>
+                <div class="row" id="overviewGrid">
+                    <div class="col-md-6 mb-3 pe-md-5" *ngFor="let item of property.featureSummary">
+                        <div class="d-flex align-items-start gap-3 border-bottom pb-3">
+                            <i class="fa-solid" [ngClass]="iconMap[item.featureName] || 'fa-circle-info'" style="width: 24px;"></i>
+                            <div>
+                                <div class="text-muted">{{ item.featureName }}</div>
+                                <div class="fw-semibold">  
+                                    {{ item.values.length === 1 && (item.values[0] === 'true' || item.values[0] === 'false')
+                                        ? (item.values[0] === 'true' ? 'Yes' : 'No')
+                                        : item.values.join(', ')
+                                    }}
+                                </div>                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Description -->
+    <div class="container my-4">
+        <div class="card shadow-sm p-4 rounded">
+            <div class="description-card p-4 rounded shadow-sm">
+                <h5 class="section-heading mb-3">Description</h5>
+                <p>{{ property.description }}</p>
+            </div>
+        </div>
+    </div>
+
+   <!--Discount Section-->
+    <div class="container my-4">
+        <div class="card shadow-sm p-4 rounded">
+            <h5 class="section-heading mb-3" style="max-width: 100px;">Discounts</h5>
+            <div *ngIf="property.discountCodes && property.discountCodes.length > 0; else noDiscounts">
+                <div class="row">
+                    <div class="col-md-4 mb-3" *ngFor="let discount of property.discountCodes">
+                        <div class="card h-100">
+                            <div class="card-body d-flex flex-column justify-content-between custom-dashed-border ">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="fw-semibold">{{ discount.code }}</span>
+                                    <span class="badge bg-info">
+                                        {{ discount.discountValue }} {{ discount.isPercentage ? '%' : '' }}
+                                    </span>
+                                </div>
+                                <small class="text-muted">
+                                    Valid: {{ discount.fromDate | date }} - {{ discount.toDate | date }}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ng-template #noDiscounts>
+                <p class="text-muted">No discounts available for this property.</p>
+            </ng-template>
+        </div>
+    </div>
+
+    <!-- Location Map -->
+    <div class="container"#locationSection>
+         <div class="card shadow-sm p-4 rounded">
+             <h5 class="section-heading mb-0" style="max-width: 160px;">Property Location</h5>
+            <div *ngIf="property?.location?.latitude && property?.location?.longitude; else locationNotAvailable">
+                <div class="map-container mt-3">
+                    <div id="leaflet-map"></div>
+                </div>
+            </div>
+
+            <ng-template #locationNotAvailable>
+                <p class="text-muted mt-3">
+                    📍 Location details not available for this property.
+                </p>
+            </ng-template>
+        </div>
+    </div>
+
+
+    <!-- Contact form -->
+    <app-contact-lister-form
+        *ngIf="selectedProperty"
+        [property]="selectedProperty"
+        (closed)="selectedProperty = null">
+    </app-contact-lister-form>
+
+</div>

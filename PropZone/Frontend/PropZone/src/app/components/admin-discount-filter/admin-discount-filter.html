@@ -1,0 +1,126 @@
+<div class="discount-modal-overlay">
+  <div class="discount-modal-content">
+    <div
+      class="px-4 py-4 rounded mb-3 mb-md-0 shadow-sm sticky-top"
+      style="min-width: 280px; max-width: 400px"
+    >
+      <div class="d-flex justify-content-between mb-2">
+        <h4 class="mb-3 section-heading">Filters</h4>
+        <button type="button" class="btn-close ms-auto" (click)="closeFilter()" aria-label="Close"></button>
+      </div>
+
+      <form>
+        <!-- Min/Max Value -->
+        <div class="row gx-4">
+          <h6 class="mb-2">Discount Value Range</h6>
+
+          <div class="col-12 col-md-6 mb-2">
+            <input
+              class="form-control"
+              [(ngModel)]="filterform.minDiscountValue"
+              name="MinDiscountValue"
+              type="number"
+              placeholder="Min Value"
+              (ngModelChange)="onFieldChange()"
+            />
+          </div>
+          <div class="col-12 col-md-6 mb-2">
+            <input
+              class="form-control"
+              [(ngModel)]="filterform.maxDiscountValue"
+              name="MaxDiscountValue"
+              type="number"
+              placeholder="Max Value"
+              (ngModelChange)="onFieldChange()"
+            />
+          </div>
+        </div>
+        <hr />
+        <!-- Date Range -->
+        <h6 class="mb-2">Date Range</h6>
+        <div class="row gx-4">
+          <div class="col-12 col-md-6 mb-2">
+            <input
+              class="form-control"
+              [(ngModel)]="filterform.fromDate"
+              name="FromDate"
+              type="date"
+              placeholder="From Date"
+              (ngModelChange)="onFieldChange()"
+            />
+          </div>
+          <div class="col-12 col-md-6 mb-2">
+            <input
+              class="form-control"
+              [(ngModel)]="filterform.toDate"
+              name="ToDate"
+              type="date"
+              placeholder="To Date"
+              (ngModelChange)="onFieldChange()"
+            />
+          </div>
+        </div>
+        <hr />
+        <!-- Discount Status -->
+        <h6 class="mb-2">Discount Status</h6>
+        <div class="row gx-4">
+          <div class="col-12 col-md-6 mb-2">
+            <select
+              class="form-select"
+              [(ngModel)]="filterform.isDeleted"
+              name="IsDeleted"
+              (ngModelChange)="onFieldChange()"
+            >
+              <option [ngValue]="null">All</option>
+              <option [ngValue]="true">Deleted</option>
+              <option [ngValue]="false">Active</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-6 mb-2">
+            <select
+              class="form-select"
+              [(ngModel)]="filterform.isActive"
+              name="IsActive"
+              (ngModelChange)="onFieldChange()"
+            >
+              <option [ngValue]="null">All Active</option>
+              <option [ngValue]="true">Active</option>
+              <option [ngValue]="false">Inactive</option>
+            </select>
+          </div>
+        </div>
+        <hr />
+        <!-- Option Filter -->
+        <h6 class="mb-2">Option Filter</h6>
+        <div class="row gx-4">
+          <div class="col-12 col-md-6 mb-2">
+            <select
+              class="form-select"
+              [(ngModel)]="filterform.typeOfProperty"
+              name="TypeOfProperty"
+              (ngModelChange)="onFieldChange()"
+            >
+              <option [ngValue]="null">All Types</option>
+              <option value="Apartment">Apartment</option>
+              <option value="House">House</option>
+              <option value="Plot">Plot</option>
+              <option value="CommercialSpace">Commercial Space</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-6 mb-2">
+            <select
+              class="form-select"
+              [(ngModel)]="filterform.purpose"
+              name="Purpose"
+              (ngModelChange)="onFieldChange()"
+            >
+              <option [ngValue]="null">All Purposes</option>
+              <option value="Sale">Sale</option>
+              <option value="Rent">Rent</option>
+            </select>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

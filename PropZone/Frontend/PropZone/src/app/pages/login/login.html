@@ -1,0 +1,89 @@
+<div class="main-bg d-flex justify-content-center align-items-center">
+  <div class="login-wrapper d-flex shadow-lg flex-wrap p-0">
+    <!-- Left Side -->
+    <div class="position-relative py-5 d-flex flex-column justify-content-center align-items-center w-50">
+       <button
+        class="btn btn-outline-primary position-absolute top-0 end-0 m-2 admin-btn"
+        (click)="loginAsAdmin()"
+        *ngIf="!isAdminLogin">
+        Admin Login
+      </button>
+
+      <a *ngIf="isAdminLogin"
+        class="position-absolute top-0 end-0 m-2 text-decoration-none text-primary"
+        (click)="backToUserLogin()">
+        ← Back
+      </a>
+      
+      <div class="bg-white bg-opacity-75 px-md-4 py-md-3" >
+        <h3 class="text-center mb-4 text-teal">
+          {{ isAdminLogin ? 'Admin Login' : 'Welcome!' }}
+        </h3>
+
+        <!-- Admin toggle button -->
+
+        <!-- Role Selection (hide in admin mode) -->
+        <div *ngIf="!isAdminLogin" class="text-center mb-5">
+          <h5 class="mb-3">Login as?</h5>
+          <div class="d-flex justify-content-center gap-3">
+            <button type="button"
+                    class="role btn"
+                    [class.active]="selectedRole === 'Buyer'"
+                    (click)="selectRole('Buyer')">Buyer</button>
+            <button type="button"
+                    class="role btn"
+                    [class.active]="selectedRole === 'Lister'"
+                    (click)="selectRole('Lister')">Owner / Agent</button>
+          </div>
+        </div>
+
+        <!-- Login Form -->
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <div class="mb-3 position-relative">
+            <i class="fa-solid fa-envelope input-icon"></i>
+            <input type="email"
+                   class="form-control custom-input ps-5"
+                   formControlName="email"
+                   placeholder="Enter your email" />
+            <small *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+                   class="text-danger">Valid email is required</small>
+          </div>
+
+          <div class="mb-4 position-relative">
+            <i class="fa-solid fa-lock input-icon"></i>
+            <input [type]="showPassword ? 'text' : 'password'"
+                   class="form-control custom-input ps-5"
+                   formControlName="password"
+                   placeholder="Enter your password" />
+            <span class="toggle-password" (click)="togglePassword()">
+              <i class="fa-solid" [ngClass]="showPassword ? 'fa-eye' : 'fa-eye-slash'"></i>
+            </span>
+            <small *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+                   class="text-danger">Password is required</small>
+          </div>
+
+          <button type="submit" id="main-btn"
+                  class="btn w-100 mt-3"
+                  [disabled]="loginForm.invalid || loading">
+            Login
+          </button>
+
+          <p *ngIf="errorMessage" class="text-danger text-center mt-3">{{ errorMessage }}</p>
+        </form>
+
+        <div *ngIf="!isAdminLogin" class="text-center mt-4" style="font-size: 15px;">
+          Don't have an account?
+          <a routerLink="/signup" class="text-decoration-none text-primary">Sign up</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Side -->
+    <div class="login-right d-none d-md-block">
+      <div class="overlay-text">
+        <h2>Find Your Dream Home</h2>
+        <p>Trusted by thousands of buyers and sellers.</p>
+      </div>
+    </div>
+  </div>
+</div>

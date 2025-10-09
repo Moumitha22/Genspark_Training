@@ -1,0 +1,17 @@
+.modal-dialog-scrollable {
+  background: var(--color-white);
+  width: 100%;
+  max-width: 900px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+}
+
+@media (max-width: 576px) {
+  .modal-dialog-scrollable {
+    padding: 1rem 0.75rem;
+    font-size: 0.9rem;
+  }
+}

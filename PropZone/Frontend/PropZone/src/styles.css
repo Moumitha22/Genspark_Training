@@ -1,0 +1,236 @@
+@import url('bootstrap-icons/font/bootstrap-icons.css');
+@import "@ng-select/ng-select/themes/material.theme.css";
+/* ===============================
+   CSS Variables
+   =============================== */
+:root {
+  /* Colors */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-dark: #212529;
+  --color-muted: #6c757d;
+  --color-light: #f8f9fa;
+  --color-border: #ced4da;
+  --color-light-border: #ccc;
+
+  /* Theme Colors */
+  --color-primary: #088178;
+  --color-primary-hover: #066b64;
+  --color-accent: #009e8a;
+  --color-accent-hover: teal;
+  --color-heading-border: #008080;
+  --color-primary-disabled: #014f49;
+  --color-soft-bg: #f9fdfc;
+  --color-light-hover: #e0f2f1;
+  --color-disabled-bg: #e9ecef;
+
+  /* Font Sizes */
+  --font-size-xs: 0.75rem;      
+  --font-size-sm: 0.85rem;      
+  --font-size-md: 1rem;         
+  --font-size-lg: 1.15rem;      
+  --font-size-xl: 1.25rem;     
+  --font-size-2xl: 1.45rem;   
+  --font-size-3xl: 2rem;
+
+  /* Font Weights */
+  --font-weight-normal: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Shadows */
+  --shadow-focus: 0 0 0 0.2rem rgba(8, 129, 120, 0.25);
+  --shadow-focus-strong: 0 0 0 2px rgba(6, 107, 100, 0.4);
+  --shadow-pagination: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-pagination-active: 0 2px 4px rgba(6, 107, 100, 0.3);
+}
+
+/* ===============================
+   Buttons
+   =============================== */
+.btn-outline-primary {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
+
+#main-btn {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-white);
+  transition: 0.3s;
+}
+
+#main-btn:hover {
+  background-color: var(--color-accent-hover);
+  border-color: var(--color-accent);
+}
+
+/* ===============================
+   Icons & Headings
+   =============================== */
+.property-card .bi {
+  color: var(--color-primary) !important;
+}
+
+.section-heading {
+  border-bottom: 3px solid var(--color-heading-border);
+  display: inline-block;
+  padding-bottom: 4px;
+  color: var(--color-primary);
+}
+
+/* ===============================
+   Inputs
+   =============================== */
+input.form-control,
+select.form-select,
+textarea.form-control {
+  border-color: var(--color-border);
+  background-color: var(--color-white) !important;
+  color: var(--color-dark);
+  outline: none;
+}
+
+input.form-control:focus,
+select.form-select:focus,
+textarea.form-control:focus {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-focus);
+}
+
+input.form-control[readonly],
+input.form-control:disabled,
+textarea.form-control[readonly],
+textarea.form-control:disabled {
+  background-color: var(--color-white) !important;
+  border-color: var(--color-border);
+  color: var(--color-muted);
+}
+
+
+/* ===============================
+   Modal
+   =============================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+}
+
+.modal-content {
+  background: var(--color-white);
+  padding: 2rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+}
+
+/* ===============================
+   Responsive Button
+   =============================== */
+.responsive-btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .responsive-btn {
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+/* ===============================
+ Core filters
+=============================== */
+
+.core-filters-sticky {
+  position: sticky;
+  top: 75px;
+  z-index: 1020;
+  background-color: var(--color-light); 
+}
+
+@media (max-width: 991.98px) {
+  .core-filters-sticky {
+    position: static; 
+  }
+}
+/* ===============================
+   Property Card
+   =============================== */
+.custom-dashed-border {
+  border: 1px dashed #088178 !important;
+  border-radius: 0.25rem;
+}
+
+
+/* ===============================
+   Custom Select
+   =============================== */
+
+.ng-select.custom{
+  position: relative;
+  display: inline-block;
+  height: auto;
+  min-height: 40px;
+  width: 100%;
+  cursor: pointer;
+  outline: none;
+  font-weight:300;
+  padding: 0px 0px;
+}
+
+.ng-select.custom .ng-dropdown-panel{
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.17);
+  margin-top: 6px;
+}
+
+.ng-select.custom .ng-dropdown-panel .ng-dropdown-panel-items{
+  background: white !important;
+}
+.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value{
+  background-color: var(--color-primary);
+  border-radius: 12px;
+}
+
+.ng-select .ng-select-container .ng-placeholder{
+  color: var(--color-primary) !important;
+}
+
+.ng-select.ng-select-focused .ng-select-container:after {
+    border-color: var(--color-primary) !important;
+}
+
+.ng-select.custom .ng-dropdown-panel .ng-option-selected {
+  background-color: var(--color-primary-disabled);
+  color: var(--color-white);
+}
+
+.drop-down-custom-line-spacing{
+  line-height: 22px;
+}

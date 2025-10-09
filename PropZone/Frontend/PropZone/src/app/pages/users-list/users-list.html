@@ -1,0 +1,117 @@
+<div class="container mt-4">
+  <h3 class="text-center">Users</h3>
+
+  <!-- Spinner -->
+  <div *ngIf="loading" class="text-center mt-4">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage && !loading" class="alert alert-danger mb-4">
+      <div class="text-center">{{ errorMessage }}</div>
+  </div>
+
+   <!-- Empty state -->
+  <div *ngIf="!loading && !errorMessage && users.length === 0">
+    <p>No users found.</p>
+  </div>
+
+  <!-- Filters -->
+  <div *ngIf="!loading && users.length > 0" class="d-flex justify-content-start align-items-center mt-4 mb-4 gap-3 gap-md-4">
+    <!-- Search by name -->
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (input)="onSearchOrFilter()"
+      class="form-control"
+      placeholder="Search by name"
+      style="max-width: 280px;"
+    />
+
+    <!-- Filter by Role -->
+    <select
+      [(ngModel)]="selectedRole"
+      (change)="onSearchOrFilter()"
+      class="form-select"
+      style="max-width: 200px;"
+    >
+      <option *ngFor="let role of availableRoles" [value]="role">{{ role }}</option>
+    </select>
+
+    <!--  Filter by Status -->
+    <select
+      [(ngModel)]="selectedStatus"
+      (change)="onSearchOrFilter()"
+      class="form-select"
+      style="max-width: 200px;"
+    >
+      <option value="All Users">All Users</option>
+      <option value="Active">Active Users</option>
+      <option value="Disabled">Disabled Users</option>
+    </select>
+
+  </div>
+
+  <div *ngIf="!loading && users.length > 0 && filteredUsers.length === 0" class="text-muted text-center mt-4">
+    No users match the filters.
+  </div>
+
+  <!-- Table -->
+  <div class="custom-scroll-wrapper shadow">
+    <table *ngIf="!loading && filteredUsers.length > 0" class="table table-hover align-middle hover-table">
+      <thead class="sticky-header">
+        <tr>
+          <th>#</th>
+          <th>User ID</th> 
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Role</th>
+          <th>Status</th>
+          <th>Joined</th>
+          <th>Last Updated</th> 
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of filteredUsers; let i = index" class="hover-scale" [class.table-secondary]="user.isDeleted" [class.text-muted]="user.isDeleted" [class.disabled-user]="user.isDeleted" [class.disabled-user]="user.isDeleted">
+          <td>{{ i + 1 }}</td>
+          <td>{{ user.id }}</td>     
+          <td ><div class="fw-semibold">{{ user.name }}</div></td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.phoneNumber || '-' }}</td>
+          <td>{{ user.role }}</td>
+          <td>
+            <span class="badge" [ngClass]="user.isDeleted ? 'bg-danger' : 'bg-success'">
+              {{ user.isDeleted ? 'Disabled' : 'Active' }}
+            </span>
+          </td>
+          <td class="date">{{ user.createdAt | date: 'short' }}</td>
+          <td class="date">{{ user.updatedAt | date: 'short' }}</td>
+          <td style="white-space: nowrap; min-width: 50px;">
+            <div class="d-inline-flex gap-1">
+              <button class="btn btn-sm me-2"
+                  [ngClass]="user.isDeleted ? 'btn-success' : 'btn-danger'"
+                  (click)="toggleDisableUser(user)">
+                <i class="fas" [ngClass]="user.isDeleted ? 'fa-user-check' : 'fa-user-slash'"></i>
+              </button>
+
+              <a
+              *ngIf="user.role === 'Lister'"
+              [routerLink]="['/admin/properties']"
+              [queryParams]="{ listerId: user.id, listerName: user.name }"
+              class="btn btn-sm btn-warning"
+              title="View properties posted by this lister"
+            >
+              <i class="fas fa-building"></i>
+            </a>
+            </div>
+          </td >
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

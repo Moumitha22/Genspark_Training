@@ -1,0 +1,160 @@
+<div class="container my-4">
+  <h2 class="text-center mb-3">
+    {{ listerName ? 'Properties of ' + listerName : 'Properties' }}
+  </h2>
+
+  <div *ngIf="coreFilters.listerId" class="mb-3 text-center">
+    <button class="btn btn-link btn-sm" (click)="clearListerFilter()">
+      Clear Lister Filter
+    </button>
+  </div>
+
+  <div class="mb-4" *ngIf="!errorMessage">
+    <app-core-filters
+      [model]="coreFilters"
+      (filtersChanged)="onFiltersChanged($event)"
+    ></app-core-filters>
+    <div class="row g-3 mt-2 justify-content-center">
+      <div class="col-6 col-md-3">
+        <select
+          class="form-select"
+          [(ngModel)]="coreFilters.statuses"
+          (change)="onFiltersChanged(coreFilters)"
+        >
+          <option [ngValue]="undefined">All Statuses</option>
+          <option [ngValue]="['Available']">Available</option>
+          <option [ngValue]="['Sold']">Sold</option>
+          <option [ngValue]="['Rented']">Rented</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="loading" class="text-center mb-4">
+    <div class="spinner-border text-success" role="status"></div>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage && !loading" class="alert alert-danger mb-4">
+    <div class="text-center">{{ errorMessage }}</div>
+  </div>
+
+  <!-- Empty state -->
+  <div
+    *ngIf="!loading && !errorMessage && properties.length === 0"
+    class="text-center text-muted my-4"
+  >
+    <p>No properties match the selected filters.</p>
+    <button
+      *ngIf="hasActiveFilters"
+      class="btn btn-primary"
+      (click)="clearAllFilters()"
+    >
+      Clear Filters
+    </button>
+  </div>
+
+  <div class="custom-scroll-wrapper shadow mt-4">
+    <table
+      *ngIf="!loading && properties.length > 0"
+      class="table table-hover align-middle hover-table"
+    >
+      <thead class="sticky-header">
+        <tr>
+          <th>#</th>
+          <th>Title</th>
+          <th>Location</th>
+          <th>Price</th>
+          <th>Type</th>
+          <th>Purpose</th>
+          <th>Status</th>
+          <th>Discounts</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let property of properties; let i = index"
+          class="hover-scale"
+        >
+          <td>{{ i + 1 }}</td>
+          <td><div class="fw-semibold">{{ property.title }}</div></td>
+          <td>{{ property.location.city }}, {{ property.location.state }}</td>
+          <td>₹ {{ property.price | number }}</td>
+          <td>{{ property.propertyType }}</td>
+          <td>
+            <span
+              class="badge"
+              [ngClass]="{
+                'bg-success': property.listingPurpose === 'Sale',
+                'bg-primary': property.listingPurpose === 'Rent',
+                'bg-secondary': property.listingPurpose !== 'Sale' && property.listingPurpose !== 'Rent' 
+              }"
+            >
+              {{ property.listingPurpose }}
+            </span>
+          </td>
+
+          <td>
+            <span
+              class="badge"
+              [ngClass]="{
+                'bg-success': property.status === 'Available',
+                'bg-danger': property.status === 'Sold',
+                'bg-warning': property.status === 'Rented',
+                'bg-secondary': property.status !== 'Available' && property.status !== 'Sold' && property.status !== 'Rented'
+              }"
+            >
+              {{ property.status }}
+            </span>
+          </td>
+
+          <td>
+            <ng-container
+              *ngIf="property.discountCodes && property.discountCodes.length > 0; else noDiscounts"
+            >
+              <ng-container *ngFor="let code of property.discountCodes">
+                <span class="badge bg-info me-1">
+                  {{ code?.code || code }}<span *ngIf="code?.discountValue">
+                    ({{ code?.discountValue }})</span
+                  >
+                </span>
+              </ng-container>
+            </ng-container>
+            <ng-template #noDiscounts>
+              <span class="text-muted">No Discounts</span>
+            </ng-template>
+          </td>
+
+          <td class="date">{{ property.createdAt | date: 'short' }}</td>
+          <td style="white-space: nowrap; min-width: 120px">
+            <div class="d-inline-flex gap-2">
+              <button
+                class="btn btn-sm btn-warning"
+                [routerLink]="['/property', property.id]"
+              >
+                <i class="fas fa-eye"></i>
+              </button>
+
+              <button
+                class="btn btn-sm btn-primary"
+                [routerLink]="['/property', property.id, 'edit']"
+              >
+                <i class="fas fa-edit"></i>
+              </button>
+
+              <button
+                class="btn btn-sm btn-danger"
+                (click)="deleteProperty(property.id)"
+              >
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

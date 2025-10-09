@@ -1,0 +1,31 @@
+.discount-modal-overlay {
+  position: fixed;
+  top: 30px;
+  left: 0;
+  z-index: 1050;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.discount-modal-content {
+  padding: 10px 15px;
+  background: var(--color-white);
+  border-radius: 10px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.discount-modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+}

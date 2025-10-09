@@ -1,0 +1,134 @@
+ <nav *ngIf="showNavbar" id="mainNavbar" [ngClass]="navbarClasses" class="navbar navbar-expand-lg">
+  <div class="container d-flex align-items-center">
+
+    <!-- BRAND (Left) -->
+    <a class="navbar-brand d-flex align-items-center flex-shrink-0" routerLink="/">
+      <i class="bi bi-house-fill me-2 text-white fs-3"></i>
+      <span class="fw-bold text-white brand-text">PROPZONE</span>
+    </a>
+
+    <!-- COLLAPSIBLE NAV LINKS -->
+    <div class="collapse navbar-collapse order-3 order-lg-2" id="navbarContent">
+      <ul class="navbar-nav mb-2 mb-lg-0 ms-auto align-items-lg-center">
+        <!-- GUEST LINKS -->
+        <ng-container *ngIf="(userRole$ | async) === null; else authLinks">
+          <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+            <a class="nav-link text-white" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+          </li>
+          <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+            <a class="nav-link text-white" routerLink="/properties" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Properties</a>
+          </li>
+          <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+            <a class="btn nav-btn" routerLink="/post-property">Post</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn nav-btn me-3" routerLink="/login">Login</a>
+          </li>
+        </ng-container>
+
+        <!-- AUTH LINKS -->
+        <ng-template #authLinks>
+          <ng-container *ngIf="userRole$ | async as role">
+            <ng-container *ngIf="role === 'Buyer'">
+              <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+                <a class="nav-link text-white" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+              </li>
+              <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+                <a class="nav-link text-white" routerLink="/properties" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Properties</a>
+              </li>
+              <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+                <a class="btn nav-btn" routerLink="/post-property">Post</a>
+              </li>
+            </ng-container>
+
+            <ng-container *ngIf="role === 'Lister'">
+              <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+                <a class="nav-link text-white" routerLink="/lister/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Dashboard</a>
+              </li>
+              <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+                <a class="nav-link text-white" routerLink="/properties" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Properties</a>
+              </li>
+              <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+                <a class="nav-link text-white" routerLink="/my-properties" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">My Properties</a>
+              </li>
+              <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+                <a class="btn nav-btn" routerLink="/post-property">Post</a>
+              </li>
+            </ng-container>
+
+            <ng-container *ngIf="role === 'Admin'">
+              <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+                <a class="nav-link text-white" routerLink="/admin/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Admin Dashboard</a>
+              </li>
+              <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+                <a class="nav-link text-white" routerLink="/admin/users" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Users</a>
+              </li>
+              <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+                <a class="nav-link text-white" routerLink="/admin/properties" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Properties</a>
+              </li>
+              <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+                <a class="nav-link text-white" routerLink="/admin/features" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Features</a>
+              </li>
+              <li class="nav-item me-lg-4 mb-3 mb-lg-0">
+                <a class="nav-link text-white" routerLink="/admin/discounts" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Discount Codes</a>
+            </ng-container>
+          </ng-container>
+        </ng-template>
+      </ul>
+    </div>
+
+    <!-- RIGHT SIDE: NOTIF + PROFILE + TOGGLER -->
+    <div class="d-flex align-items-center ms-auto order-2 order-lg-3">
+
+      <!-- Username -->
+      <ng-container *ngIf="isLoggedIn$ | async">
+        <span class="text-white me-2 d-none d-lg-inline nav-user-name">{{ userName }}</span>
+      </ng-container>
+
+      <!-- Profile Dropdown -->
+      <ng-container *ngIf="userRole$ | async as role">
+        <div class="dropdown">
+          <button class="dropdown-toggle d-flex align-items-center text-white border-0 bg-transparent p-0"
+                  id="profileDropdown"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false">
+            <i class="bi bi-person-fill fs-4 me-1"></i>
+            <i class="bi bi-caret-down-fill fs-6 mt-2 me-3"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end mt-3 mb-2" aria-labelledby="profileDropdown">
+            <li *ngIf="role === 'Lister' || role === 'Buyer' || role === 'Admin'">
+              <a class="dropdown-item" routerLink="/profile">My Profile</a>
+            </li>
+            <li *ngIf="role === 'Buyer'">
+              <a class="dropdown-item" routerLink="/buyer/inquiries">Contacted Properties</a>
+            </li>
+            <li *ngIf="role === 'Lister'">
+              <a class="dropdown-item" routerLink="/lister/inquiries">Received Inquiries</a>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <span class="dropdown-item text-danger" role="button" (click)="logout()">Logout</span>
+            </li>
+          </ul>
+        </div>
+      </ng-container>
+
+      <!-- Notification Bell -->
+      <ng-container *ngIf="userRole$ | async as role">
+        <app-push-notification-bell  *ngIf="role === 'Lister' || role === 'Buyer'" class="me-2"></app-push-notification-bell>
+      </ng-container>
+
+      <!-- Toggler -->
+      <button class="navbar-toggler ms-2 d-lg-none"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarContent"
+              aria-controls="navbarContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+
+  </div>
+</nav>

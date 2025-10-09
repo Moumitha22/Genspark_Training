@@ -1,0 +1,45 @@
+.sticky-compare {
+  position: sticky;
+  top: 138.2px;
+  z-index: 1020;
+  background: var(--color-white);
+  padding: 0.5rem;
+}
+
+.sticky-filter-card {
+  position: sticky;
+  top: 170px;
+  max-height: 80vh;
+  overflow: hidden;
+}
+
+.sticky-filter-card .filter-scroll-area {
+  max-height: calc(80vh - 40px); 
+  overflow-y: auto;
+  padding-right: 4px;
+  padding-left: 3px;
+}
+
+.sticky-filter-card::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sticky-filter-card::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+@media (max-width: 991.98px) {
+  .sticky-filter-card {
+    max-height: 65vh;
+    position: static;
+  }
+
+  .filter-scroll-area {
+    max-height: calc(60vh - 20px); 
+  }
+
+  .sticky-compare {
+    position: static;
+  }
+}
